@@ -58,8 +58,9 @@ if errorlevel 1 (
     echo ✅ 推送成功！
     echo.
     echo 🌐 正在打开 GitHub Pages...
-    start "https://ghbgjxrz.github.io/MyPages/"
+    start "" "https://github.com/GhbGjxZr/MyPages"
+    start "" "https://dash.cloudflare.com/1fa9f1235b0a82feecbf0687901ba61c/workers-and-pages"
 )
 
 :: 自动关闭窗口
-pause
+exit
