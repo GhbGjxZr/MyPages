@@ -59,7 +59,7 @@ if errorlevel 1 (
     echo.
     echo 🌐 正在打开 GitHub Pages...
     start "" "https://github.com/GhbGjxZr/MyPages"
-    start "" "https://dash.cloudflare.com/1fa9f1235b0a82feecbf0687901ba61c/workers-and-pages"
+    start "" "https://dash.cloudflare.com/1fa9f1235b0a82feecbf0687901ba61c/pages/view/html-projects"
     del-pages-log.bat
 )
 
