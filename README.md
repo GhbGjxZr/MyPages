@@ -18,9 +18,13 @@
 # 📦 工具：commit.bat 和 del-pages-log.bat
 
 ## commit.bat
-      一键提交 Git 变更并推送到远程仓库，自动打开 GitHub 和 Cloudflare Pages。
+
+> 一键提交 Git 变更并推送到远程仓库，自动打开 GitHub 和 Cloudflare Pages。
+
 ## del-pages-log.bat
-      清理 Cloudflare Pages 历史部署版本，保留最新 N 个版本。
+
+> 清理 Cloudflare Pages 历史部署版本，保留最新 N 个版本。
+
 <details>
 <summary>📋 点击展开复制代码 </summary>
 
