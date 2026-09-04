@@ -61,4 +61,5 @@ if errorlevel 1 (
     start "https://ghbgjxrz.github.io/MyPages/"
 )
 
+:: 自动关闭窗口
 exit
