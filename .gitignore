@@ -142,5 +142,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
-#My Key
+#My 隐私
 del-pages-log.bat
+commit.bat
