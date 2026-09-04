@@ -1,10 +1,10 @@
 @echo off
-set msg=鎻愪氦
+set msg=提交
 
 if not "%1"=="" set msg=%1
 
 git add .
 git commit -m "%msg%"
 git push
-echo 鎺ㄩ�佸畬鎴愶紒
+echo 推送完成！
 pause
