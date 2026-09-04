@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>高一数学 · 人教A版 2019 · 理论+小白双视角</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        :root {
+            --bg-body: #f5f7fb;
+            --bg-card: #ffffff;
+            --bg-header: #1e293b;
+            --text-primary: #1e293b;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+            --radius-card: 18px;
+            --accent: #3b5bdb;
+            --accent-soft: #eef2ff;
+            --code-bg: #f1f5f9;
+            --example-border: #dbeafe;
+            --btn-search: #0b8a5e;
+            --btn-search-hover: #09734e;
+            --btn-video: #fb7299;
+            --btn-video-hover: #e05a7a;
+            --tip-bg: #fef9e7;
+            --tip-border: #f9e79f;
+            --theory-bg: #e6f0fa;
+            --theory-border: #b6d4f0;
+            --theory-text: #1a3a5e;
+        }
+
+        body.dark {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-header: #0b1120;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-light: #334155;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.5);
+            --accent: #818cf8;
+            --accent-soft: #1e293b;
+            --code-bg: #0f172a;
+            --example-border: #2d3a5c;
+            --btn-search: #34d399;
+            --btn-search-hover: #22c55e;
+            --btn-video: #fb7299;
+            --btn-video-hover: #e05a7a;
+            --tip-bg: #1e2a3a;
+            --tip-border: #4a5a7a;
+            --theory-bg: #1a2a3f;
+            --theory-border: #2d4b6a;
+            --theory-text: #b8d0e8;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            padding: 0 0 32px 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .app-header {
+            background: var(--bg-header);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .app-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .app-header h1 small {
+            font-weight: 400;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-left: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 40px;
+            padding: 6px 12px 6px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: white;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.08);
+            font-weight: 500;
+        }
+        .theme-toggle:active { transform: scale(0.95); }
+        .theme-toggle span { line-height: 1; }
+        .toggle-icon { font-size: 1.2rem; }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 16px 14px 20px;
+        }
+
+        .chapter-overview {
+            background: var(--tip-bg);
+            border-left: 5px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 6px 10px 14px 10px;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--tip-border);
+            border-left-width: 5px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+        }
+        .chapter-overview strong {
+            color: var(--accent);
+        }
+
+        .chapter {
+            background: var(--bg-card);
+            border-radius: var(--radius-card);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .chapter-header {
+            padding: 16px 18px;
+            background: var(--bg-card);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .chapter-header:active {
+            background: var(--accent-soft);
+        }
+        .chapter-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chapter-header .chapter-num {
+            background: var(--accent);
+            color: white;
+            border-radius: 40px;
+            padding: 0 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .chevron {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            display: inline-block;
+        }
+
+        .chapter-body {
+            padding: 4px 8px 16px 8px;
+            display: block;
+        }
+        .chapter-body.collapsed {
+            display: none;
+        }
+
+        .section {
+            background: var(--bg-card);
+            margin: 12px 10px;
+            padding: 12px 14px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .section-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .section-header .sec-tag {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+
+        .section-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            transition: background 0.15s, transform 0.1s;
+            white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
+            line-height: 1.5;
+        }
+        .btn-sm:active { transform: scale(0.94); }
+
+        .btn-search {
+            background: var(--btn-search);
+        }
+        .btn-search:hover { background: var(--btn-search-hover); }
+
+        .btn-video {
+            background: var(--btn-video);
+        }
+        .btn-video:hover { background: var(--btn-video-hover); }
+
+        .theory-block {
+            background: var(--theory-bg);
+            border-left: 4px solid var(--accent);
+            padding: 10px 14px;
+            margin: 10px 0 6px 0;
+            border-radius: 10px;
+            border: 1px solid var(--theory-border);
+            border-left-width: 5px;
+            font-size: 0.9rem;
+            color: var(--theory-text);
+        }
+        .theory-block strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .theory-block .theory-def {
+            margin-top: 4px;
+            padding-left: 8px;
+            border-left: 2px solid var(--accent-soft);
+            font-style: normal;
+            font-weight: 450;
+        }
+
+        .example-box {
+            background: var(--code-bg);
+            border-left: 4px solid var(--accent);
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin: 10px 0 6px;
+            font-size: 0.9rem;
+            border: 1px solid var(--example-border);
+            border-left-width: 5px;
+        }
+        .example-box strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .example-box .parse {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-light);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+        }
+
+        .understand-tip {
+            background: var(--tip-bg);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin: 10px 0 4px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--tip-border);
+        }
+        .understand-tip strong {
+            color: var(--accent);
+        }
+
+        .search-tip {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        @media (max-width: 520px) {
+            .app-header h1 { font-size: 1rem; }
+            .app-header h1 small { font-size: 0.6rem; }
+            .chapter-header h2 { font-size: 0.95rem; }
+            .section { margin: 10px 4px; padding: 10px 10px; }
+            .example-box { padding: 10px 12px; font-size: 0.85rem; }
+            .container { padding: 12px 6px; }
+            .theme-toggle { font-size: 0.75rem; padding: 4px 10px 4px 6px; }
+            .section-header { flex-direction: column; align-items: stretch; gap: 6px; }
+            .section-actions { justify-content: flex-start; }
+            .btn-sm { font-size: 0.65rem; padding: 4px 10px; }
+            .chapter-overview { font-size: 0.85rem; padding: 10px 12px; }
+            .theory-block { font-size: 0.85rem; padding: 8px 12px; }
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 20px; }
+    </style>
+</head>
+<body>
+
+<header class="app-header">
+    <h1>
+        📐 高一数学
+        <small>人教A版·2019 · 课本理论</small>
+    </h1>
+    <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+            <span class="toggle-icon" id="themeIcon">🌙</span>
+            <span id="themeLabel">深色</span>
+        </button>
+    </div>
+</header>
+
+<div class="container" id="appContainer">
+    <div id="chapterList"></div>
+</div>
+
+<script>
+    (function() {
+        // ---------- 数据：每个小节均包含 theory (课本语言) ----------
+        // 注意：所有字符串中的单引号均已转义，避免语法错误
+        const chaptersData = [
+            {
+                id: 'c1', num: '第一章', title: '集合与常用逻辑用语',
+                overview: '📖 集合是数学的"语言"，用来描述确定的对象群体。常用逻辑用语帮助我们判断命题真假。这一章是数学推理的基础。',
+                sections: [
+                    { title: '1.1 集合的概念', 
+                      theory: '一般地，我们把研究对象统称为元素（element），把一些元素组成的总体叫做集合（set）。集合中元素的三个特性：确定性、互异性、无序性。',
+                      example: '判断下列对象能否构成集合<br>(1) 所有的好人；(2) 小于10的自然数；(3) 方程 x²-3x+2=0 的所有实数根。', 
+                      parse: '(1)不能，"好人"标准不明确，不满足集合元素的确定性；(2)能；(3)能。', 
+                      understand: '🔍 集合三要素：确定性、互异性、无序性。"好人"标准模糊，所以不能构成集合。' },
+                    { title: '1.2 集合间的基本关系', 
+                      theory: '一般地，对于两个集合A，B，如果集合A中任意一个元素都是集合B中的元素，就称集合A为集合B的子集（subset），记作A⊆B。如果A⊆B且B⊆A，则A=B。',
+                      example: '设集合 A={x|(x+1)/(2-x)<0}，B={x|4x+p<0}，且 B⊆A，求实数 p 的取值范围。', 
+                      parse: '解不等式得 A={x|x>2 或 x<-1}，B={x|x<-p/4}。由B⊆A得 -p/4≤-1，解得 p≥4。', 
+                      understand: '🧩 B是A的子集，意味着B中所有元素都在A里。画数轴可以更直观地理解包含关系。' },
+                    { title: '1.3 集合的基本运算', 
+                      theory: '交集：由所有属于集合A且属于集合B的元素组成的集合，记作A∩B。并集：由所有属于集合A或属于集合B的元素组成的集合，记作A∪B。补集：全集U中不属于A的元素组成的集合。',
+                      example: '设 A={x|2x²-px+q=0}，B={x|6x²+(p+2)x+5+q=0}，且 A∩B={1/2}，求 A∪B。', 
+                      parse: '将 x=1/2 代入两方程，解得 p=-7，q=-4。代回得 A={1/2，-4}，B={1/2，1/3}，故 A∪B={-4，1/3，1/2}。', 
+                      understand: '🎯 交集就是两个集合共有的元素，并集就是把所有元素合并起来（重复的只算一次）。' },
+                    { title: '1.4 充分条件与必要条件', 
+                      theory: '如果"若p，则q"是真命题，即p⇒q，那么p是q的充分条件，q是p的必要条件。如果p⇒q且q⇒p，则p是q的充要条件。',
+                      example: '已知 p：|x-1|≤2，q：x²-2x+1-m²≤0（m>0），若 p 是 q 的充分不必要条件，求 m 的取值范围。', 
+                      parse: 'p 对应的集合为[-1，3]，q 对应的集合为[1-m，1+m]。由题意得[-1，3]真包含于[1-m，1+m]，解得 m>2。', 
+                      understand: '💡 "充分"就是"有它就行"，"必要"就是"没它不行"。p能推出q，但q不能推出p，就是充分不必要。' },
+                    { title: '1.5 全称量词与存在量词', 
+                      theory: '全称量词"∀"表示"所有的"、"任意一个"。全称命题"∀x∈M，p(x)"的真假需要验证M中每一个元素都满足p(x)。存在量词"∃"表示"存在"、"至少有一个"。',
+                      example: '判断下列命题的真假，并说明理由<br>(1) ∀x∈R，x²≥0；(2) ∃x∈Z，x²=2。', 
+                      parse: '(1)真命题，任意实数的平方非负；(2)假命题，不存在整数x使x²=2。', 
+                      understand: '🌟 "∀"表示"所有"，"∃"表示"存在"。全称命题要求所有情况都成立，存在命题只要找到一个就行。' }
+                ]
+            },
+            {
+                id: 'c2', num: '第二章', title: '一元二次函数、方程和不等式',
+                overview: '📊 这一章从等式性质延伸到不等式，再结合二次函数，解决"范围"和"最值"问题。是高中代数的重要工具。',
+                sections: [
+                    { title: '2.1 等式性质与不等式性质', 
+                      theory: '不等式性质：(1) a>b ⇔ a+c>b+c；(2) a>b，c>0 ⇒ ac>bc；(3) a>b，c<0 ⇒ ac<bc；(4) a>b>0，c>d>0 ⇒ ac>bd。',
+                      example: '已知 a>b>0，c<d<0，比较 a/c 与 b/d 的大小。', 
+                      parse: 'a/c - b/d = (ad-bc)/cd，由已知 ad<0，bc<0，无法直接判断，需分情况讨论。更简便方法：取特殊值判断。', 
+                      understand: '📐 不等式性质中，乘负数要变号。遇到复杂比较，赋值法（取特殊值）是很好的验证手段。' },
+                    { title: '2.2 基本不等式', 
+                      theory: '对于任意正数a，b，有 a+b ≥ 2√ab，当且仅当a=b时等号成立。该不等式称为基本不等式，其几何解释为"半弦长不大于半径"。',
+                      example: '已知 x>0，y>0，且 x+y=1，求 1/x + 4/y 的最小值。', 
+                      parse: '1/x + 4/y = (1/x + 4/y)(x+y) = 5 + y/x + 4x/y ≥ 5 + 2√4 = 9，当且仅当 y=2x 时取等号，即 x=1/3，y=2/3。', 
+                      understand: '🎈 基本不等式 a+b≥2√ab 是"积定和最小，和定积最大"的核心。配凑法是关键。' },
+                    { title: '2.3 二次函数与一元二次方程、不等式', 
+                      theory: '一元二次不等式 ax²+bx+c>0（a>0）的解集与二次函数 y=ax²+bx+c 的图象有关：大于取两边，小于取中间（当判别式>0时）。',
+                      example: '解不等式 -x²+3x+10<0。', 
+                      parse: '化为 x²-3x-10>0，因式分解得 (x-5)(x+2)>0，解集为 {x|x>5 或 x<-2}。', 
+                      understand: '📈 二次不等式先化标准式，再找根，结合图像（开口方向）判断区间。大于取两边，小于取中间。' }
+                ]
+            },
+            {
+                id: 'c3', num: '第三章', title: '函数的概念与性质',
+                overview: '📌 函数是描述变量之间依赖关系的模型。这一章从"对应关系"出发，研究函数的单调性、奇偶性等性质，是后续所有函数的基础。',
+                sections: [
+                    { title: '3.1 函数的概念及其表示', 
+                      theory: '设A，B是非空的实数集，如果对于集合A中的任意一个数x，按照某种确定的对应关系f，在集合B中都有唯一确定的数y和它对应，那么称f：A→B为从集合A到集合B的一个函数。',
+                      example: '下列对应是否为函数？<br>(1) y=2x+1，x∈{1，2，3，4}，y∈{x|x≤10，x∈N}；<br>(2) y²=x，x∈[0，+∞)，y∈R。', 
+                      parse: '(1)是函数，每个x都有唯一确定的y对应；(2)不是函数，一个x对应两个y值。', 
+                      understand: '🧠 函数的本质：每个输入（x）只能对应一个输出（y）。像 y²=x 中，x=4时y=±2，不满足唯一性。' },
+                    { title: '3.2 函数的基本性质', 
+                      theory: '设函数f(x)的定义域为I，如果对于定义域I内某个区间D上的任意两个自变量的值x₁，x₂，当x₁<x₂时，都有f(x₁)<f(x₂)，那么就说f(x)在区间D上是增函数。奇函数：f(-x)=-f(x)；偶函数：f(-x)=f(x)。',
+                      example: '已知 f(x) 是定义在R上的奇函数，且当 x>0 时，f(x)=x²-2x，求 f(x) 的解析式。', 
+                      parse: 'x<0时，-x>0，f(-x)=x²+2x。由奇函数 f(-x)=-f(x) 得 f(x)=-x²-2x。f(0)=0。', 
+                      understand: '🌈 奇函数关于原点对称，f(-x)=-f(x)；偶函数关于y轴对称，f(-x)=f(x)。利用对称性可以快速补全解析式。' },
+                    { title: '3.3 幂函数', 
+                      theory: '一般地，函数y=x^α叫做幂函数，其中x是自变量，α是常数。幂函数在第一象限内的图象和性质与α的正负有关。',
+                      example: '函数 f(x)=(m²-m-1)x^(m²-2m-3) 是幂函数，且在(0，+∞)上为减函数，求实数 m 的值。', 
+                      parse: '由幂函数定义 m²-m-1=1，得 m=2 或 m=-1。m=2时，指数为-3，符合减函数；m=-1时，指数为0，不符合。故 m=2。', 
+                      understand: '📦 幂函数形式为 y=x^a，系数必须为1。指数小于0时，在(0,+∞)单调递减。' },
+                    { title: '3.4 函数的应用（一）', 
+                      theory: '用函数模型解决实际问题的一般步骤：审题→建模→求模→还原。常见的函数模型有一次函数、二次函数、分段函数等。',
+                      example: '某种储蓄月利率0.36%，存入本金100元，求本息和 y（元）与所存月数 x 的函数关系式，并计算5个月后的本息和（不计复利）。', 
+                      parse: 'y=100+100×0.36%·x=100+0.36x，当x=5时，y=101.8元。', 
+                      understand: '💰 实际问题建模：找到变量关系，用函数表达。注意"不计复利"就是单利，利息=本金×利率×时间。' }
+                ]
+            },
+            {
+                id: 'c4', num: '第四章', title: '指数函数与对数函数',
+                overview: '📈 指数和对数是互为逆运算的关系。指数函数描述"爆炸式"增长，对数函数则是指数函数的"反函数"。在科学、金融中广泛应用。',
+                sections: [
+                    { title: '4.1 指数', 
+                      theory: '一般地，a^n (a>0，n∈N*) 表示n个a相乘。分数指数幂：a^(m/n)=ⁿ√(a^m) (a>0，m，n∈N*，n>1)。有理数指数幂的运算性质同整数指数幂。',
+                      example: '计算：2^(2/3) × 3^(1/3) × 12^(1/6)', 
+                      parse: '原式 = 2^(2/3+1/3) × 3^(1/3+1/6) = 2×3^(1/2) = 2√3。', 
+                      understand: '🔢 指数运算遵循同底数幂相乘，指数相加。将底数拆解成相同底数的幂是化简的常用技巧。' },
+                    { title: '4.2 指数函数', 
+                      theory: '函数 y=a^x (a>0，且a≠1) 叫做指数函数。当a>1时，函数在R上是增函数；当0<a<1时，函数在R上是减函数。',
+                      example: '判断函数 f(x)=2^x/(2^x+1) 的奇偶性。', 
+                      parse: '定义域为R，f(-x)=2^(-x)/(2^(-x)+1)=1/(1+2^x)，f(x)+f(-x)=1，故 f(x) 非奇非偶。', 
+                      understand: '🧪 判断奇偶性先看定义域是否对称，再用定义验证。相加等于1说明图像关于点(0,0.5)对称。' },
+                    { title: '4.3 对数', 
+                      theory: '一般地，如果 a^x=N (a>0，且a≠1)，那么数x叫做以a为底N的对数，记作 x=log_a N。对数恒等式：a^(log_a N)=N。换底公式：log_a b = log_c b / log_c a。',
+                      example: '计算 log₂27 × log₃4 + 3^(log₃2)', 
+                      parse: 'log₂27=3log₂3，log₃4=2log₃2，相乘得6。3^(log₃2)=2，原式=6+2=8。', 
+                      understand: '📐 对数恒等式 a^(log_a N)=N 是化简关键。换底公式 log_a b = log_c b / log_c a 也很常用。' },
+                    { title: '4.4 对数函数', 
+                      theory: '函数 y=log_a x (a>0，且a≠1) 叫做对数函数。定义域为(0，+∞)，值域为R。当a>1时在(0，+∞)上为增函数；0<a<1时为减函数。',
+                      example: '求函数 y=log₂(x²-2x-3) 的定义域。', 
+                      parse: 'x²-2x-3>0，即 (x-3)(x+1)>0，定义域为 {x|x>3 或 x<-1}。', 
+                      understand: '🚧 对数函数真数必须大于0。解二次不等式时，画抛物线图像更直观。' },
+                    { title: '4.5 函数的应用（二）', 
+                      theory: '指数函数模型 y=a(1+r)^x 常用于描述复利、人口增长、细胞分裂等增长问题。对数函数常用于测量地震震级、声音响度等。',
+                      example: '按复利计算利息，本金为a元，每期利率为r，本利和为y，存期为x，写出函数式。若本金1000元，每期利率2.25%，计算5期后的本利和。', 
+                      parse: 'y=a(1+r)^x，5期后为1000(1+2.25%)^5≈1117.68元。', 
+                      understand: '💰 复利是"利滚利"，公式 y=a(1+r)^x。与单利对比，复利的增长更快。' }
+                ]
+            },
+            {
+                id: 'c5', num: '第五章', title: '三角函数',
+                overview: '🔺 三角函数将角度与边长联系起来，是几何与代数的桥梁。从任意角到诱导公式，再到恒等变换，是高考的必考重点。',
+                sections: [
+                    { title: '5.1 任意角和弧度制', 
+                      theory: '角可以看成平面内一条射线绕着端点从一个位置旋转到另一个位置所成的图形。按逆时针方向旋转形成的角叫做正角。弧度制：长度等于半径的弧所对的圆心角叫做1弧度的角。',
+                      example: '终边在直线 y=x 上的角的集合为______。', 
+                      parse: '{α|α=π/4 + kπ，k∈Z}（注意不是2kπ，因为直线经过一、三象限）。', 
+                      understand: '🧭 终边在一条直线上，角度相差π（180°）而不是2π。用弧度制表示时，要习惯π/4+kπ这种形式。' },
+                    { title: '5.2 三角函数的概念', 
+                      theory: '设α是一个任意角，α∈R，它的终边与单位圆交于点P(x，y)，那么正弦 sinα=y，余弦 cosα=x，正切 tanα=y/x (x≠0)。',
+                      example: '已知角α终边上一点 P(-3，4)，求 sinα、cosα、tanα。', 
+                      parse: 'r=√[(-3)²+4²]=5，sinα=4/5，cosα=-3/5，tanα=-4/3。', 
+                      understand: '📐 任意角三角函数的定义：sin=y/r, cos=x/r, tan=y/x。记住r永远为正，符号由象限决定。' },
+                    { title: '5.3 诱导公式', 
+                      theory: '诱导公式可以概括为"奇变偶不变，符号看象限"的口诀。利用诱导公式可以将任意角的三角函数转化为锐角三角函数。',
+                      example: '已知 sin(π/6+α)=1/3，求 cos(π/3-α) 的值。', 
+                      parse: 'cos(π/3-α)=sin[π/2-(π/3-α)]=sin(π/6+α)=1/3。', 
+                      understand: '🔄 诱导公式口诀"奇变偶不变，符号看象限"。熟练运用互余关系（sin和cos互换）可以简化计算。' },
+                    { title: '5.4 三角函数的图象与性质', 
+                      theory: '正弦函数 y=sin x 的图象关于点(kπ，0)对称，关于直线 x=π/2+kπ 对称。余弦函数 y=cos x 的图象关于点(π/2+kπ，0)对称，关于直线 x=kπ 对称。',
+                      example: '函数 y=sin(2x+π/3) 的对称轴为______，对称中心为______。', 
+                      parse: '令 2x+π/3=π/2+kπ，得 x=π/12+kπ/2（对称轴）；令 2x+π/3=kπ，得 x=-π/6+kπ/2（对称中心）。', 
+                      understand: '📊 正弦型函数的对称轴在最大值/最小值处，对称中心在平衡位置（y=0）且穿过x轴的点。' },
+                    { title: '5.5 三角恒等变换', 
+                      theory: '两角和与差公式：sin(α±β)=sinαcosβ±cosαsinβ，cos(α±β)=cosαcosβ∓sinαsinβ。二倍角公式：sin2α=2sinαcosα，cos2α=cos²α-sin²α=2cos²α-1=1-2sin²α。',
+                      example: '求值：sin15°cos15°。', 
+                      parse: 'sin15°cos15° = (1/2)sin30° = (1/2)×(1/2)=1/4。', 
+                      understand: '🧩 二倍角公式 sin2θ=2sinθcosθ 的逆用。记住常见特殊角（15°, 75°）的三角函数值。' },
+                    { title: '5.6 函数 y=Asin(ωx+φ)', 
+                      theory: '函数 y=Asin(ωx+φ) (A>0，ω>0) 的振幅为A，周期T=2π/ω，频率f=1/T，相位为ωx+φ，初相为φ。其图象可以由y=sinx的图象经过伸缩和平移得到。',
+                      example: '函数 y=3sin(2x-π/3) 的振幅、周期、初相分别为______。', 
+                      parse: '振幅A=3，周期T=2π/2=π，初相φ=-π/3。', 
+                      understand: '🎯 振幅影响"高低"，周期影响"快慢"，初相决定"起点位置"。它们共同描绘了振动的特征。' },
+                    { title: '5.7 三角函数的应用', 
+                      theory: '三角函数模型在物理（简谐运动）、工程、天文等领域有广泛应用。解决实际问题时，常需要根据已知条件确定函数解析式，再求最值或特定值。',
+                      example: '在半圆形钢板上截取一块矩形材料，怎样截取能使矩形面积最大？', 
+                      parse: '设矩形的一角在半径为R的半圆上，设角度为θ，则矩形面积S=2R²sinθcosθ=R²sin2θ，当θ=45°时面积最大。', 
+                      understand: '📐 实际优化问题常转化为三角函数最值。利用二倍角公式将面积化为单一三角函数，再求最大值。' }
+                ]
+            },
+            {
+                id: 'c6', num: '第六章', title: '平面向量及其应用',
+                overview: '➡️ 向量既有大小又有方向，是连接几何与代数的工具。向量运算（加减、数乘、数量积）为解决几何问题提供了新思路。',
+                sections: [
+                    { title: '6.1 平面向量的概念', 
+                      theory: '既有大小又有方向的量叫做向量。向量可以用有向线段表示。长度相等且方向相同的向量叫做相等向量。方向相同或相反的非零向量叫做平行向量（共线向量）。',
+                      example: '下列命题中正确的是______<br>(1) 向量就是有向线段；(2) 相等向量一定共线；(3) 零向量没有方向。', 
+                      parse: '(1)错，向量是自由向量，与起点无关；(2)对，相等向量方向相同，一定共线；(3)错，零向量方向是任意的。', 
+                      understand: '🧭 向量是"自由"的，可以平移。相等向量必须大小和方向都相同。零向量方向任意，长度为0。' },
+                    { title: '6.2 平面向量的运算', 
+                      theory: '向量的加法满足三角形法则和平行四边形法则。数乘向量：λa (λ∈R) 是向量，其模为|λ||a|，方向与a相同（λ>0）或相反（λ<0）。数量积：a·b=|a||b|cosθ。',
+                      example: '已知向量 a=(1，1)，b=(1，-1)，若 a+λb 与 a-μb 垂直，求 λμ 的值。', 
+                      parse: '(a+λb)·(a-μb)=|a|²+(λ-μ)a·b-λμ|b|²=2+(λ-μ)·0-2λμ=0，得 λμ=1。', 
+                      understand: '📐 垂直条件：数量积为0。利用数量积的分配律和正交性（a·b=0）简化计算。' },
+                    { title: '6.3 平面向量基本定理及坐标表示', 
+                      theory: '如果e₁，e₂是同一平面内的两个不共线向量，那么对于这一平面内的任一向量a，有且只有一对实数λ₁，λ₂，使a=λ₁e₁+λ₂e₂。坐标表示：a=(x，y)。',
+                      example: '已知向量 a=(1，2)，b=(2，-1)，若向量 a+kb 与 b 共线，求 k 的值。', 
+                      parse: 'a+kb=(1+2k，2-k)，b=(2，-1)。共线条件：(1+2k)(-1)=(2-k)·2，解得 k=0。', 
+                      understand: '📌 共线（平行）向量对应坐标成比例。也可以通过叉积为零或线性相关来判断。' },
+                    { title: '6.4 平面向量的应用', 
+                      theory: '用向量方法解决几何问题的"三步曲"：①建立平面几何与向量的联系，用向量表示问题中涉及的几何元素；②通过向量运算，研究几何元素之间的关系；③把运算结果"翻译"成几何关系。',
+                      example: '在△ABC中，a=2，b=3，C=60°，求c。', 
+                      parse: '由余弦定理 c²=a²+b²-2abcosC =4+9-2×2×3×1/2=7，c=√7。', 
+                      understand: '📐 向量和余弦定理是解三角形的两大工具。已知两边夹角求第三边，直接套余弦定理。' }
+                ]
+            },
+            {
+                id: 'c7', num: '第七章', title: '复数',
+                overview: '🔢 复数将实数范围扩大到"二维"，引入了虚数单位 i (i²=-1)。复数在方程求解、电学等领域有重要应用。',
+                sections: [
+                    { title: '7.1 复数的概念', 
+                      theory: '形如a+bi (a，b∈R) 的数叫做复数，其中i叫做虚数单位，满足i²=-1。a叫做复数的实部，b叫做复数的虚部。全体复数所成的集合叫做复数集，记作C。',
+                      example: '已知复数 z=(m²-3m+2)+(m²-4)i 为实数，求 m 的值。', 
+                      parse: '复数为实数需虚部为0，即 m²-4=0，得 m=±2。', 
+                      understand: '🧠 复数 z=a+bi，a为实部，b为虚部。实数的虚部为0，纯虚数的实部为0且虚部不为0。' },
+                    { title: '7.2 复数的四则运算', 
+                      theory: '设z₁=a+bi，z₂=c+di，(a，b，c，d∈R)，则z₁+z₂=(a+c)+(b+d)i，z₁-z₂=(a-c)+(b-d)i，z₁·z₂=(ac-bd)+(ad+bc)i。复数除法需要利用共轭复数来化简。',
+                      example: '计算 (1+2i)(3-4i)', 
+                      parse: '原式 = 3-4i+6i-8i² = 3+2i+8 = 11+2i。', 
+                      understand: '📐 复数运算类似多项式乘法，只需记住 i²=-1。除法时用共轭复数来化简。' }
+                ]
+            },
+            {
+                id: 'c8', num: '第八章', title: '立体几何初步',
+                overview: '🧊 从平面到空间，研究点、线、面的位置关系。直观感知和逻辑推理并重，是培养空间想象能力的关键。',
+                sections: [
+                    { title: '8.1 基本立体图形', 
+                      theory: '棱柱：有两个面互相平行，其余各面都是四边形，并且每相邻两个四边形的公共边都互相平行。棱锥：有一个面是多边形，其余各面都是有一个公共顶点的三角形。',
+                      example: '一个棱柱至少有______个面。', 
+                      parse: '三棱柱有5个面，是最少的棱柱，故至少5个面。', 
+                      understand: '📦 棱柱由两个平行且全等的底面和若干个侧面组成。三棱柱（底面三角形）面数最少。' },
+                    { title: '8.2 立体图形的直观图', 
+                      theory: '斜二测画法：在已知图形中取互相垂直的x轴和y轴，两轴交于点O。画直观图时，把它们画成对应的x轴和y轴，两轴交于点O，且使∠xOy=45°（或135°），它们确定的平面表示水平面。',
+                      example: '斜二测画法中，原图中的直角在直观图中一定还是直角吗？', 
+                      parse: '不一定。当直角的边与坐标轴垂直时，在直观图中变为45°或135°。', 
+                      understand: '🎨 斜二测画法：横向不变，纵向减半且倾斜45°。原来的直角可能被"拉斜"。' },
+                    { title: '8.3 简单几何体的表面积与体积', 
+                      theory: '柱体体积V=Sh，锥体体积V=1/3Sh，台体体积V=1/3(S上+S下+√(S上S下))h。球的表面积S=4πR²，体积V=4/3πR³。',
+                      example: '圆锥的轴截面为等边三角形，高为√3，求该圆锥内切球的表面积。', 
+                      parse: '设底面半径为r，母线为2r，高√3r=√3，得r=1。内切球半径R=r/√3=√3/3，表面积S=4πR²=4π/3。', 
+                      understand: '🎯 内切球与圆锥的侧面和底面都相切，球心在轴截面的角平分线上。利用等边三角形和相似三角形求半径。' },
+                    { title: '8.4 空间点、直线、平面之间的位置关系', 
+                      theory: '公理1：如果一条直线上的两点在一个平面内，那么这条直线在此平面内。公理2：过不在一条直线上的三点，有且只有一个平面。公理3：如果两个不重合的平面有一个公共点，那么它们有且只有一条过该点的公共直线。',
+                      example: '下列说法正确的是______<br>(1) 三点确定一个平面；(2) 两条直线确定一个平面；(3) 两条相交直线确定一个平面。', 
+                      parse: '(1)错，三点必须不共线；(2)错，两条异面直线不共面；(3)对。', 
+                      understand: '📐 公理：不共线的三点确定一个平面。两条相交直线或平行直线也确定一个平面。' },
+                    { title: '8.5 空间直线、平面的平行', 
+                      theory: '线面平行的判定定理：如果平面外一条直线与此平面内的一条直线平行，那么该直线与此平面平行。面面平行的判定定理：如果一个平面内的两条相交直线都平行于另一个平面，那么这两个平面平行。',
+                      example: '正四棱锥P-ABCD的体积为2，底面积为6，E为侧棱PC的中点，求直线BE与平面PAC所成的角。', 
+                      parse: '利用几何法找线面角，连接EO（O为底面中心），则∠BEO即为所求角。利用体积求得高，再计算三角函数值。', 
+                      understand: '📐 线面角：直线与它在平面上的射影所成的角。找射影是关键，常用到中点、垂线等几何性质。' },
+                    { title: '8.6 空间直线、平面的垂直', 
+                      theory: '线面垂直的判定定理：如果一条直线垂直于一个平面内的两条相交直线，那么该直线与此平面垂直。面面垂直的判定定理：如果一个平面经过另一个平面的一条垂线，那么这两个平面互相垂直。',
+                      example: '在正方体ABCD-A₁B₁C₁D₁中，求直线BD₁与平面ABCD所成角的正切值。', 
+                      parse: 'DD₁⊥平面ABCD，∠D₁BD为线面角。tan∠D₁BD = DD₁/BD = 1/√2 = √2/2。', 
+                      understand: '📐 线面垂直：一条直线垂直于平面内的两条相交直线。线面角的正切值等于对边比邻边（在直角三角形中）。' }
+                ]
+            },
+            {
+                id: 'c9', num: '第九章', title: '统计',
+                overview: '📊 统计是从数据中提取信息的方法。抽样、估计、数据分析帮助我们认识客观世界，是理性决策的基础。',
+                sections: [
+                    { title: '9.1 随机抽样', 
+                      theory: '简单随机抽样：一般地，设一个总体含有N个个体，从中逐个不放回地抽取n个个体作为样本（n≤N），如果每次抽取时总体内的各个个体被抽到的机会都相等，就把这种抽样方法叫做简单随机抽样。分层抽样：按比例从各层中抽取。',
+                      example: '某校有高一学生400人，高二学生320人，高三学生280人。用分层抽样抽取容量为100的样本，各年级应抽取多少人？', 
+                      parse: '总人数1000人，比例为4:3.2:2.8。高一抽取40人，高二32人，高三28人。', 
+                      understand: '📋 分层抽样：按比例从各层中抽取，保证样本结构与总体一致。计算时用"各层人数/总人数×样本容量"。' },
+                    { title: '9.2 用样本估计总体', 
+                      theory: '众数：一组数据中出现次数最多的数。中位数：将数据按从小到大排列，处于中间位置的数（或中间两个数的平均数）。平均数：所有数据之和除以数据的个数。方差：s²=1/n∑(xᵢ-ˉx)²，标准差为方差的算术平方根。',
+                      example: '一组数据为1，2，2，3，3，3，4，4，5，求中位数、众数、平均数。', 
+                      parse: '中位数=3，众数=3，平均数=(1+2+2+3+3+3+4+4+5)/9=27/9=3。', 
+                      understand: '📊 中位数：排序后中间的数；众数：出现次数最多的数；平均数：总和除以个数。它们从不同角度描述数据的中心位置。' },
+                    { title: '9.3 统计案例', 
+                      theory: '统计实践的基本过程：确定调查对象→设计调查方案→收集数据→整理数据→分析数据→作出推断。分层抽样能有效减少抽样误差。',
+                      example: '统计知识在实际生活中的应用，如调查某校学生近视率，设计抽样方案。', 
+                      parse: '可采用分层抽样按年级分层，再按性别分层，确保样本代表性。', 
+                      understand: '🏫 统计实践：明确调查目标，选择抽样方法，设计问卷，收集数据，分析并得出结论。分层抽样能减少偏差。' }
+                ]
+            },
+            {
+                id: 'c10', num: '第十章', title: '概率',
+                overview: '🎲 概率研究随机事件发生的可能性。从古典概型到事件独立性，概率论为我们理解和预测不确定性提供了框架。',
+                sections: [
+                    { title: '10.1 随机事件与概率', 
+                      theory: '一般地，对于给定的随机事件A，在相同条件下，随着试验次数的增加，事件A发生的频率会在某个常数附近摆动并趋于稳定，这个常数叫做事件A的概率，记作P(A)。古典概型：P(A)=事件A包含的基本事件数/基本事件总数。',
+                      example: '掷一枚骰子，求出现奇数点的概率。', 
+                      parse: '样本空间Ω={1，2，3，4，5，6}，事件A={1，3，5}，P(A)=3/6=1/2。', 
+                      understand: '🎯 古典概型：P(A)=事件A包含的基本事件数/总的基本事件数。每个基本事件等可能。' },
+                    { title: '10.2 事件的相互独立性', 
+                      theory: '设A，B为两个事件，如果P(AB)=P(A)P(B)，则称事件A与事件B相互独立。独立事件同时发生的概率等于各自概率的乘积。',
+                      example: '甲、乙两人同时射击同一目标，甲命中概率0.8，乙命中概率0.9，求目标被命中的概率。', 
+                      parse: 'P=1-P(甲未中)P(乙未中)=1-0.2×0.1=0.98。', 
+                      understand: '🔗 独立事件：一个事件发生与否不影响另一个。目标被命中 = 至少一人命中，用对立事件计算更简便。' },
+                    { title: '10.3 频率与概率', 
+                      theory: '频率是随机事件在n次试验中发生的频数与试验次数n的比值。概率是随机事件发生的可能性的度量，是一个确定的常数，与试验次数无关。当试验次数n很大时，频率会稳定在概率附近。',
+                      example: '抛硬币试验，前100次正面出现48次，求正面频率；以此估计抛硬币正面朝上的概率。', 
+                      parse: '频率=48/100=0.48，概率估计值≈0.5。', 
+                      understand: '📈 频率是试验中事件发生的比例，概率是理论上的稳定值。随着试验次数增加，频率会趋近于概率。' }
+                ]
+            }
+        ];
+
+        // ---------- 搜题 ----------
+        function searchQuestion(sectionTitle) {
+            const keyword = sectionTitle.replace(/^\d+\.\d+\s*/, '').trim();
+            const searchQuery = keyword + ' 高中数学';
+            const searchUrl = 'http://www.jyeoo.com/search?c=0&qb=' + encodeURIComponent(searchQuery);
+            window.open(searchUrl, '_blank');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(searchQuery).catch(function() { fallbackCopy(searchQuery); });
+            } else {
+                fallbackCopy(searchQuery);
+            }
+        }
+
+        function fallbackCopy(text) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(textarea);
+        }
+
+        // ---------- 视频 ----------
+        function watchVideo(sectionTitle) {
+            var keyword = sectionTitle.replace(/^\d+\.\d+\s*/, '').trim();
+            var searchUrl = 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(keyword + ' 高一数学 人教A版');
+            window.open(searchUrl, '_blank');
+        }
+
+        // ---------- 渲染 ----------
+        var container = document.getElementById('chapterList');
+
+        function renderAll() {
+            var html = '';
+            for (var idx = 0; idx < chaptersData.length; idx++) {
+                var ch = chaptersData[idx];
+                var collapsed = (idx === 0) ? '' : 'collapsed';
+                html += '<div class="chapter" data-chapter="' + ch.id + '">';
+                html += '<div class="chapter-header" data-toggle="' + ch.id + '">';
+                html += '<h2><span class="chapter-num">' + ch.num + '</span> ' + ch.title + '</h2>';
+                html += '<span class="chevron" id="chevron_' + ch.id + '">' + (collapsed ? '▶' : '▼') + '</span>';
+                html += '</div>';
+                html += '<div class="chapter-body ' + collapsed + '" id="body_' + ch.id + '">';
+                
+                if (ch.overview) {
+                    html += '<div class="chapter-overview">📖 ' + ch.overview + '</div>';
+                }
+
+                for (var s = 0; s < ch.sections.length; s++) {
+                    var sec = ch.sections[s];
+                    var safeTitle = sec.title.replace(/'/g, "\\'");
+                    html += '<div class="section">';
+                    html += '<div class="section-header">';
+                    html += '<h3>' + sec.title + ' <span class="sec-tag">例题</span></h3>';
+                    html += '<div class="section-actions">';
+                    html += '<button class="btn-sm btn-search" onclick="searchQuestion(\'' + safeTitle + '\')">🔍 搜题</button>';
+                    html += '<button class="btn-sm btn-video" onclick="watchVideo(\'' + safeTitle + '\')">▶ 视频</button>';
+                    html += '</div></div>';
+                    // 课本理论
+                    html += '<div class="theory-block">';
+                    html += '<strong>📘 课本理论</strong>';
+                    html += '<div class="theory-def">' + (sec.theory || '（教材定义与性质）') + '</div>';
+                    html += '</div>';
+                    // 例题
+                    html += '<div class="example-box">';
+                    html += '<strong>📌 经典例题</strong><br>';
+                    html += '<span>' + sec.example + '</span>';
+                    html += '<div class="parse"><strong>解析：</strong>' + sec.parse + '</div>';
+                    html += '</div>';
+                    // 小白理解
+                    html += '<div class="understand-tip"><strong>💡 小白理解：</strong>' + (sec.understand || '理解就是：多读几遍，结合解析和例题，体会数学逻辑。') + '</div>';
+                    html += '<div class="search-tip">💡 搜题跳转菁优网，搜索「知识点 + 高中数学」</div>';
+                    html += '</div>';
+                }
+
+                html += '</div></div>';
+            }
+            container.innerHTML = html;
+        }
+
+        renderAll();
+
+        window.searchQuestion = searchQuestion;
+        window.watchVideo = watchVideo;
+
+        // ---------- 折叠 ----------
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.chapter-header');
+            if (!header) return;
+            var chapterId = header.dataset.toggle;
+            var body = document.getElementById('body_' + chapterId);
+            var chevron = document.getElementById('chevron_' + chapterId);
+            if (!body) return;
+            var isCollapsed = body.classList.toggle('collapsed');
+            if (chevron) chevron.textContent = isCollapsed ? '▶' : '▼';
+        });
+
+        // ---------- 主题 ----------
+        var themeToggle = document.getElementById('themeToggle');
+        var themeIcon = document.getElementById('themeIcon');
+        var themeLabel = document.getElementById('themeLabel');
+
+        function setTheme(dark) {
+            if (dark) {
+                document.body.classList.add('dark');
+                themeIcon.textContent = '☀️';
+                themeLabel.textContent = '亮色';
+            } else {
+                document.body.classList.remove('dark');
+                themeIcon.textContent = '🌙';
+                themeLabel.textContent = '深色';
+            }
+            localStorage.setItem('mathTheme', dark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('mathTheme');
+        if (stored === 'dark') setTheme(true);
+        else if (stored === 'light') setTheme(false);
+        else {
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark);
+        }
+
+        themeToggle.addEventListener('click', function() {
+            var isDark = document.body.classList.contains('dark');
+            setTheme(!isDark);
+        });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            if (!localStorage.getItem('mathTheme')) {
+                setTheme(e.matches);
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>

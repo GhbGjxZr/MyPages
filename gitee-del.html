@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Gitee 仓库批量删除 · 增强版</title>
+    <style>
+        /* ===== CSS 变量 ===== */
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-container: #ffffff;
+            --bg-surface: #f8fafc;
+            --bg-hover: #fafcfe;
+            --bg-toolbar: #f7f9fc;
+            --border-color: #e9edf2;
+            --border-dark: #d0d7de;
+            --text-primary: #1f2a3a;
+            --text-secondary: #5e6f7e;
+            --text-muted: #8c9aa8;
+            --text-light: #3b4a5a;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            --btn-primary: #1e80ff;
+            --btn-primary-hover: #1a6ee0;
+            --btn-danger: #f56c6c;
+            --btn-danger-hover: #e04e4e;
+            --btn-success: #34c759;
+            --btn-success-hover: #2db84d;
+            --btn-gitee: #c71d23;
+            --btn-gitee-hover: #a8181d;
+            --progress-bg: #e9edf2;
+            --progress-fill: #1e80ff;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --log-bg: #f8fafc;
+            --log-border: #e9edf2;
+            --tag-bg: #f0f4f9;
+            --skeleton-from: #f0f2f5;
+            --skeleton-via: #e4e7eb;
+            --skeleton-to: #f0f2f5;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --empty-icon-color: #d0d7de;
+            --badge-bg: #eef2f7;
+            --input-bg: #ffffff;
+            --input-border: #d0d7de;
+            --input-focus-shadow: rgba(30, 128, 255, 0.15);
+            --status-success: #1f9b3a;
+            --status-error: #d14545;
+            --status-info: #1e80ff;
+            --scrollbar-track: #f0f2f5;
+            --scrollbar-thumb: #cbd5e1;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0d1117;
+            --bg-container: #161b22;
+            --bg-surface: #1c2333;
+            --bg-hover: #1c2333;
+            --bg-toolbar: #1c2333;
+            --border-color: #30363d;
+            --border-dark: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --text-light: #8b949e;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            --btn-primary: #1f6feb;
+            --btn-primary-hover: #388bfd;
+            --btn-danger: #da3633;
+            --btn-danger-hover: #f85149;
+            --btn-success: #2ea043;
+            --btn-success-hover: #3fb950;
+            --btn-gitee: #c71d23;
+            --btn-gitee-hover: #e04e4e;
+            --progress-bg: #30363d;
+            --progress-fill: #388bfd;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --log-bg: #0d1117;
+            --log-border: #30363d;
+            --tag-bg: #21262d;
+            --skeleton-from: #21262d;
+            --skeleton-via: #30363d;
+            --skeleton-to: #21262d;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --empty-icon-color: #30363d;
+            --badge-bg: #21262d;
+            --input-bg: #0d1117;
+            --input-border: #30363d;
+            --input-focus-shadow: rgba(56, 139, 253, 0.2);
+            --status-success: #3fb950;
+            --status-error: #f85149;
+            --status-info: #388bfd;
+            --scrollbar-track: #161b22;
+            --scrollbar-thumb: #30363d;
+        }
+
+        /* ===== 全局重置 ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg-body);
+            display: flex;
+            justify-content: center;
+            padding: 20px 12px;
+            min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
+            color: var(--text-primary);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: var(--bg-container);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px 28px 32px;
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+
+        /* ===== 头部 ===== */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h1 small {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .theme-toggle {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            transition: background var(--transition), border var(--transition);
+            line-height: 28px;
+        }
+        .theme-toggle:hover {
+            background: var(--border-color);
+        }
+        .theme-toggle .icon {
+            font-size: 18px;
+        }
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-left: 3px solid var(--border-color);
+            padding-left: 14px;
+            margin-bottom: 20px;
+            transition: color var(--transition), border var(--transition);
+        }
+
+        /* ===== 令牌区 ===== */
+        .token-section {
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 18px;
+            transition: background var(--transition), border var(--transition);
+        }
+        .token-section label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .token-section label .badge {
+            background: var(--badge-bg);
+            padding: 0 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+        .token-input-wrapper {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .token-input-wrapper input {
+            flex: 1;
+            min-width: 140px;
+            padding: 8px 14px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border var(--transition), box-shadow var(--transition), background var(--transition);
+            font-family: inherit;
+        }
+        .token-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+        .token-status {
+            font-size: 13px;
+            color: var(--btn-success);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .token-status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--btn-success);
+        }
+        .token-helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .token-helper a {
+            color: var(--btn-primary);
+            text-decoration: none;
+        }
+        .token-helper a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== 按钮 ===== */
+        .btn {
+            padding: 7px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background var(--transition), transform 0.05s, opacity var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            font-family: inherit;
+            color: #fff;
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary {
+            background: var(--btn-primary);
+            color: #fff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--btn-primary-hover);
+        }
+        .btn-danger {
+            background: var(--btn-danger);
+            color: #fff;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: var(--btn-danger-hover);
+        }
+        .btn-success {
+            background: var(--btn-success);
+            color: #fff;
+        }
+        .btn-success:hover:not(:disabled) {
+            background: var(--btn-success-hover);
+        }
+        .btn-gitee {
+            background: var(--btn-gitee);
+            color: #fff;
+        }
+        .btn-gitee:hover:not(:disabled) {
+            background: var(--btn-gitee-hover);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            color: var(--text-secondary);
+        }
+        .btn-outline:hover:not(:disabled) {
+            background: var(--bg-surface);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 4px 10px;
+            font-size: 13px;
+        }
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--bg-surface);
+            border-radius: 6px;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 13px;
+        }
+        .btn-xs {
+            padding: 2px 8px;
+            font-size: 12px;
+        }
+        .btn-icon {
+            padding: 4px 8px;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* ===== 工具栏 ===== */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 12px 0 14px;
+        }
+        .toolbar-left {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar-right {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            padding: 3px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: background var(--transition), border var(--transition), color var(--transition);
+        }
+        .stats strong {
+            color: var(--text-primary);
+        }
+        .auto-load-banner {
+            background: #e8f5e9;
+            border-radius: var(--radius-sm);
+            padding: 4px 14px;
+            font-size: 13px;
+            color: #2e7d32;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        [data-theme="dark"] .auto-load-banner {
+            background: #1a3a2a;
+            color: #7ee787;
+        }
+
+        /* ===== 高级设置控件 ===== */
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            padding: 8px 16px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 12px;
+            transition: background var(--transition), border var(--transition);
+        }
+        .settings-row .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .settings-row .setting-item label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .settings-row .setting-item input[type="number"] {
+            width: 64px;
+            padding: 4px 8px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border var(--transition), background var(--transition);
+            font-family: inherit;
+        }
+        .settings-row .setting-item input[type="number"]:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+        .settings-row .setting-item .hint {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== 搜索与筛选 ===== */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            transition: background var(--transition), border var(--transition);
+        }
+        .filter-bar .search-box {
+            flex: 1;
+            min-width: 150px;
+            padding: 7px 14px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border var(--transition), box-shadow var(--transition), background var(--transition);
+            font-family: inherit;
+        }
+        .filter-bar .search-box:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+        .filter-bar .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-bar select,
+        .filter-bar input[type="date"] {
+            padding: 6px 10px;
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: border var(--transition), background var(--transition);
+            font-family: inherit;
+            min-width: 90px;
+        }
+        .filter-bar select:focus,
+        .filter-bar input[type="date"]:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
+        }
+        .filter-bar .filter-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .filter-bar .filter-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        /* ===== 表格 ===== */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            margin-top: 2px;
+            transition: border var(--transition);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        thead {
+            background: var(--bg-toolbar);
+            transition: background var(--transition);
+        }
+        th {
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            transition: color var(--transition), border var(--transition);
+        }
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            color: var(--text-primary);
+            transition: color var(--transition), border var(--transition), background var(--transition);
+        }
+        tr:hover td {
+            background: var(--bg-hover);
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .checkbox-cell {
+            width: 40px;
+            text-align: center;
+        }
+        .checkbox-cell input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--btn-primary);
+            cursor: pointer;
+        }
+        .repo-name {
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+        .repo-name a {
+            color: var(--btn-primary);
+            text-decoration: none;
+        }
+        .repo-name a:hover {
+            text-decoration: underline;
+        }
+        .repo-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            max-width: 280px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .repo-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .repo-meta span {
+            background: var(--tag-bg);
+            padding: 0 10px;
+            border-radius: 12px;
+            line-height: 22px;
+            transition: background var(--transition);
+        }
+        .repo-meta .tag-private {
+            color: var(--btn-danger);
+        }
+        .repo-meta .tag-public {
+            color: var(--btn-success);
+        }
+
+        /* ===== 卡片视图 (移动端) ===== */
+        .card-view .table-wrap {
+            border: none;
+            background: transparent;
+        }
+        .card-view table,
+        .card-view thead,
+        .card-view tbody,
+        .card-view tr,
+        .card-view th,
+        .card-view td {
+            display: block;
+            border: none;
+        }
+        .card-view thead {
+            display: none;
+        }
+        .card-view tr {
+            background: var(--bg-container);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
+        }
+        .card-view tr:hover td {
+            background: transparent;
+        }
+        .card-view td {
+            padding: 4px 0;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .card-view td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 12px;
+            min-width: 60px;
+        }
+        .card-view .checkbox-cell {
+            width: auto;
+            justify-content: flex-start;
+        }
+        .card-view .checkbox-cell::before {
+            content: '选择';
+        }
+        .card-view .repo-desc {
+            max-width: 100%;
+            white-space: normal;
+        }
+        .card-view .repo-meta {
+            flex-wrap: wrap;
+        }
+
+        /* ===== 删除进度 ===== */
+        .delete-progress {
+            margin-top: 14px;
+            padding: 14px 18px;
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 18px;
+            transition: background var(--transition), border var(--transition);
+        }
+        .delete-progress.active {
+            display: flex;
+        }
+        .delete-progress .progress-info {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 16px;
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .delete-progress .progress-info strong {
+            color: var(--text-primary);
+        }
+        .delete-progress .progress-bar-wrap {
+            flex: 1;
+            min-width: 120px;
+            height: 8px;
+            background: var(--progress-bg);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: background var(--transition);
+        }
+        .delete-progress .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--progress-fill);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+        .delete-progress .progress-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            min-width: 80px;
+            text-align: right;
+        }
+        .delete-progress .progress-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .delete-progress .eta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ===== 状态栏 ===== */
+        .status-bar {
+            margin-top: 16px;
+            padding: 10px 16px;
+            border-radius: var(--radius);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-height: 48px;
+            transition: background var(--transition), border var(--transition);
+        }
+        .status-msg {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            font-size: 14px;
+            flex: 1;
+        }
+        .status-msg .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid var(--border-dark);
+            border-top-color: var(--btn-primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .status-msg .error {
+            color: var(--status-error);
+        }
+        .status-msg .success {
+            color: var(--status-success);
+        }
+        .status-msg .info {
+            color: var(--status-info);
+        }
+
+        /* ===== 空状态 ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 10px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+            opacity: 0.6;
+        }
+        .empty-state p {
+            margin-top: 6px;
+            font-size: 15px;
+        }
+        .empty-state .empty-hint {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* ===== 日志面板 ===== */
+        .log-panel {
+            margin-top: 14px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: border var(--transition);
+        }
+        .log-panel .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            background: var(--bg-surface);
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .log-panel .log-header:hover {
+            background: var(--border-color);
+        }
+        .log-panel .log-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 16px;
+            background: var(--log-bg);
+        }
+        .log-panel.open .log-body {
+            max-height: 300px;
+            padding: 10px 16px;
+            overflow-y: auto;
+        }
+        .log-panel .log-entry {
+            padding: 4px 0;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            font-family: monospace;
+            color: var(--text-secondary);
+        }
+        .log-panel .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-panel .log-time {
+            color: var(--text-muted);
+            min-width: 70px;
+            font-size: 12px;
+        }
+        .log-panel .log-type {
+            font-weight: 600;
+            min-width: 50px;
+        }
+        .log-panel .log-type.info {
+            color: var(--status-info);
+        }
+        .log-panel .log-type.success {
+            color: var(--status-success);
+        }
+        .log-panel .log-type.error {
+            color: var(--status-error);
+        }
+        .log-panel .log-type.warn {
+            color: #e6a700;
+        }
+        .log-panel .log-msg {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        /* ===== 模态框 (教程) ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-container);
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 28px 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: background var(--transition);
+            position: relative;
+        }
+        .modal .close-modal {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color var(--transition);
+        }
+        .modal .close-modal:hover {
+            color: var(--text-primary);
+        }
+        .modal h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        .modal .step {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: background var(--transition), border var(--transition);
+        }
+        .modal .step-num {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--btn-primary);
+            min-width: 28px;
+        }
+        .modal .step-content {
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .modal .step-content strong {
+            color: var(--text-primary);
+        }
+        .modal .step-content code {
+            background: var(--bg-body);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        .modal .copy-link-btn {
+            margin-top: 8px;
+        }
+
+        /* ===== 骨架屏 ===== */
+        .skeleton-row td {
+            height: 46px;
+            background: linear-gradient(90deg, var(--skeleton-from) 25%, var(--skeleton-via) 50%, var(--skeleton-to) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 820px) {
+            .container {
+                padding: 16px 12px;
+            }
+            .token-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .token-input-wrapper {
+                flex-wrap: wrap;
+            }
+            .token-input-wrapper input {
+                min-width: 100px;
+            }
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .filter-bar .filter-group {
+                flex-wrap: wrap;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar-left,
+            .toolbar-right {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+            .settings-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .settings-row .setting-item {
+                flex-wrap: wrap;
+            }
+            .stats {
+                font-size: 13px;
+            }
+            .delete-progress {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .delete-progress .progress-actions {
+                justify-content: center;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .modal {
+                padding: 20px 16px;
+                margin: 10px;
+            }
+            /* 移动端默认卡片视图 */
+            .table-wrap {
+                overflow-x: visible;
+            }
+            .card-view .table-wrap {
+                border: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px 8px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            h1 small {
+                font-size: 11px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 5px 12px;
+            }
+            .btn-sm {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+            .filter-bar .search-box {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+            .filter-bar select,
+            .filter-bar input[type="date"] {
+                font-size: 12px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .stats {
+                font-size: 12px;
+                padding: 2px 10px;
+            }
+            .repo-meta span {
+                font-size: 11px;
+                padding: 0 6px;
+                line-height: 20px;
+            }
+            .card-view tr {
+                padding: 10px 12px;
+            }
+            .settings-row .setting-item input[type="number"] {
+                width: 56px;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .hidden {
+            display: none !important;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .gap-1 {
+            gap: 4px;
+        }
+        .gap-2 {
+            gap: 8px;
+        }
+        .text-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .mt-1 {
+            margin-top: 6px;
+        }
+        .mb-1 {
+            margin-bottom: 6px;
+        }
+        .w-full {
+            width: 100%;
+        }
+
+        /* ===== 复制提示 ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-container);
+            color: var(--text-primary);
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+
+        <!-- ===== 头部 ===== -->
+        <div class="header">
+            <div class="header-left">
+                <h1>🗑️ Gitee 仓库批量删除 <small>v2.1</small></h1>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" title="切换暗色/亮色模式">
+                    <span class="icon">🌓</span> <span id="themeLabel">自动</span>
+                </button>
+                <button class="btn btn-ghost btn-sm" id="tutorialBtn">📖 教程</button>
+            </div>
+        </div>
+        <div class="subtitle">🚀 全量加载 · 并发删除 · 智能筛选 · 操作日志</div>
+
+        <!-- ===== 令牌区 ===== -->
+        <div class="token-section">
+            <label>🔑 私人令牌 <span class="badge">需 projects 权限</span></label>
+            <div class="token-input-wrapper">
+                <input type="password" id="tokenInput" placeholder="输入令牌（首次使用需要）" />
+                <button class="btn btn-primary" id="loadBtn">📂 加载仓库</button>
+                <button class="btn btn-outline btn-sm" id="saveTokenBtn">💾 保存</button>
+                <button class="btn btn-ghost btn-sm" id="clearTokenBtn" title="清除保存的令牌">✕ 清除</button>
+            </div>
+            <div class="token-helper">
+                <span>没有令牌？</span>
+                <button class="btn btn-gitee btn-sm" id="goToTokenBtn">🚀 去 Gitee 生成</button>
+                <button class="btn btn-ghost btn-sm" id="copyTokenUrlBtn" title="复制令牌生成链接">📋 复制链接</button>
+            </div>
+            <span class="token-status" id="tokenStatus" style="display:none;">
+                <span class="dot"></span> 已保存
+            </span>
+        </div>
+
+        <!-- ===== 高级设置控件 ===== -->
+        <div class="settings-row" id="settingsRow">
+            <div class="setting-item">
+                <label for="concurrencyInput">🚀 并发数</label>
+                <input type="number" id="concurrencyInput" min="1" max="20" value="5" />
+                <span class="hint">(1~20)</span>
+            </div>
+            <div class="setting-item">
+                <label for="oldDaysInput">📅 未更新阈值 (天)</label>
+                <input type="number" id="oldDaysInput" min="1" max="3650" value="365" />
+                <span class="hint">(用于“超期”选择)</span>
+            </div>
+            <div class="setting-item" style="font-size:12px;color:var(--text-muted);">
+                ⚡ 修改后立即生效，无需刷新
+            </div>
+        </div>
+
+        <!-- ===== 工具栏 ===== -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="btn btn-outline btn-sm" id="selectAllBtn">☑ 全选</button>
+                <button class="btn btn-outline btn-sm" id="deselectAllBtn">☐ 取消</button>
+                <button class="btn btn-outline btn-sm" id="invertSelectBtn">↔ 反选</button>
+                <button class="btn btn-outline btn-sm" id="selectPublicBtn">🌐 公开</button>
+                <button class="btn btn-outline btn-sm" id="selectPrivateBtn">🔒 私有</button>
+                <button class="btn btn-outline btn-sm" id="selectOldBtn">📅 超期</button>
+                <span class="stats" id="statsText">共 <strong id="totalCount">0</strong> 个仓库</span>
+                <span id="autoLoadBanner" style="display:none;" class="auto-load-banner">⚡ 自动加载</span>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-danger" id="deleteSelectedBtn">🗑️ 删除选中</button>
+            </div>
+        </div>
+
+        <!-- ===== 搜索与筛选 ===== -->
+        <div class="filter-bar">
+            <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜索 / 正则 (名称/描述)" />
+            <div class="filter-group">
+                <span class="filter-label">🔹 可见性</span>
+                <select id="visibilityFilter">
+                    <option value="all">全部</option>
+                    <option value="public">公开</option>
+                    <option value="private">私有</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">📅 更新于</span>
+                <input type="date" id="dateFrom" title="起始日期" />
+                <span style="color:var(--text-muted);font-size:13px;">~</span>
+                <input type="date" id="dateTo" title="结束日期" />
+                <button class="btn btn-ghost btn-xs" id="clearDateFilter">✕ 清除</button>
+            </div>
+            <div class="filter-group filter-actions">
+                <button class="btn btn-outline btn-sm" id="applyFiltersBtn">🔄 应用筛选</button>
+                <button class="btn btn-ghost btn-sm" id="resetFiltersBtn">重置</button>
+            </div>
+        </div>
+
+        <!-- ===== 删除进度 ===== -->
+        <div class="delete-progress" id="deleteProgress">
+            <div class="progress-info">
+                <span>🗑️ 删除中</span>
+                <strong id="progressCount">0/0</strong>
+                <span class="eta" id="progressEta">--</span>
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%;"></div>
+            </div>
+            <div class="progress-text" id="progressPercent">0%</div>
+            <div class="progress-actions">
+                <button class="btn btn-outline btn-sm" id="pauseDeleteBtn">⏸️ 暂停</button>
+                <button class="btn btn-outline btn-sm" id="cancelDeleteBtn">✖ 取消</button>
+            </div>
+        </div>
+
+        <!-- ===== 表格 ===== -->
+        <div class="table-wrap" id="tableWrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="checkbox-cell"><input type="checkbox" id="headerCheckbox" /></th>
+                        <th>仓库名称</th>
+                        <th>描述</th>
+                        <th>信息</th>
+                    </tr>
+                </thead>
+                <tbody id="repoTableBody">
+                    <!-- 由 js 动态渲染 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== 状态栏 ===== -->
+        <div class="status-bar">
+            <div class="status-msg" id="statusMsg">
+                <span>💡 输入令牌后点击「加载仓库」</span>
+            </div>
+            <div>
+                <button class="btn btn-outline btn-sm" id="refreshBtn" title="刷新列表（使用已保存令牌）">🔄 刷新</button>
+            </div>
+        </div>
+
+        <!-- ===== 日志面板 ===== -->
+        <div class="log-panel" id="logPanel">
+            <div class="log-header" id="logToggle">
+                <span>📋 操作日志 <span id="logCount" style="font-weight:400;color:var(--text-muted);font-size:12px;">(0)</span></span>
+                <span style="font-size:12px;color:var(--text-muted);">▼ 点击展开</span>
+            </div>
+            <div class="log-body" id="logBody"></div>
+        </div>
+
+    </div>
+
+    <!-- ===== 模态框 (教程) ===== -->
+    <div class="modal-overlay" id="tutorialModal">
+        <div class="modal">
+            <button class="close-modal" id="closeTutorialBtn">✕</button>
+            <h2>📖 Gitee 私人令牌生成教程</h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <strong>登录 Gitee</strong><br />
+                    访问 <a href="https://gitee.com" target="_blank">gitee.com</a> 并登录你的账号。
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <strong>进入令牌管理页面</strong><br />
+                    点击右上角头像 → <code>设置</code> → 左侧 <code>私人令牌</code>。<br />
+                    或直接点击下方按钮一键跳转：
+                    <div style="margin-top:6px;">
+                        <button class="btn btn-gitee btn-sm" id="modalGoToTokenBtn">🚀 去 Gitee 生成令牌</button>
+                        <button class="btn btn-outline btn-sm copy-link-btn" id="modalCopyTokenUrl">📋 复制链接</button>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <strong>创建新令牌</strong><br />
+                    点击 <code>+ 生成新令牌</code>，填写描述（如 "批量删除工具"）。<br />
+                    <strong>权限勾选：</strong> 至少勾选 <code>projects</code> 和 <code>user_info</code> 权限。
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <strong>复制令牌</strong><br />
+                    生成后 <strong>立即复制</strong> 令牌（只显示一次），粘贴到页面输入框中。<br />
+                    点击 <code>💾 保存</code> 可永久保存在浏览器本地。
+                </div>
+            </div>
+            <div style="margin-top:12px;padding:12px 16px;background:var(--bg-body);border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);border:1px solid var(--border-color);">
+                ⚠️ 令牌相当于密码，请勿泄露！本工具仅将令牌保存在你的浏览器本地，不会上传到任何服务器。
+            </div>
+            <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-primary" id="closeTutorialBtn2">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Toast ===== -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ========================================================================
+            //  一、DOM 引用
+            // ========================================================================
+            const tokenInput = document.getElementById('tokenInput');
+            const loadBtn = document.getElementById('loadBtn');
+            const saveTokenBtn = document.getElementById('saveTokenBtn');
+            const clearTokenBtn = document.getElementById('clearTokenBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            const deselectAllBtn = document.getElementById('deselectAllBtn');
+            const invertSelectBtn = document.getElementById('invertSelectBtn');
+            const selectPublicBtn = document.getElementById('selectPublicBtn');
+            const selectPrivateBtn = document.getElementById('selectPrivateBtn');
+            const selectOldBtn = document.getElementById('selectOldBtn');
+            const headerCheckbox = document.getElementById('headerCheckbox');
+            const searchInput = document.getElementById('searchInput');
+            const visibilityFilter = document.getElementById('visibilityFilter');
+            const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
+            const clearDateFilter = document.getElementById('clearDateFilter');
+            const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+            const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+            const repoTableBody = document.getElementById('repoTableBody');
+            const totalCount = document.getElementById('totalCount');
+            const statsText = document.getElementById('statsText');
+            const statusMsg = document.getElementById('statusMsg');
+            const tokenStatus = document.getElementById('tokenStatus');
+            const autoLoadBanner = document.getElementById('autoLoadBanner');
+            const goToTokenBtn = document.getElementById('goToTokenBtn');
+            const copyTokenUrlBtn = document.getElementById('copyTokenUrlBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const themeLabel = document.getElementById('themeLabel');
+            const logToggle = document.getElementById('logToggle');
+            const logBody = document.getElementById('logBody');
+            const logCount = document.getElementById('logCount');
+            const logPanel = document.getElementById('logPanel');
+            const deleteProgress = document.getElementById('deleteProgress');
+            const progressCount = document.getElementById('progressCount');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressEta = document.getElementById('progressEta');
+            const pauseDeleteBtn = document.getElementById('pauseDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const tutorialBtn = document.getElementById('tutorialBtn');
+            const tutorialModal = document.getElementById('tutorialModal');
+            const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+            const closeTutorialBtn2 = document.getElementById('closeTutorialBtn2');
+            const modalGoToTokenBtn = document.getElementById('modalGoToTokenBtn');
+            const modalCopyTokenUrl = document.getElementById('modalCopyTokenUrl');
+            const tableWrap = document.getElementById('tableWrap');
+            const toastEl = document.getElementById('toast');
+            const concurrencyInput = document.getElementById('concurrencyInput');
+            const oldDaysInput = document.getElementById('oldDaysInput');
+
+            // ========================================================================
+            //  二、状态
+            // ========================================================================
+            let allRepos = [];
+            let filteredRepos = [];
+            let isLoading = false;
+            let isDeleting = false;
+            let isPaused = false;
+            let deleteCanceled = false;
+            let currentToken = '';
+            let hasAutoLoaded = false;
+
+            // 删除状态
+            let deleteState = {
+                total: 0,
+                completed: 0,
+                failed: 0,
+                failedItems: [],
+                queue: [],
+                startTime: 0,
+                concurrency: 5, // 默认值，会被控件覆盖
+                running: false,
+            };
+
+            // 日志
+            let logs = [];
+            let logPanelOpen = false;
+
+            // ========================================================================
+            //  三、工具函数
+            // ========================================================================
+            const STORAGE_KEY = 'gitee_batch_delete_token';
+            const THEME_KEY = 'gitee_batch_delete_theme';
+
+            function setStatus(msg, type) {
+                const el = statusMsg;
+                let icon = '💡';
+                let cls = '';
+                if (type === 'loading') { icon = '<span class="spinner"></span>';
+                    cls = ''; } else if (type === 'success') { icon = '✅';
+                    cls = 'success'; } else if (type === 'error') { icon = '❌';
+                    cls = 'error'; } else if (type === 'info') { icon = 'ℹ️';
+                    cls = 'info'; } else { icon = '💡';
+                    cls = ''; }
+                el.innerHTML = `<span class="${cls}">${icon} ${msg}</span>`;
+            }
+
+            function showError(msg) { setStatus(msg, 'error');
+                addLog(msg, 'error'); }
+
+            function showSuccess(msg) { setStatus(msg, 'success');
+                addLog(msg, 'success'); }
+
+            function showInfo(msg) { setStatus(msg, 'info');
+                addLog(msg, 'info'); }
+
+            function showLoading(msg) { setStatus(msg || '加载中...', 'loading'); }
+
+            function toast(msg, duration = 2000) {
+                toastEl.textContent = msg;
+                toastEl.classList.add('show');
+                clearTimeout(toastEl._timer);
+                toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
+            }
+
+            function addLog(msg, type = 'info') {
+                const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+                logs.push({ time, msg, type });
+                if (logs.length > 500) logs.shift();
+                renderLogs();
+            }
+
+            function renderLogs() {
+                logCount.textContent = `(${logs.length})`;
+                if (!logPanelOpen) return;
+                logBody.innerHTML = logs.map(l =>
+                    `<div class="log-entry">
+                        <span class="log-time">${l.time}</span>
+                        <span class="log-type ${l.type}">${l.type}</span>
+                        <span class="log-msg">${l.msg}</span>
+                    </div>`
+                ).join('');
+                logBody.scrollTop = logBody.scrollHeight;
+            }
+
+            // ===== 读取控件值 =====
+            function getConcurrency() {
+                let val = parseInt(concurrencyInput.value, 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > 20) val = 20;
+                concurrencyInput.value = val;
+                return val;
+            }
+
+            function getOldDays() {
+                let val = parseInt(oldDaysInput.value, 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > 3650) val = 3650;
+                oldDaysInput.value = val;
+                return val;
+            }
+
+            // ===== 令牌存储 =====
+            function loadTokenFromStorage() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) {
+                        currentToken = saved;
+                        tokenInput.value = saved;
+                        tokenStatus.style.display = 'inline-flex';
+                        return true;
+                    }
+                } catch (_) {}
+                tokenStatus.style.display = 'none';
+                return false;
+            }
+
+            function saveTokenToStorage(token) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, token);
+                    currentToken = token;
+                    tokenStatus.style.display = 'inline-flex';
+                    return true;
+                } catch (_) { return false; }
+            }
+
+            function clearTokenFromStorage() {
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                    currentToken = '';
+                    tokenInput.value = '';
+                    tokenStatus.style.display = 'none';
+                    return true;
+                } catch (_) { return false; }
+            }
+
+            function getToken() {
+                const val = tokenInput.value.trim();
+                if (val) return val;
+                return currentToken;
+            }
+
+            // ===== 主题 =====
+            function getSystemTheme() {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            let currentTheme = 'auto';
+
+            function applyTheme(mode) {
+                currentTheme = mode;
+                let actual = mode;
+                if (mode === 'auto') actual = getSystemTheme();
+                document.documentElement.setAttribute('data-theme', actual);
+                const labelMap = { auto: '自动', light: '☀️ 亮色', dark: '🌙 暗色' };
+                themeLabel.textContent = labelMap[mode] || '自动';
+                try {
+                    localStorage.setItem(THEME_KEY, mode);
+                } catch (_) {}
+                const icon = themeToggle.querySelector('.icon');
+                if (mode === 'auto') icon.textContent = '🌓';
+                else if (mode === 'light') icon.textContent = '☀️';
+                else icon.textContent = '🌙';
+                updateViewMode();
+            }
+
+            function loadTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved && ['auto', 'light', 'dark'].includes(saved)) {
+                        applyTheme(saved);
+                        return;
+                    }
+                } catch (_) {}
+                applyTheme('auto');
+            }
+
+            // ===== 视图模式 (移动端卡片) =====
+            function updateViewMode() {
+                const isMobile = window.innerWidth < 820;
+                tableWrap.classList.toggle('card-view', isMobile);
+                if (isMobile) {
+                    const labels = ['选择', '仓库名称', '描述', '信息'];
+                    document.querySelectorAll('#repoTableBody tr').forEach(tr => {
+                        const tds = tr.querySelectorAll('td');
+                        tds.forEach((td, i) => {
+                            if (i < labels.length) td.setAttribute('data-label', labels[i]);
+                        });
+                    });
+                } else {
+                    document.querySelectorAll('#repoTableBody td').forEach(td => td.removeAttribute('data-label'));
+                }
+            }
+
+            // ========================================================================
+            //  四、渲染函数
+            // ========================================================================
+            function showSkeleton(count = 6) {
+                let html = '';
+                for (let i = 0; i < count; i++) {
+                    html += `<tr class="skeleton-row"><td></td><td></td><td></td><td></td></tr>`;
+                }
+                repoTableBody.innerHTML = html;
+                totalCount.textContent = '...';
+                updateViewMode();
+            }
+
+            function showEmptyState(message, showTokenBtn = false) {
+                let btnHtml = '';
+                if (showTokenBtn) {
+                    btnHtml = `
+                        <div class="empty-hint">
+                            <button class="btn btn-gitee" id="emptyGoToTokenBtn">🚀 去 Gitee 生成私人令牌</button>
+                            <span style="color:var(--text-muted);font-size:13px;display:inline-flex;align-items:center;">💡 需要「projects」权限</span>
+                        </div>
+                    `;
+                }
+                repoTableBody.innerHTML = `
+                    <tr><td colspan="4">
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <p>${message}</p>
+                            ${btnHtml}
+                        </div>
+                    </td></tr>
+                `;
+                totalCount.textContent = '0';
+                updateViewMode();
+                const emptyBtn = document.getElementById('emptyGoToTokenBtn');
+                if (emptyBtn) emptyBtn.addEventListener('click', () => window.open('https://gitee.com/personal_access_tokens',
+                    '_blank'));
+            }
+
+            function renderTable(repos) {
+                if (!repos || repos.length === 0) {
+                    const hasToken = getToken() !== '';
+                    if (hasToken && allRepos.length === 0) {
+                        showEmptyState('当前账号下没有找到仓库', false);
+                    } else if (hasToken && filteredRepos.length === 0 && allRepos.length > 0) {
+                        showEmptyState('没有匹配筛选条件的仓库', false);
+                    } else {
+                        showEmptyState('请先输入 Gitee 私人令牌', true);
+                    }
+                    return;
+                }
+
+                let html = '';
+                repos.forEach((repo, index) => {
+                    const name = repo.name || '未命名';
+                    const fullName = repo.full_name || name;
+                    const desc = repo.description || '';
+                    const isPrivate = repo.private === true;
+                    const privateLabel = isPrivate ? '🔒 私有' : '🌐 公开';
+                    const privateClass = isPrivate ? 'tag-private' : 'tag-public';
+                    const updated = repo.updated_at ? repo.updated_at.slice(0, 10) : '未知';
+                    const url = repo.html_url || '#';
+                    const val = fullName;
+
+                    html += `
+                        <tr data-index="${index}" data-fullname="${val}">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="repo-checkbox" value="${val}" />
+                            </td>
+                            <td>
+                                <div class="repo-name">
+                                    <a href="${url}" target="_blank">${name}</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="repo-desc" title="${desc}">${desc || '-'}</div>
+                            </td>
+                            <td>
+                                <div class="repo-meta">
+                                    <span class="${privateClass}">${privateLabel}</span>
+                                    <span>📅 ${updated}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                repoTableBody.innerHTML = html;
+                totalCount.textContent = repos.length;
+                updateHeaderCheckboxState();
+                updateViewMode();
+
+                document.querySelectorAll('.repo-checkbox').forEach(cb => {
+                    cb.addEventListener('change', updateHeaderCheckboxState);
+                });
+                updateViewMode();
+            }
+
+            function updateHeaderCheckboxState() {
+                const checkboxes = document.querySelectorAll('.repo-checkbox');
+                const checked = document.querySelectorAll('.repo-checkbox:checked');
+                if (checkboxes.length === 0) {
+                    headerCheckbox.checked = false;
+                    headerCheckbox.indeterminate = false;
+                    return;
+                }
+                if (checked.length === 0) {
+                    headerCheckbox.checked = false;
+                    headerCheckbox.indeterminate = false;
+                } else if (checked.length === checkboxes.length) {
+                    headerCheckbox.checked = true;
+                    headerCheckbox.indeterminate = false;
+                } else {
+                    headerCheckbox.checked = false;
+                    headerCheckbox.indeterminate = true;
+                }
+            }
+
+            function getSelectedRepoNames() {
+                const cbs = document.querySelectorAll('.repo-checkbox:checked');
+                return Array.from(cbs).map(cb => cb.value);
+            }
+
+            function selectAllRepos(checked) {
+                document.querySelectorAll('.repo-checkbox').forEach(cb => cb.checked = checked);
+                updateHeaderCheckboxState();
+            }
+
+            function getFilteredRepos() {
+                const keyword = searchInput.value.trim();
+                const vis = visibilityFilter.value;
+                const from = dateFrom.value;
+                const to = dateTo.value;
+
+                return allRepos.filter(repo => {
+                    if (keyword) {
+                        try {
+                            const re = new RegExp(keyword, 'i');
+                            if (!re.test(repo.name) && !re.test(repo.description || '')) return false;
+                        } catch (_) {
+                            const kw = keyword.toLowerCase();
+                            if (!(repo.name && repo.name.toLowerCase().includes(kw)) &&
+                                !(repo.description && repo.description.toLowerCase().includes(kw))) return false;
+                        }
+                    }
+                    if (vis === 'public' && repo.private === true) return false;
+                    if (vis === 'private' && repo.private !== true) return false;
+                    if (from && repo.updated_at) {
+                        const d = repo.updated_at.slice(0, 10);
+                        if (d < from) return false;
+                    }
+                    if (to && repo.updated_at) {
+                        const d = repo.updated_at.slice(0, 10);
+                        if (d > to) return false;
+                    }
+                    return true;
+                });
+            }
+
+            function applySearchAndRender() {
+                filteredRepos = getFilteredRepos();
+                renderTable(filteredRepos);
+            }
+
+            // ========================================================================
+            //  五、加载仓库 (全量分页)
+            // ========================================================================
+            async function loadRepos(token, silent = false) {
+                if (!token) {
+                    if (!silent) showError('请先输入 Gitee 私人令牌');
+                    showEmptyState('请先输入 Gitee 私人令牌', true);
+                    return;
+                }
+
+                if (isLoading) return;
+                isLoading = true;
+                loadBtn.disabled = true;
+
+                if (!silent || allRepos.length === 0) showSkeleton(6);
+                if (!silent) showLoading('正在获取仓库列表...');
+
+                try {
+                    let all = [];
+                    let page = 1;
+                    const perPage = 100;
+                    let hasMore = true;
+
+                    while (hasMore) {
+                        const url =
+                            `https://gitee.com/api/v5/user/repos?access_token=${encodeURIComponent(token)}&page=${page}&per_page=${perPage}&sort=updated&direction=desc`;
+                        const resp = await fetch(url);
+                        if (!resp.ok) {
+                            let errMsg = `请求失败 (HTTP ${resp.status})`;
+                            if (resp.status === 401) errMsg = '令牌无效或权限不足，请检查私人令牌';
+                            else if (resp.status === 403) errMsg = 'API 请求被限制，请稍后重试';
+                            else if (resp.status === 404) errMsg = 'API 端点不存在，请检查令牌权限';
+                            throw new Error(errMsg);
+                        }
+                        const data = await resp.json();
+                        if (!Array.isArray(data) || data.length === 0) {
+                            hasMore = false;
+                            break;
+                        }
+                        const mapped = data.map(repo => ({
+                            id: repo.id,
+                            name: repo.name,
+                            full_name: repo.full_name,
+                            description: repo.description || '',
+                            private: repo.private === true,
+                            html_url: repo.html_url,
+                            updated_at: repo.updated_at,
+                            _raw: repo
+                        }));
+                        all = all.concat(mapped);
+                        page++;
+                        if (data.length < perPage) hasMore = false;
+                        if (page > 50) break;
+                    }
+
+                    if (all.length === 0) {
+                        if (!silent) showInfo('当前账号下没有找到仓库');
+                        showEmptyState('当前账号下没有找到仓库', false);
+                    } else {
+                        if (!silent) showSuccess(`成功加载 ${all.length} 个仓库`);
+                        addLog(`加载了 ${all.length} 个仓库`, 'success');
+                    }
+
+                    allRepos = all;
+                    filteredRepos = [...allRepos];
+                    applySearchAndRender();
+                    currentToken = token;
+                    tokenInput.value = token;
+
+                    if (!localStorage.getItem(STORAGE_KEY)) {
+                        saveTokenToStorage(token);
+                    }
+
+                } catch (err) {
+                    if (!silent) showError('加载失败: ' + err.message);
+                    addLog('加载失败: ' + err.message, 'error');
+                    if (allRepos.length === 0) {
+                        allRepos = [];
+                        filteredRepos = [];
+                        showEmptyState('加载失败：' + err.message, true);
+                    }
+                } finally {
+                    isLoading = false;
+                    loadBtn.disabled = false;
+                }
+            }
+
+            // ========================================================================
+            //  六、并发删除（使用动态并发数）
+            // ========================================================================
+            async function deleteReposConcurrently(repoNames) {
+                if (isDeleting) return;
+                if (!repoNames || repoNames.length === 0) {
+                    showError('请至少勾选一个仓库');
+                    return;
+                }
+
+                const token = getToken();
+                if (!token) {
+                    showError('令牌丢失，请重新输入');
+                    return;
+                }
+
+                const concurrency = getConcurrency(); // 从控件读取
+
+                const confirmMsg =
+                    `⚠️ 你确定要删除 ${repoNames.length} 个仓库吗？\n\n删除后不可恢复！\n\n仓库列表：\n${repoNames.slice(0, 10).join('\n')}${repoNames.length > 10 ? `\n... 还有 ${repoNames.length - 10} 个` : ''}`;
+                if (!confirm(confirmMsg)) {
+                    showInfo('已取消删除操作');
+                    return;
+                }
+
+                isDeleting = true;
+                deleteCanceled = false;
+                isPaused = false;
+                deleteSelectedBtn.disabled = true;
+                pauseDeleteBtn.textContent = '⏸️ 暂停';
+                deleteProgress.classList.add('active');
+
+                deleteState = {
+                    total: repoNames.length,
+                    completed: 0,
+                    failed: 0,
+                    failedItems: [],
+                    queue: [...repoNames],
+                    startTime: Date.now(),
+                    concurrency: concurrency,
+                    running: true,
+                };
+
+                updateProgressUI();
+
+                let index = 0;
+                const workers = [];
+                const worker = async () => {
+                    while (deleteState.running && !deleteCanceled) {
+                        if (isPaused) {
+                            await new Promise(r => setTimeout(r, 200));
+                            continue;
+                        }
+                        if (index >= deleteState.queue.length) break;
+                        const idx = index++;
+                        const fullName = deleteState.queue[idx];
+                        try {
+                            const url =
+                                `https://gitee.com/api/v5/repos/${fullName}?access_token=${encodeURIComponent(token)}`;
+                            const resp = await fetch(url, { method: 'DELETE' });
+                            if (resp.ok) {
+                                deleteState.completed++;
+                                allRepos = allRepos.filter(r => r.full_name !== fullName);
+                                addLog(`✅ 删除成功: ${fullName}`, 'success');
+                            } else {
+                                let errText = `HTTP ${resp.status}`;
+                                try {
+                                    const errJson = await resp.json();
+                                    if (errJson.message) errText = errJson.message;
+                                } catch (_) {}
+                                deleteState.failed++;
+                                deleteState.failedItems.push({ fullName, error: errText });
+                                addLog(`❌ 删除失败: ${fullName} — ${errText}`, 'error');
+                            }
+                        } catch (err) {
+                            deleteState.failed++;
+                            deleteState.failedItems.push({ fullName, error: err.message });
+                            addLog(`❌ 删除失败: ${fullName} — ${err.message}`, 'error');
+                        }
+                        updateProgressUI();
+                    }
+                };
+
+                const workerCount = Math.min(concurrency, repoNames.length);
+                for (let i = 0; i < workerCount; i++) {
+                    workers.push(worker());
+                }
+                await Promise.all(workers);
+
+                deleteState.running = false;
+                isDeleting = false;
+                deleteSelectedBtn.disabled = false;
+                deleteProgress.classList.remove('active');
+
+                filteredRepos = [...allRepos];
+                applySearchAndRender();
+
+                let msg = `删除完成：成功 ${deleteState.completed} 个`;
+                if (deleteState.failed > 0) {
+                    msg += `，失败 ${deleteState.failed} 个`;
+                    const errs = deleteState.failedItems.slice(0, 3).map(f => `${f.fullName}: ${f.error}`).join('; ');
+                    if (errs) msg += `\n错误示例：${errs}${deleteState.failedItems.length > 3 ? '...' : ''}`;
+                    showError(msg);
+                } else if (deleteCanceled) {
+                    showInfo('删除已取消');
+                } else {
+                    showSuccess(msg);
+                }
+                addLog(msg, deleteState.failed > 0 ? 'error' : 'success');
+            }
+
+            function updateProgressUI() {
+                const total = deleteState.total;
+                const done = deleteState.completed + deleteState.failed;
+                const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+                progressCount.textContent = `${done}/${total}`;
+                progressFill.style.width = pct + '%';
+                progressPercent.textContent = pct + '%';
+
+                if (done > 0 && deleteState.startTime > 0) {
+                    const elapsed = (Date.now() - deleteState.startTime) / 1000;
+                    const rate = done / elapsed;
+                    const remaining = total - done;
+                    if (rate > 0 && remaining > 0) {
+                        const etaSec = Math.ceil(remaining / rate);
+                        if (etaSec < 60) progressEta.textContent = `⏱️ 约 ${etaSec}s`;
+                        else if (etaSec < 3600) progressEta.textContent = `⏱️ 约 ${Math.ceil(etaSec / 60)}min`;
+                        else progressEta.textContent = `⏱️ 约 ${(etaSec / 3600).toFixed(1)}h`;
+                    } else {
+                        progressEta.textContent = '--';
+                    }
+                } else {
+                    progressEta.textContent = '--';
+                }
+            }
+
+            // ========================================================================
+            //  七、选择功能（使用动态天数）
+            // ========================================================================
+            function selectByVisibility(privateVal) {
+                document.querySelectorAll('.repo-checkbox').forEach(cb => {
+                    const fullName = cb.value;
+                    const repo = allRepos.find(r => r.full_name === fullName);
+                    if (repo) {
+                        cb.checked = (repo.private === privateVal);
+                    }
+                });
+                updateHeaderCheckboxState();
+                const label = privateVal ? '私有' : '公开';
+                addLog(`已选择所有 ${label} 仓库`, 'info');
+                toast(`已选择所有 ${label} 仓库`);
+            }
+
+            function selectOldRepos() {
+                const days = getOldDays(); // 从控件读取
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - days);
+                let count = 0;
+                document.querySelectorAll('.repo-checkbox').forEach(cb => {
+                    const fullName = cb.value;
+                    const repo = allRepos.find(r => r.full_name === fullName);
+                    if (repo && repo.updated_at) {
+                        const d = new Date(repo.updated_at);
+                        if (d < cutoff) {
+                            cb.checked = true;
+                            count++;
+                        } else {
+                            cb.checked = false;
+                        }
+                    } else {
+                        cb.checked = false;
+                    }
+                });
+                updateHeaderCheckboxState();
+                addLog(`已选择 ${count} 个超过 ${days} 天未更新的仓库`, 'info');
+                toast(`已选择 ${count} 个超过 ${days} 天未更新的仓库`);
+            }
+
+            // ========================================================================
+            //  八、事件绑定
+            // ========================================================================
+
+            // ---- 令牌 ----
+            goToTokenBtn.addEventListener('click', () => window.open('https://gitee.com/personal_access_tokens', '_blank'));
+
+            copyTokenUrlBtn.addEventListener('click', () => {
+                const url = 'https://gitee.com/personal_access_tokens';
+                navigator.clipboard.writeText(url).then(() => {
+                    toast('✅ 令牌生成链接已复制');
+                    addLog('复制了令牌生成链接', 'info');
+                }).catch(() => {
+                    toast('请手动复制: ' + url);
+                });
+            });
+
+            loadBtn.addEventListener('click', function() {
+                const token = tokenInput.value.trim();
+                if (!token) {
+                    showError('请输入私人令牌');
+                    showEmptyState('请先输入 Gitee 私人令牌', true);
+                    return;
+                }
+                saveTokenToStorage(token);
+                loadRepos(token, false);
+            });
+
+            saveTokenBtn.addEventListener('click', function() {
+                const token = tokenInput.value.trim();
+                if (!token) {
+                    showError('请输入要保存的令牌');
+                    return;
+                }
+                const ok = saveTokenToStorage(token);
+                if (ok) {
+                    showSuccess('✅ 令牌已永久保存到本地浏览器');
+                    tokenStatus.style.display = 'inline-flex';
+                    autoLoadBanner.style.display = 'inline-flex';
+                    toast('令牌已保存');
+                } else {
+                    showError('保存失败，请检查浏览器存储权限');
+                }
+            });
+
+            clearTokenBtn.addEventListener('click', function() {
+                if (confirm('确定要清除已保存的令牌吗？下次打开页面需要重新输入。')) {
+                    clearTokenFromStorage();
+                    autoLoadBanner.style.display = 'none';
+                    tokenStatus.style.display = 'none';
+                    allRepos = [];
+                    filteredRepos = [];
+                    showEmptyState('请先输入 Gitee 私人令牌，或点击下方按钮生成', true);
+                    showInfo('已清除令牌，点击「加载仓库」可重新输入');
+                    addLog('已清除保存的令牌', 'warn');
+                }
+            });
+
+            refreshBtn.addEventListener('click', function() {
+                const token = getToken();
+                if (!token) {
+                    showError('请先输入令牌并加载');
+                    showEmptyState('请先输入 Gitee 私人令牌', true);
+                    return;
+                }
+                loadRepos(token, false);
+            });
+
+            // ---- 删除 ----
+            deleteSelectedBtn.addEventListener('click', function() {
+                const selected = getSelectedRepoNames();
+                if (selected.length === 0) {
+                    showError('请至少勾选一个仓库');
+                    toast('请至少勾选一个仓库');
+                    return;
+                }
+                deleteReposConcurrently(selected);
+            });
+
+            pauseDeleteBtn.addEventListener('click', function() {
+                if (!isDeleting) return;
+                isPaused = !isPaused;
+                pauseDeleteBtn.textContent = isPaused ? '▶️ 继续' : '⏸️ 暂停';
+                addLog(isPaused ? '删除已暂停' : '删除已继续', 'info');
+                toast(isPaused ? '已暂停' : '已继续');
+            });
+
+            cancelDeleteBtn.addEventListener('click', function() {
+                if (!isDeleting) return;
+                if (confirm('确定要取消删除操作吗？')) {
+                    deleteCanceled = true;
+                    deleteState.running = false;
+                    isDeleting = false;
+                    deleteSelectedBtn.disabled = false;
+                    deleteProgress.classList.remove('active');
+                    showInfo('删除已取消');
+                    addLog('删除操作已取消', 'warn');
+                    toast('已取消删除');
+                }
+            });
+
+            // ---- 选择 ----
+            selectAllBtn.addEventListener('click', () => { selectAllRepos(true);
+                toast('已全选'); });
+            deselectAllBtn.addEventListener('click', () => { selectAllRepos(false);
+                toast('已取消全选'); });
+            invertSelectBtn.addEventListener('click', () => {
+                document.querySelectorAll('.repo-checkbox').forEach(cb => cb.checked = !cb.checked);
+                updateHeaderCheckboxState();
+                toast('已反选');
+                addLog('执行反选', 'info');
+            });
+            selectPublicBtn.addEventListener('click', () => selectByVisibility(false));
+            selectPrivateBtn.addEventListener('click', () => selectByVisibility(true));
+            selectOldBtn.addEventListener('click', selectOldRepos); // 使用动态天数
+
+            headerCheckbox.addEventListener('change', function() {
+                const checked = this.checked;
+                document.querySelectorAll('.repo-checkbox').forEach(cb => cb.checked = checked);
+                headerCheckbox.checked = checked;
+                headerCheckbox.indeterminate = false;
+            });
+
+            // ---- 搜索与筛选 ----
+            let searchTimer = null;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(applySearchAndRender, 300);
+            });
+
+            applyFiltersBtn.addEventListener('click', applySearchAndRender);
+
+            resetFiltersBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                visibilityFilter.value = 'all';
+                dateFrom.value = '';
+                dateTo.value = '';
+                applySearchAndRender();
+                toast('筛选已重置');
+                addLog('重置筛选条件', 'info');
+            });
+
+            clearDateFilter.addEventListener('click', function() {
+                dateFrom.value = '';
+                dateTo.value = '';
+                applySearchAndRender();
+                toast('日期筛选已清除');
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') { clearTimeout(searchTimer);
+                    applySearchAndRender(); }
+            });
+
+            // ---- 令牌输入回车 ----
+            tokenInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') loadBtn.click();
+            });
+
+            // ---- 主题 ----
+            themeToggle.addEventListener('click', function() {
+                const modes = ['auto', 'light', 'dark'];
+                const idx = modes.indexOf(currentTheme);
+                const next = modes[(idx + 1) % modes.length];
+                applyTheme(next);
+                toast(`主题: ${next === 'auto' ? '自动' : next === 'light' ? '亮色' : '暗色'}`);
+                addLog(`切换主题: ${next}`, 'info');
+            });
+
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addEventListener('change', () => {
+                if (currentTheme === 'auto') applyTheme('auto');
+            });
+
+            // ---- 日志面板 ----
+            logToggle.addEventListener('click', function() {
+                logPanelOpen = !logPanelOpen;
+                logPanel.classList.toggle('open', logPanelOpen);
+                if (logPanelOpen) renderLogs();
+                const arrow = logToggle.querySelector('span:last-child');
+                if (arrow) arrow.textContent = logPanelOpen ? '▲ 收起' : '▼ ';
+            });
+
+            // ---- 教程 ----
+            tutorialBtn.addEventListener('click', () => tutorialModal.classList.add('active'));
+            closeTutorialBtn.addEventListener('click', () => tutorialModal.classList.remove('active'));
+            closeTutorialBtn2.addEventListener('click', () => tutorialModal.classList.remove('active'));
+            tutorialModal.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+            modalGoToTokenBtn.addEventListener('click', () => window.open('https://gitee.com/personal_access_tokens',
+            '_blank'));
+            modalCopyTokenUrl.addEventListener('click', () => {
+                const url = 'https://gitee.com/personal_access_tokens';
+                navigator.clipboard.writeText(url).then(() => {
+                    toast('✅ 链接已复制');
+                }).catch(() => {
+                    toast('请手动复制: ' + url);
+                });
+            });
+
+            // ---- 窗口resize ----
+            let resizeTimer = null;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(updateViewMode, 200);
+            });
+
+            // ========================================================================
+            //  九、自动初始化
+            // ========================================================================
+            async function autoInit() {
+                loadTheme();
+                showSkeleton(6);
+
+                const hasSaved = loadTokenFromStorage();
+
+                if (hasSaved && currentToken) {
+                    tokenStatus.style.display = 'inline-flex';
+                    autoLoadBanner.style.display = 'inline-flex';
+                    showInfo('🔑 已读取保存的令牌，自动加载仓库...');
+                    await loadRepos(currentToken, true);
+                    hasAutoLoaded = true;
+                    if (allRepos.length > 0) {
+                        showSuccess(`✅ 自动加载完成，共 ${allRepos.length} 个仓库`);
+                        addLog(`自动加载完成，共 ${allRepos.length} 个仓库`, 'success');
+                    } else {
+                        showInfo('📭 已读取令牌，但账号下暂无仓库');
+                        showEmptyState('当前账号下没有找到仓库', false);
+                    }
+                } else {
+                    tokenStatus.style.display = 'none';
+                    autoLoadBanner.style.display = 'none';
+                    showInfo('💡 首次使用：输入令牌后点击「加载仓库」，令牌会自动保存');
+                    showEmptyState('请先输入 Gitee 私人令牌，或点击下方按钮生成', true);
+                }
+                updateViewMode();
+                addLog('工具已初始化', 'info');
+            }
+
+            // ========================================================================
+            //  十、启动
+            // ========================================================================
+            window.addEventListener('DOMContentLoaded', autoInit);
+
+            // 暴露调试
+            window.__app = {
+                allRepos: () => allRepos,
+                filteredRepos: () => filteredRepos,
+                logs: () => logs,
+                deleteState: () => deleteState,
+                loadRepos,
+                addLog,
+            };
+
+        })();
+    </script>
+
+</body>
+</html>
