@@ -53,9 +53,12 @@ git push
 :: 检查推送是否成功
 if errorlevel 1 (
     echo ❌ 推送失败，请检查网络或权限！
+    pause
 ) else (
     echo ✅ 推送成功！
+    echo.
+    echo 🌐 正在打开 GitHub Pages...
+    start "https://ghbgjxrz.github.io/MyPages/"
 )
 
-echo.
-pause
+exit
