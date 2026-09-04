@@ -62,6 +62,3 @@ if errorlevel 1 (
     start "" "https://dash.cloudflare.com/1fa9f1235b0a82feecbf0687901ba61c/pages/view/html-projects"
     del-pages-log.bat
 )
-
-:: 自动关闭窗口
-exit

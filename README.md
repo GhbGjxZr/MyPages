@@ -187,7 +187,7 @@ echo     echo   ✅ 清理完成！
 echo     echo ========================================
 echo ^)
 echo.
-echo pause
+echo exit
 ) > del-pages-log.bat
 
 echo.
