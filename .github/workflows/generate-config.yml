@@ -1,0 +1,179 @@
+name: 生成配置文件并打包下载
+
+on:
+  workflow_dispatch:
+    inputs:
+      account_id:
+        description: '🔑 ACCOUNT_ID（账户ID）'
+        required: true
+        type: string
+      api_token:
+        description: '🔐 API_TOKEN（API令牌）'
+        required: true
+        type: string
+      project_name:
+        description: '📁 PROJECT_NAME（项目名称）'
+        required: true
+        type: string
+      github_url:
+        description: '🌐 GitHub 仓库地址'
+        required: false
+        type: string
+        default: 'https://github.com/GhbGjxZr/MyPages'
+      cf_pages_url:
+        description: '🌐 Cloudflare Pages 地址'
+        required: false
+        type: string
+        default: 'https://dash.cloudflare.com/1fa9f1235b0a82feecbf0687901ba61c/pages/view/html-projects'
+      keep_count:
+        description: '📊 保留历史版本数（默认：5）'
+        required: false
+        type: number
+        default: 5
+
+jobs:
+  generate-and-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: 生成 del-pages-log.bat
+        run: |
+          cat > del-pages-log.bat << 'EOF'
+          @echo off
+          chcp 65001 >nul
+          setlocal enabledelayedexpansion
+          
+          :: ============================================
+          :: Cloudflare Pages 历史版本清理工具
+          :: ============================================
+          
+          set ACCOUNT_ID=${{ github.event.inputs.account_id }}
+          set API_TOKEN=${{ github.event.inputs.api_token }}
+          set PROJECT_NAME=${{ github.event.inputs.project_name }}
+          
+          set CLOUDFLARE_ACCOUNT_ID=%ACCOUNT_ID%
+          set CLOUDFLARE_API_TOKEN=%API_TOKEN%
+          set CLOUDFLARE_PROJECT_NAME=%PROJECT_NAME%
+          
+          echo ========================================
+          echo   🧹 清理 Cloudflare Pages 历史版本
+          echo ========================================
+          echo.
+          echo 📁 项目: %PROJECT_NAME%
+          echo 📅 保留策略: 保留最新 ${{ github.event.inputs.keep_count }} 个版本
+          echo.
+          
+          call npx --yes cf-deploy-cleanup -s=${{ github.event.inputs.keep_count }}
+          
+          if %errorlevel% equ 0 (
+              echo.
+              echo ========================================
+              echo   ✅ 清理完成！
+              echo ========================================
+          ) else (
+              echo.
+              echo ========================================
+              echo   ❌ 清理失败
+              echo ========================================
+              echo.
+              echo 请检查：
+              echo 1. API 令牌是否有效
+              echo 2. 项目名称是否正确
+              echo 3. 网络连接是否正常
+          )
+          
+          echo.
+          pause
+          EOF
+      
+      - name: 生成 commit.bat
+        run: |
+          cat > commit.bat << 'EOF'
+          @echo off
+          chcp 65001 >nul
+          echo ================================
+          echo   一键提交并推送脚本
+          echo ================================
+          echo.
+          
+          git status --porcelain >nul 2>&1
+          if errorlevel 1 (
+              echo ❌ 不是有效的 Git 仓库！
+              pause
+              exit /b 1
+          )
+          
+          git diff --quiet
+          if errorlevel 1 (
+              echo ✅ 检测到变更，准备提交...
+          ) else (
+              git diff --cached --quiet
+              if errorlevel 1 (
+                  echo ✅ 检测到暂存区变更，准备提交...
+              ) else (
+                  echo ⚠️ 没有需要提交的变更
+                  pause
+                  exit /b 0
+              )
+          )
+          
+          echo.
+          set /p msg="📝 请输入提交信息（直接回车使用默认：提交）: "
+          if "%msg%"=="" set msg=提交
+          
+          echo.
+          echo 📤 正在添加所有变更...
+          git add .
+          
+          echo 📝 正在提交...
+          git commit -m "%msg%"
+          
+          if errorlevel 1 (
+              echo ❌ 提交失败！
+              pause
+              exit /b 1
+          )
+          
+          echo 🚀 正在推送到远程仓库...
+          git push
+          
+          if errorlevel 1 (
+              echo ❌ 推送失败，请检查网络或权限！
+              pause
+          ) else (
+              echo ✅ 推送成功！
+              echo.
+              echo 🌐 正在打开网页...
+              start "" "${{ github.event.inputs.github_url }}"
+              start "" "${{ github.event.inputs.cf_pages_url }}"
+              del-pages-log.bat
+          )
+          
+          exit
+          EOF
+      
+      - name: 打包成 ZIP
+        run: |
+          mkdir MyPages-配置文件
+          cp del-pages-log.bat MyPages-配置文件/
+          cp commit.bat MyPages-配置文件/
+          zip -r MyPages-配置文件.zip MyPages-配置文件/
+      
+      - name: 上传 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyPages-配置文件
+          path: MyPages-配置文件.zip
+      
+      - name: 创建 Release（可选）
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: config-${{ github.run_id }}
+          name: "📦 配置文件 v${{ github.run_id }}"
+          files: MyPages-配置文件.zip
+          draft: false
+          prerelease: false
