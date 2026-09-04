@@ -62,4 +62,4 @@ if errorlevel 1 (
 )
 
 :: 自动关闭窗口
-exit
+pause
