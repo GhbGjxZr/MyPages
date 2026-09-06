@@ -14,7 +14,17 @@
 
 ## 环境要求
 - **Git** 必须已安装并添加到 `PATH` 环境变量中。
+
+  `可以手动下载,脚本会自动下载`
+    ```
+    powershell -c "Invoke-WebRequest -Uri 'https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe' -OutFile 'Git.exe'"
+    ```
 - **Node.js** 必须已安装并添加到 `PATH` 环境变量中（包含 `npx`）。
+
+  `可以手动下载,脚本会自动下载`
+    ```
+    powershell -c "Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi' -OutFile 'Node.msi'"
+    ```
 - 系统需支持 `chcp 65001` 命令（Windows 控制台 UTF-8 编码）。
 
 ---

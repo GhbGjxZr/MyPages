@@ -67,10 +67,10 @@ if errorlevel 1 (
     echo   [错误] Git 未安装或未添加到 PATH 环境变量！
     echo ============================================================
     echo/
-    echo 请从以下地址安装 Git：https://git-scm.com/download/win
+    echo 自动从该地址安装 Git：https://git-scm.com/download/win
     echo/
-    pause
-    start "" "https://git-scm.com/download/win"
+    powershell -c "Invoke-WebRequest -Uri 'https://github.com/git-for-windows/git/releases/download/v2.49.0.windows.1/Git-2.49.0-64-bit.exe' -OutFile 'Git.exe'"
+    echo 下载完成
     exit /b 1
 )
 
@@ -89,36 +89,16 @@ if errorlevel 1 (
     echo   [错误] Node.js 未安装或未添加到 PATH 环境变量！
     echo ============================================================
     echo/
-    echo 请从以下地址安装 Node.js：https://nodejs.org/
+    echo 自动从该地址安装 Node.js：https://nodejs.org/
     echo/
-    pause
-    start "" "https://nodejs.org/"
+    powershell -c "Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi' -OutFile 'Node.msi'"
+    echo 下载完成   
     exit /b 1
 )
 
 echo [通过] Node.js 已安装
 
 for /f "tokens=*" %%a in ('node --version') do echo 版本：%%a
-
-:: 检查 npx
-echo [检查] npx...
-
-where npx >nul 2>&1
-
-if errorlevel 1 (
-    cls
-    echo ============================================================
-    echo   [错误] npx 未安装或未添加到 PATH 环境变量！
-    echo ============================================================
-    echo/
-    echo npx 随 Node.js 一起安装，请重新安装 Node.js。
-    echo/
-    pause
-    start "" "https://nodejs.org/"
-    exit /b 1
-)
-
-echo [通过] npx 已安装
 
 echo/
 
@@ -170,11 +150,18 @@ if "%ACCOUNT_ID%"=="" (
     goto input_account
 )
 
-:: 验证账户 ID 格式（简单检查）
-echo %ACCOUNT_ID%| findstr /r "^[0-9a-fA-F][0-9a-fA-F]*$" >nul
+:: 移除可能的空格（防止意外）
+set ACCOUNT_ID=!ACCOUNT_ID: =!
+
+:: 严格验证：必须是32位十六进制字符
+echo !ACCOUNT_ID!| findstr /r "^[0-9a-fA-F]\{32\}$" >nul
 
 if errorlevel 1 (
-    echo [警告] 账户 ID 应只包含十六进制字符！已跳过验证，继续执行...
+    echo [错误] 账户 ID 格式无效！
+    echo 要求：32位十六进制字符（0-9, a-f, A-F）
+    echo 示例：a1b2c3d4e5f67890a1b2c3d4e5f67890
+    echo.
+    goto input_account
 )
 
 echo/
@@ -233,17 +220,12 @@ if "%API_TOKEN%"=="" (
     echo [警告] 不能为空！
     goto input_token
 )
+:: 支持 cfat_ 和 cfut_
+echo !API_TOKEN!| findstr /r "^cf[au]t_[0-9a-zA-Z]\{36,\}$" >nul
 
-:: 验证令牌长度（至少 40 个字符）
-set "token_len=0"
-
-set "temp_token=%API_TOKEN%"
-
-:token_loop
-if defined temp_token (
-    set "temp_token=!temp_token:~1!"
-    set /a token_len+=1
-    goto token_loop
+if errorlevel 1 (
+    echo [错误] 格式无效！支持：cfat_ 或 cfut_ 开头
+    goto input_token
 )
 
 if !token_len! lss 40 (
@@ -408,7 +390,7 @@ echo ============================================================
 echo   GitHub 信息已录入
 echo ============================================================
 echo/
-
+echo ::
 echo GitHub 仓库：%REPO_URL%
 
 echo GitHub Pages：%PAGES_URL%
@@ -610,9 +592,15 @@ echo     echo/
 
 echo     echo [操作] 正在打开页面...
 
+echo    ::
+
 echo     start "" "%REPO_URL%"
 
+echo    ::
+
 echo     start "" "%PAGES_URL%"
+
+echo    ::
 
 echo     start "" "%CLOUDFLARE_URL%"
 
@@ -620,7 +608,7 @@ echo     echo/
 
 echo     echo [操作] 正在清理 Cloudflare Pages 历史记录...
 
-echo     call del-pages-log.bat
+echo     del-pages-log.bat
 
 echo ^)
 
