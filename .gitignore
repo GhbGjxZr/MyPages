@@ -143,6 +143,5 @@ vite.config.ts.timestamp-*
 .vite/
 
 #My 隐私
-del-pages-log.bat
-commit.bat
-co-de.bat
+*bat
+^co-de.bat
