@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 提示词速查手册</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: #fafafa; color: #333; line-height: 1.7; font-size: 15px; }
+
+        /* 顶部 */
+        .header { background: #fff; border-bottom: 2px solid #6366f1; padding: 32px 24px 24px; text-align: center; }
+        .header h1 { font-size: 24px; font-weight: 700; color: #6366f1; margin-bottom: 8px; }
+        .header p { font-size: 14px; color: #888; }
+
+        /* 搜索 */
+        .search-wrap { max-width: 500px; margin: 16px auto 0; display: flex; gap: 8px; }
+        .search-wrap input { flex: 1; padding: 10px 16px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; outline: none; }
+        .search-wrap input:focus { border-color: #6366f1; }
+        .search-wrap button { padding: 10px 18px; border: none; background: #6366f1; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; }
+
+        /* 导航 */
+        .nav { background: #fff; border-bottom: 1px solid #eee; padding: 0 24px; position: sticky; top: 0; z-index: 10; }
+        .nav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 0; overflow-x: auto; }
+        .nav-btn { padding: 12px 18px; border: none; background: transparent; color: #666; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; font-family: inherit; }
+        .nav-btn:hover { color: #6366f1; }
+        .nav-btn.active { color: #6366f1; border-bottom-color: #6366f1; font-weight: 600; }
+
+        /* 主内容 */
+        .container { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+        .section-title { font-size: 18px; font-weight: 700; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+
+        /* 句式列表（简化：不用卡片） */
+        .formula-list { margin-bottom: 48px; }
+        .formula-item { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 24px; margin-bottom: 12px; }
+        .formula-item:hover { border-color: #6366f1; }
+        .formula-num { display: inline-block; width: 24px; height: 24px; background: #6366f1; color: #fff; border-radius: 50%; text-align: center; line-height: 24px; font-size: 13px; font-weight: 700; margin-right: 10px; }
+        .formula-name { font-size: 16px; font-weight: 700; color: #333; }
+        .formula-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; background: #f0f0f0; border-radius: 4px; font-size: 12px; color: #888; }
+
+        /* 模板区域 */
+        .formula-template { margin-top: 12px; padding: 12px 16px; background: #f5f5ff; border-radius: 6px; font-size: 14px; color: #6366f1; font-weight: 500; }
+        .formula-template mark { background: none; color: #e84393; font-weight: 700; }
+
+        /* 示例区 */
+        .formula-example { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .ex-good, .ex-bad { padding: 10px 14px; border-radius: 6px; font-size: 13px; line-height: 1.6; }
+        .ex-good { background: #f0fff4; border-left: 3px solid #38a169; color: #276749; }
+        .ex-bad { background: #fff5f5; border-left: 3px solid #e53e3e; color: #9b2c2c; }
+        .ex-label { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+        .ex-label.good { color: #38a169; }
+        .ex-label.bad { color: #e53e3e; }
+
+        /* 复制按钮 */
+        .copy-btn { float: right; padding: 4px 10px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; font-size: 12px; color: #888; }
+        .copy-btn:hover { border-color: #6366f1; color: #6366f1; }
+        .copy-btn.ok { border-color: #38a169; color: #38a169; }
+
+        /* 场景专区 */
+        .scene-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .scene-tab { padding: 6px 14px; border: 1px solid #ddd; background: #fff; border-radius: 20px; font-size: 13px; cursor: pointer; color: #666; font-family: inherit; }
+        .scene-tab:hover { border-color: #6366f1; color: #6366f1; }
+        .scene-tab.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+        .scene-panel { display: none; }
+        .scene-panel.active { display: block; }
+
+        .scene-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; }
+        .scene-card h4 { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 10px; }
+        .scene-card .prompt-box { background: #f9f9ff; border-radius: 6px; padding: 12px 16px; font-size: 13px; line-height: 1.8; color: #555; }
+        .scene-card .prompt-box code { background: #eef; color: #6366f1; padding: 1px 6px; border-radius: 3px; font-size: 12px; font-family: inherit; }
+
+        /* 避坑指南 */
+        .pitfall-item { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .pitfall-wrong { background: #fff5f5; border-radius: 6px; padding: 14px; }
+        .pitfall-correct { background: #f0fff4; border-radius: 6px; padding: 14px; }
+        .pitfall-label { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+        .pitfall-label.wrong { color: #e53e3e; }
+        .pitfall-label.correct { color: #38a169; }
+        .pitfall-text { font-size: 13px; color: #666; line-height: 1.6; }
+
+        /* 万能公式 */
+        .formula-big { background: #6366f1; color: #fff; border-radius: 10px; padding: 28px 32px; text-align: center; margin-bottom: 48px; }
+        .formula-big h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+        .formula-big .formula { font-size: 20px; font-weight: 700; background: rgba(255,255,255,0.2); display: inline-block; padding: 8px 24px; border-radius: 20px; margin-bottom: 12px; }
+        .formula-big .example { font-size: 14px; opacity: 0.9; line-height: 1.8; }
+        .formula-big mark { background: rgba(255,255,255,0.25); color: #fff; padding: 2px 6px; border-radius: 3px; }
+        .formula-note { text-align: center; font-size: 14px; color: #888; margin-bottom: 40px; }
+        .formula-note strong { color: #6366f1; }
+
+        /* 一页纸 */
+        .print-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .print-item { background: #fff; border: 1px solid #e8e8e8; border-radius: 6px; padding: 14px 16px; font-size: 13px; line-height: 1.6; }
+        .print-item strong { color: #6366f1; }
+
+        /* 隐藏 */
+        .hidden { display: none !important; }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .pitfall-item { grid-template-columns: 1fr; }
+            .print-grid { grid-template-columns: 1fr; }
+            .nav-btn { padding: 10px 14px; font-size: 13px; }
+        }
+
+        /* 打印 */
+        @media print {
+            .nav, .search-wrap, .copy-btn, .footer { display: none; }
+            .formula-item { break-inside: avoid; border: 1px solid #ccc; }
+        }
+
+        /* 页脚 */
+        .footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>AI 提示词速查手册</h1>
+    <p>记住这些句式，90% 的日常提问都够用了。小白友好，复制即用。</p>
+    <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="搜索关键词，如：写邮件、学Python、改错..." oninput="filterCards()">
+        <button onclick="filterCards()">搜索</button>
+    </div>
+</div>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <button class="nav-btn active" onclick="switchNav(this,'core')">核心句式</button>
+        <button class="nav-btn" onclick="switchNav(this,'scenes')">场景专区</button>
+        <button class="nav-btn" onclick="switchNav(this,'pitfalls')">避坑指南</button>
+        <button class="nav-btn" onclick="switchNav(this,'formula')">万能公式</button>
+        <button class="nav-btn" onclick="switchNav(this,'print')">一页纸</button>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- 核心句式 -->
+    <section id="core-section">
+        <h2 class="section-title">核心句式（10句通杀）</h2>
+        <div class="formula-list" id="formulaGrid">
+
+            <div class="formula-item" data-keywords="写邮件 文案 文章 生成 创作">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">1</span><span class="formula-name">直接要结果</span><span class="formula-tag">最常用</span></div>
+                <div class="formula-template">帮我写一个<mark>【什么东西】</mark>，用于<mark>【什么场景】</mark>，<mark>【多少字】</mark>，<mark>【什么风格】</mark>。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">帮我写一条请假微信，发给领导，50字以内，语气礼貌。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">帮我写个请假信息。</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="解释 大白话 通俗 理解 概念">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">2</span><span class="formula-name">让 AI 说人话</span><span class="formula-tag">学习</span></div>
+                <div class="formula-template">用大白话讲一下<mark>【什么概念】</mark>，像跟朋友聊天一样。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">用大白话讲一下什么是通货膨胀，像跟朋友聊天一样。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">解释一下通货膨胀。</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="验证 确认 对不对 检验 理解">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">3</span><span class="formula-name">判断我理解对不对</span><span class="formula-tag">验证</span></div>
+                <div class="formula-template">我这样理解：<mark>【你的理解】</mark>，对不对？先判断对错，再解释原因。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">我这样理解：AI就是个会猜下一个词的高级输入法，对不对？先判断对错，再解释原因。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">AI是什么？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="步骤 流程 怎么做 操作 指导">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">4</span><span class="formula-name">让它给步骤</span><span class="formula-tag">实操</span></div>
+                <div class="formula-template">我想做<mark>【什么事】</mark>，请分步骤告诉我怎么做。<mark>【补充条件】</mark></div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">我想3天学会做PPT，请分步骤告诉我怎么做，我每天有2小时空闲。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">怎么学PPT？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="评估 可行性 能不能 成功率 分析">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">5</span><span class="formula-name">让它评估可行性</span><span class="formula-tag">决策</span></div>
+                <div class="formula-template">如果我要做<mark>【什么事】</mark>，条件是<mark>【什么】</mark>，成功率多少？你会怎么干？</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">如果我要一个人3天写出一份20页报告，没预算，成功率多少？你会怎么干？</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">这个能做吗？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="改错 优化 改进 更好 修改">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">6</span><span class="formula-name">让它帮你改</span><span class="formula-tag">修改</span></div>
+                <div class="formula-template">请帮我<mark>【修改/润色/优化】</mark>这段文字：<mark>【原文】</mark>。要求<mark>【具体要求】</mark>。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">请帮我润色这段文字：「今天天气不错，想去公园走走。」要求改成更正式的书信语气，用于请假申请。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">帮我改一下这段话。</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="举例 案例 例子 说明 具体">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">7</span><span class="formula-name">让它举例子</span><span class="formula-tag">理解</span></div>
+                <div class="formula-template">能给我举几个<mark>【什么概念】</mark>的例子吗？<mark>【要求：简单/具体/生活化】</mark>。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">能给我举几个「沉没成本」的例子吗？要生活化的，别用经济学名词。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">什么是沉没成本？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="对比 区别 差别 不一样 区分">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">8</span><span class="formula-name">让它做对比</span><span class="formula-tag">对比</span></div>
+                <div class="formula-template"><mark>【A】</mark>和<mark>【B】</mark>有什么区别？用表格列出来，要直观。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">机器学习、深度学习和强化学习有什么区别？用表格列出来，要直观。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">AI有哪些类型？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="总结 提炼 概括 要点 核心">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">9</span><span class="formula-name">让它帮你总结</span><span class="formula-tag">提炼</span></div>
+                <div class="formula-template">请总结这段文字的核心要点：<mark>【粘贴文字或链接】</mark>。限制在<mark>【几】</mark>条以内。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">请总结这篇文章的核心要点：[粘贴链接]，限制在5条以内，每条不超过30字。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">这篇文章讲了什么？</div></div>
+                </div>
+            </div>
+
+            <div class="formula-item" data-keywords="角色 扮演 假设 如果你是">
+                <button class="copy-btn" onclick="copyPrompt(this)">复制</button>
+                <div><span class="formula-num">10</span><span class="formula-name">给它一个角色</span><span class="formula-tag">进阶</span></div>
+                <div class="formula-template">你现在是<mark>【什么角色】</mark>，请帮我<mark>【做什么】</mark>。要求<mark>【具体要求】</mark>。</div>
+                <div class="formula-example">
+                    <div><div class="ex-label good">✅ 好的示例</div><div class="ex-good">你现在是一位有10年经验的HR总监，请帮我修改这份简历，突出我的项目管理能力，语言要简洁专业。</div></div>
+                    <div><div class="ex-label bad">❌ 差的示例</div><div class="ex-bad">帮我改简历。</div></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 场景专区 -->
+    <section id="scenes-section" class="hidden">
+        <h2 class="section-title">场景专区</h2>
+        <div class="scene-tabs">
+            <button class="scene-tab active" onclick="switchScene(this,'work')">💼 工作</button>
+            <button class="scene-tab" onclick="switchScene(this,'study')">📚 学习</button>
+            <button class="scene-tab" onclick="switchScene(this,'write')">✍️ 写作</button>
+            <button class="scene-tab" onclick="switchScene(this,'code')">💻 编程</button>
+            <button class="scene-tab" onclick="switchScene(this,'data')">📊 数据分析</button>
+            <button class="scene-tab" onclick="switchScene(this,'life')">🏠 日常</button>
+        </div>
+
+        <div id="scene-work" class="scene-panel active">
+            <div class="scene-card">
+                <h4>💼 写工作邮件</h4>
+                <div class="prompt-box">你现在是一位资深职场人士，请帮我写一封邮件：发给<code>收件人职位</code>，主题是<code>主题</code>，目的是<code>目的</code>，语气<code>正式/委婉/催促</code>，控制在<code>字数</code>字以内。</div>
+            </div>
+            <div class="scene-card">
+                <h4>💼 会议纪要整理</h4>
+                <div class="prompt-box">请帮我整理这份会议录音的文字稿，提取出：1. 参会人员名单 2. 讨论的主要议题 3. 达成的决议 4. 待办事项及负责人，用表格形式呈现，简洁清晰。</div>
+            </div>
+            <div class="scene-card">
+                <h4>💼 PPT大纲生成</h4>
+                <div class="prompt-box">我要做一个<code>主题</code>的PPT汇报，面向<code>受众</code>，时长<code>分钟</code>，请帮我列出PPT的大纲，包含每页的标题和核心要点，总共<code>页数</code>页。</div>
+            </div>
+            <div class="scene-card">
+                <h4>💼 周报/月报撰写</h4>
+                <div class="prompt-box">帮我写一份本周工作周报，以下是我的工作记录：<code>粘贴工作内容</code>。要求：分三点总结，每点包含「做了什么 + 结果如何 + 下周计划」，语气积极专业，300字以内。</div>
+            </div>
+        </div>
+
+        <div id="scene-study" class="scene-panel">
+            <div class="scene-card">
+                <h4>📚 解释复杂概念</h4>
+                <div class="prompt-box">我完全不懂<code>概念/术语</code>，请用一个生活中的例子帮我理解它，像给小学生讲解一样，不要使用专业术语。</div>
+            </div>
+            <div class="scene-card">
+                <h4>📚 制定学习计划</h4>
+                <div class="prompt-box">我想在<code>时间</code>内学会<code>技能</code>，我现在是<code>零基础/有一定基础</code>，每天能投入<code>小时</code>，请帮我制定一份详细的学习计划，包括每天学什么、推荐资源、练习方法。</div>
+            </div>
+            <div class="scene-card">
+                <h4>📚 考试复习重点</h4>
+                <div class="prompt-box">我要参加<code>考试名称</code>考试，考试范围是<code>范围</code>，请在<code>天数</code>天内帮我制定复习计划，并列出每个章节的核心考点和易错点。</div>
+            </div>
+            <div class="scene-card">
+                <h4>📚 Quiz自测生成</h4>
+                <div class="prompt-box">根据这段学习内容：<code>粘贴内容</code>，帮我出10道选择题，每题4个选项，附上答案和解析，用于我self-test。</div>
+            </div>
+        </div>
+
+        <div id="scene-write" class="scene-panel">
+            <div class="scene-card">
+                <h4>✍️ 创意故事生成</h4>
+                <div class="prompt-box">请以「<code>开头句</code>」为开头，写一篇<code>字数</code>字的<code>题材</code>故事，风格要求<code>风格</code>，要有反转结局。</div>
+            </div>
+            <div class="scene-card">
+                <h4>✍️ 文章改写润色</h4>
+                <div class="prompt-box">请帮我润色这篇文章：<code>粘贴原文</code>。要求：1.保持原意不变 2.让语言更生动流畅 3.减少重复用词 4.适合发表在<code>平台</code></div>
+            </div>
+            <div class="scene-card">
+                <h4>✍️ 社交媒体文案</h4>
+                <div class="prompt-box">帮我写一条适合发在<code>小红书/微博/朋友圈</code>的文案：主题是<code>主题</code>，风格要<code>幽默/文艺/干货/种草</code>，带上合适的<code>表情/话题标签</code>，控制在<code>字数</code>字以内。</div>
+            </div>
+            <div class="scene-card">
+                <h4>✍️ 标题生成器</h4>
+                <div class="prompt-box">请为这篇文章生成10个吸引眼球的标题：文章内容：<code>摘要或链接</code>，发布平台：<code>公众号/知乎/头条</code>，风格要求：<code>悬念型/数字型/情感型</code></div>
+            </div>
+        </div>
+
+        <div id="scene-code" class="scene-panel">
+            <div class="scene-card">
+                <h4>💻 代码解释</h4>
+                <div class="prompt-box">请逐行解释这段代码的作用：<code>粘贴代码</code>。要求：1.用大白话讲解，不要堆砌术语 2.指出每段代码的核心逻辑 3.如果有潜在bug请指出</div>
+            </div>
+            <div class="scene-card">
+                <h4>💻 Bug调试</h4>
+                <div class="prompt-box">这段代码报了错：<code>粘贴错误信息</code>，代码是：<code>粘贴代码</code>。请帮我：1.找出错误原因 2.给出修复后的完整代码 3.解释为什么这样改</div>
+            </div>
+            <div class="scene-card">
+                <h4>💻 代码重构建议</h4>
+                <div class="prompt-box">请帮我优化这段代码：<code>粘贴代码</code>。要求：1.提高可读性 2.减少重复代码 3.保持原有功能不变 4.给出优化前后对比</div>
+            </div>
+            <div class="scene-card">
+                <h4>💻 从零写一个功能</h4>
+                <div class="prompt-box">请帮我写一个<code>功能描述</code>，技术栈：<code>语言/框架</code>，要求：<code>具体要求</code>。代码要完整可运行，注释用中文。</div>
+            </div>
+        </div>
+
+        <div id="scene-data" class="scene-panel">
+            <div class="scene-card">
+                <h4>📊 数据解读</h4>
+                <div class="prompt-box">这是一组数据：<code>粘贴数据</code>。请帮我：1.找出数据中的趋势和异常 2.用一句话总结核心发现 3.给出3条可操作的结论</div>
+            </div>
+            <div class="scene-card">
+                <h4>📊 SQL查询生成</h4>
+                <div class="prompt-box">我有一张<code>表名</code>表，字段包括：<code>字段列表</code>，请帮我写一条SQL查询：<code>查询需求</code>。要求：高效、可读性强，加上必要注释。</div>
+            </div>
+            <div class="scene-card">
+                <h4>📊 Excel公式生成</h4>
+                <div class="prompt-box">我在Excel中需要：<code>需求描述</code>，A列是<code>内容</code>，B列是<code>内容</code>，请帮我写出对应的公式，并解释每个参数的含义。</div>
+            </div>
+        </div>
+
+        <div id="scene-life" class="scene-panel">
+            <div class="scene-card">
+                <h4>🏠 生活建议</h4>
+                <div class="prompt-box">我最近<code>遇到的问题</code>，我的情况是<code>背景信息</code>，请给我<code>几条</code>实用建议，要具体可操作，不要太笼统。</div>
+            </div>
+            <div class="scene-card">
+                <h4>🏠 礼物推荐</h4>
+                <div class="prompt-box">我要给<code>关系</code>送礼物，预算<code>金额</code>，对方喜欢<code>兴趣偏好</code>，请推荐5个礼物选项，每个附上推荐理由。</div>
+            </div>
+            <div class="scene-card">
+                <h4>🏠 旅行攻略</h4>
+                <div class="prompt-box">我计划去<code>目的地</code>玩<code>天数</code>天，预算<code>金额</code>，喜欢<code>类型：自然/人文/美食/购物</code>，请帮我规划每天的行程，包含景点推荐和用餐建议。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 避坑指南 -->
+    <section id="pitfalls-section" class="hidden">
+        <h2 class="section-title">新手常见错误 & 正确改法</h2>
+        <div class="pitfall-item">
+            <div class="pitfall-wrong"><div class="pitfall-label wrong">❌ 错误示范</div><div class="pitfall-text">「帮我写个东西。」</div></div>
+            <div class="pitfall-correct"><div class="pitfall-label correct">✅ 正确改法</div><div class="pitfall-text">「帮我写一份产品需求文档，面向开发团队，500字以内，包含功能列表和优先级排序。」</div></div>
+        </div>
+        <div class="pitfall-item">
+            <div class="pitfall-wrong"><div class="pitfall-label wrong">❌ 错误示范</div><div class="pitfall-text">「解释一下机器学习。」</div></div>
+            <div class="pitfall-correct"><div class="pitfall-label correct">✅ 正确改法</div><div class="pitfall-text">「我是一个完全不懂技术的小白，请用生活中的例子解释什么是机器学习，不要使用专业术语。」</div></div>
+        </div>
+        <div class="pitfall-item">
+            <div class="pitfall-wrong"><div class="pitfall-label wrong">❌ 错误示范</div><div class="pitfall-text">「帮我改一下这段文字。」</div></div>
+            <div class="pitfall-correct"><div class="pitfall-label correct">✅ 正确改法</div><div class="pitfall-text">「请帮我润色这段文字，让它更简洁有力，去掉重复内容，适合发在朋友圈，200字以内。」</div></div>
+        </div>
+        <div class="pitfall-item">
+            <div class="pitfall-wrong"><div class="pitfall-label wrong">❌ 错误示范</div><div class="pitfall-text">「这个功能怎么做？」</div></div>
+            <div class="pitfall-correct"><div class="pitfall-label correct">✅ 正确改法</div><div class="pitfall-text">「我想用Python写一个自动批量重命名文件的脚本，要求：支持自定义前缀、保留原后缀、处理中文文件名，请分步骤教我。」</div></div>
+        </div>
+        <div class="pitfall-item">
+            <div class="pitfall-wrong"><div class="pitfall-label wrong">❌ 错误示范</div><div class="pitfall-text">「给我列个计划。」</div></div>
+            <div class="pitfall-correct"><div class="pitfall-label correct">✅ 正确改法</div><div class="pitfall-text">「我下周要面试一家互联网公司的产品经理岗位，请帮我制定一个3天的冲刺复习计划，重点准备STAR面试法和产品思维题。」</div></div>
+        </div>
+    </section>
+
+    <!-- 万能公式 -->
+    <section id="formula-section" class="hidden">
+        <h2 class="section-title">万能公式</h2>
+        <div class="formula-big">
+            <h3>记住这个公式，什么都能问</h3>
+            <div class="formula">背景 + 要什么 + 给谁 + 限制 + 格式</div>
+            <div class="example">
+                我在准备一场<mark>面试</mark>，帮我写一段<mark>自我介绍</mark>，面向<mark>互联网公司面试官</mark>，<mark>1分钟以内</mark>，<mark>口语化，分3点</mark>。
+            </div>
+        </div>
+        <div class="formula-note">
+            <p>💡 <strong>核心口诀：</strong>说清楚「要什么、给谁、多少、什么风格、什么格式」</p>
+            <p style="margin-top:8px;">如果AI还是答非所问，补一句：<strong>「如果信息不够，你先问我3个问题。」</strong></p>
+        </div>
+    </section>
+
+    <!-- 一页纸 -->
+    <section id="print-section" class="hidden">
+        <h2 class="section-title">一页纸速查卡（可打印）</h2>
+        <div class="print-grid">
+            <div class="print-item"><strong>1. 直接要结果</strong><br>帮我写一个【什么】，用于【场景】，【多少字】，【什么风格】。</div>
+            <div class="print-item"><strong>2. 说人话</strong><br>用大白话讲一下【概念】，像跟朋友聊天一样。</div>
+            <div class="print-item"><strong>3. 验证理解</strong><br>我这样理解：【理解】，对不对？先判断对错再解释。</div>
+            <div class="print-item"><strong>4. 要步骤</strong><br>我想做【事】，请分步骤告诉我怎么做。</div>
+            <div class="print-item"><strong>5. 评估可行性</strong><br>如果我要做【事】，条件是【条件】，成功率多少？你会怎么干？</div>
+            <div class="print-item"><strong>6. 让AI改</strong><br>请帮我【修改/润色】这段文字：【原文】，要求【要求】。</div>
+            <div class="print-item"><strong>7. 要例子</strong><br>能给我举几个【概念】的例子吗？要生活化的。</div>
+            <div class="print-item"><strong>8. 做对比</strong><br>【A】和【B】有什么区别？用表格列出来。</div>
+            <div class="print-item"><strong>9. 要总结</strong><br>请总结这段文字的要点：【内容】，限制在【几条】以内。</div>
+            <div class="print-item"><strong>10. 给角色</strong><br>你现在是【角色】，请帮我【事】。要求【要求】。</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#6366f1;color:#fff;border-radius:8px;font-weight:700;">万能公式：背景 + 要什么 + 给谁 + 限制 + 格式</div>
+    </section>
+
+</div>
+
+<div class="footer">
+    AI 提示词速查手册 · 数据来源：数据/AI提示词推荐.md · 2026-09-12
+</div>
+
+<script>
+function switchNav(btn, section) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['core-section','scenes-section','pitfalls-section','formula-section','print-section'].forEach(id => {
+        document.getElementById(id).classList.toggle('hidden', id !== section + '-section');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function switchScene(btn, scene) {
+    document.querySelectorAll('.scene-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.scene-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('scene-' + scene).classList.add('active');
+}
+
+function filterCards() {
+    const kw = document.getElementById('searchInput').value.toLowerCase();
+    document.querySelectorAll('.formula-item').forEach(card => {
+        const k = (card.getAttribute('data-keywords') || '') + ' ' + card.textContent;
+        card.style.display = (k.toLowerCase().includes(kw) || kw === '') ? '' : 'none';
+    });
+}
+
+function copyPrompt(btn) {
+    const item = btn.closest('.formula-item');
+    const template = item.querySelector('.formula-template').textContent;
+    navigator.clipboard.writeText(template).then(() => {
+        btn.textContent = '已复制';
+        btn.classList.add('ok');
+        setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('ok'); }, 1500);
+    });
+}
+</script>
+
+</body>
+</html>
