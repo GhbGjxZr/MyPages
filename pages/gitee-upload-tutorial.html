@@ -29,7 +29,7 @@
     /* 页头 */
     .header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.2rem;
     }
     .header h1 {
         font-size: 2.3rem;
@@ -55,7 +55,48 @@
         margin-top: 0.5rem;
     }
 
-    /* 切换标签 */
+    /* 顶部注意事项横幅 */
+    .notice-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.8rem;
+        background: linear-gradient(135deg, #fff4e5 0%, #ffe8cc 100%);
+        border: 1px solid #f5b041;
+        border-radius: 60px;
+        padding: 0.8rem 2rem;
+        margin: 1.2rem auto 0;
+        width: fit-content;
+        max-width: 100%;
+        box-shadow: 0 8px 20px -8px #f5b04180;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        text-decoration: none;
+        color: #7d5d1e;
+    }
+    .notice-banner:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 24px -6px #f5b041;
+    }
+    .notice-banner i.warn-icon {
+        color: #e67e22;
+        font-size: 1.4rem;
+        background: white;
+        padding: 0.4rem;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(230, 126, 34, 0.25);
+    }
+    .notice-banner .notice-text {
+        font-weight: 600;
+        font-size: 0.98rem;
+    }
+    .notice-banner .notice-arrow {
+        color: #d35400;
+        font-size: 1rem;
+        margin-left: 0.3rem;
+    }
+
+    /* 切换标签（三个） */
     .tabs {
         display: flex;
         justify-content: center;
@@ -70,13 +111,14 @@
         box-shadow: 0 8px 20px -8px rgba(0, 40, 80, 0.2);
         border: 1px solid #ffffff90;
         backdrop-filter: blur(6px);
+        flex-wrap: wrap;
     }
     .tab-btn {
         border: none;
         background: transparent;
-        padding: 0.7rem 2rem;
+        padding: 0.7rem 1.6rem;
         border-radius: 40px;
-        font-size: 1rem;
+        font-size: 0.98rem;
         font-weight: 600;
         color: #4a5f73;
         cursor: pointer;
@@ -96,6 +138,11 @@
         box-shadow: 0 6px 14px -4px #0b2d4b90;
     }
     .tab-btn.active i { color: #7ec8ff; }
+    .tab-btn.notice-tab.active {
+        background: #b85e00;
+        box-shadow: 0 6px 14px -4px #b85e0090;
+    }
+    .tab-btn.notice-tab.active i { color: #ffd8a8; }
 
     /* 内容面板：互斥显示 */
     .panel { display: none; animation: fade 0.3s ease; }
@@ -113,6 +160,186 @@
         box-shadow: 0 20px 35px -12px rgba(0, 20, 40, 0.15), 0 0 0 1px #ffffff inset;
         border: 1px solid #ffffff90;
         margin-bottom: 1.5rem;
+    }
+
+    /* ============ 注意事项页面样式 ============ */
+    .notice-hero {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        background: linear-gradient(135deg, #fff9f0 0%, #fff0db 100%);
+        border: 1px solid #f5b04180;
+        border-radius: 24px;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.8rem;
+        flex-wrap: wrap;
+    }
+    .notice-hero .hero-icon {
+        flex-shrink: 0;
+        font-size: 3rem;
+        color: #e67e22;
+        background: white;
+        width: 80px;
+        height: 80px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 20px -8px #e67e2280;
+    }
+    .notice-hero .hero-text h2 {
+        font-size: 1.4rem;
+        color: #7d3c00;
+        margin-bottom: 0.3rem;
+    }
+    .notice-hero .hero-text p {
+        color: #8a5a20;
+        font-size: 0.98rem;
+    }
+
+    /* 图文并行：Gitee 仓库创建页模拟 */
+    .gitee-mock {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+    @media (max-width: 760px) {
+        .gitee-mock { grid-template-columns: 1fr; }
+    }
+
+    /* 左侧：模拟 Gitee 创建仓库表单 */
+    .mock-form {
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #d6e5f2;
+        padding: 1.4rem;
+        box-shadow: 0 8px 20px -10px rgba(0, 40, 80, 0.12);
+    }
+    .mock-form .mock-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0b2d4b;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-bottom: 1px dashed #c8dae9;
+        padding-bottom: 0.6rem;
+    }
+    .mock-form .mock-title i { color: #c71b1b; }
+    .mock-field {
+        margin-bottom: 0.9rem;
+    }
+    .mock-field label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: #4a5f73;
+        margin-bottom: 0.25rem;
+    }
+    .mock-field .mock-input {
+        background: #f6f9fc;
+        border: 1px solid #d6e5f2;
+        border-radius: 10px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.88rem;
+        color: #1e2b3c;
+        font-family: 'Fira Code', monospace;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .mock-field .mock-input i {
+        color: #8aa8c4;
+        font-size: 0.8rem;
+    }
+    .mock-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #2e4a66;
+        margin-bottom: 0.5rem;
+    }
+    .mock-check i.fa-check-square { color: #1a8f5a; }
+    .mock-check i.fa-square { color: #b0c4d8; }
+    .mock-btn {
+        background: #c71b1b;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        padding: 0.55rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-top: 0.8rem;
+        opacity: 0.9;
+    }
+
+    /* 右侧：复制命令提示（图文并行的关键） */
+    .copy-zone {
+        background: #0b1f2e;
+        border-radius: 18px;
+        padding: 1.4rem;
+        border: 1px solid #1c3c55;
+        position: relative;
+        box-shadow: 0 12px 25px -12px #0b1f2e90;
+    }
+    .copy-zone .copy-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #7ec8ff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+    .copy-zone .copy-label i { color: #f5b041; }
+    .copy-zone .copy-hint {
+        color: #a6e3a1;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.88rem;
+        line-height: 1.9;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .copy-zone .copy-hint .cmt { color: #7e9eb5; }
+    .copy-zone .copy-hint .str { color: #f5b041; }
+    .copy-zone .copy-badge {
+        position: absolute;
+        top: -12px;
+        right: 18px;
+        background: #f5b041;
+        color: #4a2c00;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.2rem 0.8rem;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px -3px #f5b041;
+    }
+
+    /* 注意块 */
+    .attention-block {
+        background: #fef9e7;
+        border-left: 5px solid #f5b041;
+        border-radius: 16px;
+        padding: 1.1rem 1.3rem;
+        margin: 1.4rem 0;
+    }
+    .attention-block .att-title {
+        font-weight: 700;
+        color: #b85e00;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.4rem;
+        font-size: 1rem;
+    }
+    .attention-block .att-title i { color: #e67e22; }
+    .attention-block p {
+        color: #7d5d1e;
+        font-size: 0.95rem;
     }
 
     /* 命令块 —— 每条命令清晰展示 */
@@ -163,20 +390,27 @@
     .dont .meta-label { color: #c0392b; }
     .meta-text { color: #2e4a66; }
 
-    .badge-do {
+    /* Vim 操作专用行 */
+    .meta-row.vim .meta-label { color: #8e44ad; }
+    .meta-row.vim .meta-text { color: #4a2c6a; }
+    .vim-badge {
         display: inline-block;
-        background: #e1f7ec;
-        color: #16794c;
+        background: #f0e6fa;
+        color: #6d3b9e;
         font-size: 0.78rem;
         padding: 0.1rem 0.5rem;
         border-radius: 20px;
         margin-left: 0.3rem;
         font-weight: 600;
     }
-    .badge-dont {
+
+    /* 重定向专用行 */
+    .meta-row.redirect .meta-label { color: #d35400; }
+    .meta-row.redirect .meta-text { color: #7e4a1e; }
+    .redirect-badge {
         display: inline-block;
-        background: #fdeaea;
-        color: #b03030;
+        background: #fef0e0;
+        color: #b85e00;
         font-size: 0.78rem;
         padding: 0.1rem 0.5rem;
         border-radius: 20px;
@@ -205,7 +439,59 @@
         flex-shrink: 0;
     }
 
-    /* 视频链接区（只保留 B 站纯 Git 指令视频） */
+    /* 简单版顶部跳转提示条 */
+    .simple-jump {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        background: #fff4e5;
+        border: 1px solid #f5b041;
+        border-radius: 18px;
+        padding: 0.9rem 1.2rem;
+        margin-bottom: 1.2rem;
+        flex-wrap: wrap;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .simple-jump:hover {
+        background: #ffe8cc;
+        transform: translateY(-1px);
+    }
+    .simple-jump .jump-left {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        color: #7d3c00;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+    .simple-jump .jump-left i {
+        color: #e67e22;
+        font-size: 1.3rem;
+    }
+    .simple-jump .jump-btn {
+        background: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 40px;
+        padding: 0.5rem 1.2rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 6px 12px -5px #e67e2290;
+        font-family: inherit;
+        transition: all 0.2s ease;
+    }
+    .simple-jump .jump-btn:hover {
+        background: #ca6b12;
+        transform: scale(1.02);
+    }
+
+    /* 视频链接区 */
     .bili-box {
         background: #f0f7ff;
         border: 1px solid #b8d4ed;
@@ -311,9 +597,12 @@
     @media (max-width: 640px) {
         .header h1 { font-size: 1.6rem; }
         .card { padding: 1.3rem; }
-        .tab-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        .tab-btn { padding: 0.6rem 1rem; font-size: 0.88rem; }
         .meta-label { width: 76px; font-size: 0.82rem; }
         .bili-box { flex-direction: column; align-items: flex-start; }
+        .notice-banner { flex-direction: column; text-align: center; border-radius: 20px; }
+        .notice-hero { flex-direction: column; text-align: center; }
+        .notice-hero .hero-icon { width: 64px; height: 64px; font-size: 2.2rem; }
     }
 </style>
 </head>
@@ -326,7 +615,14 @@
         <div class="subhead">纯 Git 指令 · 每条命令讲清「做什么 / 不做什么」</div>
     </div>
 
-    <!-- 切换标签：简单版 / 详细版 -->
+    <!-- 顶部注意事项横幅 -->
+    <div class="notice-banner" onclick="switchPanel('notice')">
+        <i class="fas fa-exclamation-triangle warn-icon"></i>
+        <span class="notice-text">⚠️ 注意：创建 Git 仓库后，Gitee 页面上会显示一段完整命令，只需复制修改即可</span>
+        <i class="fas fa-arrow-right notice-arrow"></i>
+    </div>
+
+    <!-- 切换标签（三个） -->
     <div class="tabs">
         <button class="tab-btn active" data-panel="simple">
             <i class="fas fa-bolt"></i> 简单版
@@ -334,12 +630,26 @@
         <button class="tab-btn" data-panel="detail">
             <i class="fas fa-book-open"></i> 详细版
         </button>
+        <button class="tab-btn notice-tab" data-panel="notice">
+            <i class="fas fa-exclamation-circle"></i> 注意事项
+        </button>
     </div>
 
     <!-- ================= 简单版 ================= -->
     <div id="panel-simple" class="panel active">
         <div class="card">
-            <div class="sec-title"><i class="fas fa-list-ol"></i> 五步上传，够用就行</div>
+            <!-- 顶部跳转提示条 -->
+            <div class="simple-jump" onclick="switchPanel('notice')">
+                <div class="jump-left">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>创建仓库后，Gitee 页面上有现成的命令，复制修改就能用，先看看注意事项</span>
+                </div>
+                <button class="jump-btn" type="button" onclick="event.stopPropagation(); switchPanel('notice')">
+                    <i class="fas fa-arrow-right"></i> 去查看
+                </button>
+            </div>
+
+            <div class="sec-title"><i class="fas fa-list-ol"></i> 六步上传，够用就行</div>
 
             <!-- 步骤 1 -->
             <div class="cmd-item">
@@ -359,16 +669,81 @@
                 </div>
             </div>
 
-            <!-- 步骤 2 -->
+            <!-- 步骤 2：touch 创建 .gitignore -->
             <div class="cmd-item">
                 <div class="simple-step">
                     <span class="simple-num">2</span>
+                    <div class="cmd-code">touch .gitignore</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">用 <code class="inline">touch</code> 创建一个空的 <code class="inline">.gitignore</code> 文件，准备写入需要忽略的内容。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不会自动填写忽略规则，文件是空的；不删除任何已有文件。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 3：vim 编辑 .gitignore + Vim 操作列 + 重定向 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">3</span>
+                    <div class="cmd-code">vim .gitignore</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">用 Vim 打开 <code class="inline">.gitignore</code>，准备写入忽略规则。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">Vim 只是编辑器，不会自动修改文件，需要手动操作。</span>
+                    </div>
+                    <!-- 单独一列：Vim 使用操作 -->
+                    <div class="meta-row vim">
+                        <span class="meta-label">Vim 操作 <span class="vim-badge">重点</span></span>
+                        <span class="meta-text">
+                            1. 按 <code class="inline">i</code> 进入插入模式 <br>
+                            2. 输入忽略内容，例如：<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">*.log</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">*.exe</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">go.mod</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">go.sum</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">.idea</code><br>
+                            3. 按 <code class="inline">Esc</code> 退出插入模式 <br>
+                            4. 输入 <code class="inline">:wq</code> 保存并退出 <br>
+                            5. 如果不想保存，输入 <code class="inline">:q!</code> 强制退出
+                        </span>
+                    </div>
+                    <!-- 单独一列：重定向操作 -->
+                    <div class="meta-row redirect">
+                        <span class="meta-label">重定向 <span class="redirect-badge">备选</span></span>
+                        <span class="meta-text">
+                            如果不想用 Vim，可以用重定向直接写入：<br>
+                            <code class="inline">echo "*.log" > .gitignore</code> &nbsp;（覆盖写入）<br>
+                            <code class="inline">echo "*.exe" >> .gitignore</code> &nbsp;（追加写入）<br>
+                            <code class="inline">echo "go.mod" >> .gitignore</code><br>
+                            <code class="inline">echo "go.sum" >> .gitignore</code><br>
+                            <code class="inline">echo ".idea" >> .gitignore</code><br>
+                            说明：<code class="inline">></code> 会清空原文件再写入，<code class="inline">>></code> 在文件末尾追加内容。
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 4 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">4</span>
                     <div class="cmd-code">git add .</div>
                 </div>
                 <div class="cmd-meta">
                     <div class="meta-row do">
                         <span class="meta-label">做什么</span>
-                        <span class="meta-text">把当前文件夹里<strong>所有</strong>新增和修改过的文件加入「暂存区」，告诉 Git：这些改动我准备提交了。</span>
+                        <span class="meta-text">把当前文件夹里<strong>所有</strong>新增和修改过的文件加入「暂存区」（忽略文件除外），告诉 Git：这些改动我准备提交了。</span>
                     </div>
                     <div class="meta-row dont">
                         <span class="meta-label">不做什么</span>
@@ -377,10 +752,10 @@
                 </div>
             </div>
 
-            <!-- 步骤 3 -->
+            <!-- 步骤 5 -->
             <div class="cmd-item">
                 <div class="simple-step">
-                    <span class="simple-num">3</span>
+                    <span class="simple-num">5</span>
                     <div class="cmd-code">git commit -m "首次提交"</div>
                 </div>
                 <div class="cmd-meta">
@@ -395,44 +770,27 @@
                 </div>
             </div>
 
-            <!-- 步骤 4 -->
+            <!-- 步骤 6 -->
             <div class="cmd-item">
                 <div class="simple-step">
-                    <span class="simple-num">4</span>
-                    <div class="cmd-code">git remote add origin 你的仓库HTTPS地址</div>
+                    <span class="simple-num">6</span>
+                    <div class="cmd-code">git remote add origin 你的仓库HTTPS地址
+git push -u origin master</div>
                 </div>
                 <div class="cmd-meta">
                     <div class="meta-row do">
                         <span class="meta-label">做什么</span>
-                        <span class="meta-text">给本地的 Git 仓库绑定一个「远程仓库」地址，并起名叫 <code class="inline">origin</code>，之后 push 就知道往哪送。</span>
+                        <span class="meta-text">绑定远程仓库地址（<code class="inline">origin</code>），然后把本地 <code class="inline">master</code> 分支的已提交版本上传到 Gitee；<code class="inline">-u</code> 记住关联，以后直接 <code class="inline">git push</code>。</span>
                     </div>
                     <div class="meta-row dont">
                         <span class="meta-label">不做什么</span>
-                        <span class="meta-text">不上传代码，不下载代码，只是登记一个地址。若之前绑定过，需改用 <code class="inline">git remote set-url origin 地址</code>。</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 步骤 5 -->
-            <div class="cmd-item">
-                <div class="simple-step">
-                    <span class="simple-num">5</span>
-                    <div class="cmd-code">git push -u origin master</div>
-                </div>
-                <div class="cmd-meta">
-                    <div class="meta-row do">
-                        <span class="meta-label">做什么</span>
-                        <span class="meta-text">把本地仓库里已提交的版本<strong>上传</strong>到 Gitee 的 <code class="inline">master</code> 分支，<code class="inline">-u</code> 记住这次关联，以后直接 <code class="inline">git push</code> 即可。</span>
-                    </div>
-                    <div class="meta-row dont">
-                        <span class="meta-label">不做什么</span>
-                        <span class="meta-text">不会自动帮你 commit，没提交的改动不会被传上去；也不会拉取远程已有内容。</span>
+                        <span class="meta-text">不会自动 commit，未提交的改动不会被上传；不会拉取远程已有内容。</span>
                     </div>
                 </div>
             </div>
 
             <div class="tip-box">
-                <i class="fas fa-lightbulb"></i> 顺序不能乱：<strong>init → add → commit → remote → push</strong>。跳步会导致推送失败。
+                <i class="fas fa-lightbulb"></i> 顺序不能乱：<strong>init → touch .gitignore → vim/重定向编辑 → add → commit → remote → push</strong>。跳步会导致推送失败。
             </div>
 
             <!-- B 站视频链接（纯 Git 指令，无 VSCode） -->
@@ -506,6 +864,65 @@ git init</div>
                 </div>
             </div>
 
+            <!-- touch 创建 .gitignore -->
+            <div class="cmd-item">
+                <div class="cmd-code">touch .gitignore</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">用 <code class="inline">touch</code> 创建一个空的 <code class="inline">.gitignore</code> 文件，准备写入需要 Git 忽略的文件或目录。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不会自动填写内容，文件是空的；不删除磁盘上的任何文件。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- vim 编辑 .gitignore + Vim 操作列 + 重定向列 -->
+            <div class="cmd-item">
+                <div class="cmd-code">vim .gitignore</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">用 Vim 打开 <code class="inline">.gitignore</code>，准备写入忽略规则。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">Vim 只是编辑器，不会自动修改文件，需要手动操作。</span>
+                    </div>
+                    <!-- 单独一列：Vim 使用操作 -->
+                    <div class="meta-row vim">
+                        <span class="meta-label">Vim 操作 <span class="vim-badge">重点</span></span>
+                        <span class="meta-text">
+                            1. 按 <code class="inline">i</code> 进入插入模式 <br>
+                            2. 输入忽略内容，例如：<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">*.log</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">*.exe</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">go.mod</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">go.sum</code><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<code class="inline">.idea</code><br>
+                            3. 按 <code class="inline">Esc</code> 退出插入模式 <br>
+                            4. 输入 <code class="inline">:wq</code> 保存并退出 <br>
+                            5. 如果不想保存，输入 <code class="inline">:q!</code> 强制退出
+                        </span>
+                    </div>
+                    <!-- 单独一列：重定向操作 -->
+                    <div class="meta-row redirect">
+                        <span class="meta-label">重定向 <span class="redirect-badge">备选</span></span>
+                        <span class="meta-text">
+                            如果不想用 Vim，可以用重定向直接写入：<br>
+                            <code class="inline">echo "*.log" > .gitignore</code> &nbsp;（覆盖写入）<br>
+                            <code class="inline">echo "*.exe" >> .gitignore</code> &nbsp;（追加写入）<br>
+                            <code class="inline">echo "go.mod" >> .gitignore</code><br>
+                            <code class="inline">echo "go.sum" >> .gitignore</code><br>
+                            <code class="inline">echo ".idea" >> .gitignore</code><br>
+                            说明：<code class="inline">></code> 会清空原文件再写入，<code class="inline">>></code> 在文件末尾追加内容。
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <!-- add -->
             <div class="cmd-item">
                 <div class="cmd-code">git add .
@@ -513,7 +930,7 @@ git init</div>
                 <div class="cmd-meta">
                     <div class="meta-row do">
                         <span class="meta-label">做什么</span>
-                        <span class="meta-text">把工作区中所有新增、修改的文件放入「暂存区」，表示这些改动即将被提交。</span>
+                        <span class="meta-text">把工作区中所有新增、修改的文件（忽略文件除外）放入「暂存区」，表示这些改动即将被提交。</span>
                     </div>
                     <div class="meta-row dont">
                         <span class="meta-label">不做什么</span>
@@ -603,6 +1020,14 @@ git push</div>
                 <strong>❓ 提交后发现漏了文件</strong>
                 <p>再执行 <code class="inline">git add 漏掉的文件</code> → <code class="inline">git commit -m "补充"</code> → <code class="inline">git push</code> 即可，不需要重新 init。</p>
             </div>
+            <div class="faq-item">
+                <strong>❓ 为什么需要 .gitignore？</strong>
+                <p>避免将系统文件、日志、依赖包等无关内容上传到仓库，保持仓库干净，也防止敏感信息泄露。</p>
+            </div>
+            <div class="faq-item">
+                <strong>❓ 不会用 Vim 怎么办？</strong>
+                <p>记住三个操作：<code class="inline">i</code> 进入编辑模式，<code class="inline">Esc</code> 退出编辑模式，<code class="inline">:wq</code> 保存退出。如果出错想放弃修改，输入 <code class="inline">:q!</code> 不保存强制退出。也可以直接用重定向 <code class="inline">echo "内容" >> .gitignore</code> 追加写入。</p>
+            </div>
 
             <!-- B 站视频链接（纯 Git 指令） -->
             <div class="bili-box">
@@ -617,34 +1042,144 @@ git push</div>
         </div>
     </div>
 
+    <!-- ================= 注意事项（独立页面） ================= -->
+    <div id="panel-notice" class="panel">
+        <div class="card">
+            <!-- 图文并行的头部 -->
+            <div class="notice-hero">
+                <div class="hero-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="hero-text">
+                    <h2>创建仓库后，先别急着敲命令！</h2>
+                    <p>Gitee 在创建完仓库后，页面上会直接显示一段<strong>完整的命令清单</strong>，你只需要复制下来，按需修改即可，不用全部自己手写。</p>
+                </div>
+            </div>
+
+            <div class="attention-block">
+                <div class="att-title"><i class="fas fa-lightbulb"></i> 为什么特别提醒这一点？</div>
+                <p>很多新手创建完仓库后直接关掉页面，然后手动去敲命令，容易漏掉关键步骤（比如 <code class="inline">git remote add origin</code> 的地址复制错）。Gitee 页面已经为你准备好一份“标准答案”，直接复制修改最省事。</p>
+            </div>
+
+            <!-- 图文并行：左侧模拟 Gitee 创建页，右侧展示可复制的命令 -->
+            <div class="gitee-mock">
+                <!-- 左侧：模拟 Gitee 创建仓库页面 -->
+                <div class="mock-form">
+                    <div class="mock-title"><i class="fab fa-git-alt"></i> 新建仓库（模拟 Gitee 页面）</div>
+                    <div class="mock-field">
+                        <label>仓库名称</label>
+                        <div class="mock-input"><i class="fas fa-folder"></i> my-project</div>
+                    </div>
+                    <div class="mock-field">
+                        <label>路径</label>
+                        <div class="mock-input"><i class="fas fa-link"></i> https://gitee.com/yourname/my-project.git</div>
+                    </div>
+                    <div class="mock-field">
+                        <label>初始化仓库</label>
+                        <div class="mock-check"><i class="fas fa-check-square"></i> 使用 Readme 文件初始化这个仓库</div>
+                        <div class="mock-check"><i class="fas fa-square"></i> 使用 .gitignore 模板</div>
+                        <div class="mock-check"><i class="fas fa-square"></i> 使用开源许可证</div>
+                    </div>
+                    <div class="mock-btn"><i class="fas fa-check"></i> 创建仓库</div>
+                </div>
+
+                <!-- 右侧：复制命令区（图文并行的核心） -->
+                <div class="copy-zone">
+                    <span class="copy-badge">复制这段就能用</span>
+                    <div class="copy-label"><i class="fas fa-copy"></i> Gitee 创建后显示的命令</div>
+                    <div class="copy-hint">
+<span class="cmt"># 已有仓库？直接复制下面命令并修改地址：</span>
+git remote add origin https://gitee.com/yourname/my-project.git
+git push -u origin master
+
+<span class="cmt"># 如果还没初始化，先执行：</span>
+git init
+git add .
+git commit -m <span class="str">"first commit"</span>
+git remote add origin https://gitee.com/yourname/my-project.git
+git push -u origin master
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作说明 -->
+            <div class="sec-title" style="margin-top:2rem;"><i class="fas fa-list-check"></i> 怎么用这段命令？</div>
+
+            <div class="cmd-item">
+                <div class="cmd-code"><span class="cmt"># 第一步：复制 Gitee 页面上的 git remote add 那一行</span>
+git remote add origin https://gitee.com/yourname/my-project.git
+
+<span class="cmt"># 第二步：把地址改成你自己的仓库地址</span>
+<span class="cmt"># 注意：yourname 换成你的 Gitee 用户名，my-project 换成你的仓库名</span>
+
+<span class="cmt"># 第三步：推送</span>
+git push -u origin master</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">直接复制 Gitee 页面上给的命令，把用户名和仓库名改成自己的，就能完成关联和推送。不需要自己拼写命令，减少出错。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不要照抄页面上的用户名和仓库名，一定要替换成你自己的；如果本地还没 <code class="inline">git init</code>，要先执行初始化步骤。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最后提醒 -->
+            <div class="attention-block">
+                <div class="att-title"><i class="fas fa-shield-alt"></i> 总结：最省事的做法</div>
+                <p>
+                    1. 在 Gitee 上创建仓库。<br>
+                    2. 创建完成后<strong>不要关页面</strong>，找到它显示的“已有仓库？”或“Git 命令”区域。<br>
+                    3. 复制命令 → 粘贴到终端 → 把用户名/仓库名改成自己的 → 执行。<br>
+                    4. 如果本地已有代码，先 <code class="inline">git init</code>、<code class="inline">git add .</code>、<code class="inline">git commit -m "first commit"</code>，再执行复制的命令。
+                </p>
+            </div>
+
+            <!-- 返回简单版按钮 -->
+            <div style="text-align:center; margin-top:1.5rem;">
+                <button class="jump-btn" type="button" onclick="switchPanel('simple')" style="padding:0.7rem 1.8rem; font-size:0.95rem;">
+                    <i class="fas fa-arrow-left"></i> 返回简单版
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
-        <i class="fas fa-code-branch"></i> 纯 Git 指令教程 · 简单版 / 详细版 点击上方标签切换
+        <i class="fas fa-code-branch"></i> 纯 Git 指令教程 · 简单版 / 详细版 / 注意事项 点击上方标签切换
     </div>
 </div>
 
 <script>
-    // 标签切换：两个版本互斥显示
+    // 标签切换：三个版本互斥显示
     const tabBtns = document.querySelectorAll('.tab-btn');
     const panels = {
         simple: document.getElementById('panel-simple'),
-        detail: document.getElementById('panel-detail')
+        detail: document.getElementById('panel-detail'),
+        notice: document.getElementById('panel-notice')
     };
 
+    // 切换面板的公共函数
+    function switchPanel(target) {
+        // 切换按钮激活态
+        tabBtns.forEach(b => {
+            b.classList.toggle('active', b.dataset.panel === target);
+        });
+
+        // 切换面板：同一时间只显示一个
+        Object.keys(panels).forEach(key => {
+            panels[key].classList.toggle('active', key === target);
+        });
+
+        // 切回顶部，体验更顺
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 给每个按钮绑定点击事件
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            const target = btn.dataset.panel;
-
-            // 切换按钮激活态
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // 切换面板：同一时间只显示一个
-            Object.keys(panels).forEach(key => {
-                panels[key].classList.toggle('active', key === target);
-            });
-
-            // 可选：切回顶部，体验更顺
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            switchPanel(btn.dataset.panel);
         });
     });
 </script>
