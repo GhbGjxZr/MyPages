@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gitee 上传教程 · 简单版 / 详细版</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        background: linear-gradient(145deg, #f6f9fc 0%, #e9f0f5 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: #1e2b3c;
+        line-height: 1.7;
+        padding: 2rem 1rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    /* 页头 */
+    .header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .header h1 {
+        font-size: 2.3rem;
+        font-weight: 700;
+        color: #0a2a44;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    .header h1 i {
+        color: #c71b1b;
+        background: white;
+        padding: 0.5rem;
+        border-radius: 50%;
+        box-shadow: 0 8px 20px rgba(199, 27, 27, 0.15);
+        font-size: 1.6rem;
+    }
+    .header .subhead {
+        color: #4a5f73;
+        font-size: 1.05rem;
+        margin-top: 0.5rem;
+    }
+
+    /* 切换标签 */
+    .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.5rem 0 2rem;
+        background: #ffffffb0;
+        padding: 0.4rem;
+        border-radius: 60px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 8px 20px -8px rgba(0, 40, 80, 0.2);
+        border: 1px solid #ffffff90;
+        backdrop-filter: blur(6px);
+    }
+    .tab-btn {
+        border: none;
+        background: transparent;
+        padding: 0.7rem 2rem;
+        border-radius: 40px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #4a5f73;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .tab-btn:hover {
+        color: #1e3c5a;
+        background: #ffffff70;
+    }
+    .tab-btn.active {
+        background: #0b2d4b;
+        color: white;
+        box-shadow: 0 6px 14px -4px #0b2d4b90;
+    }
+    .tab-btn.active i { color: #7ec8ff; }
+
+    /* 内容面板：互斥显示 */
+    .panel { display: none; animation: fade 0.3s ease; }
+    .panel.active { display: block; }
+    @keyframes fade {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 卡片 */
+    .card {
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 28px;
+        padding: 2rem;
+        box-shadow: 0 20px 35px -12px rgba(0, 20, 40, 0.15), 0 0 0 1px #ffffff inset;
+        border: 1px solid #ffffff90;
+        margin-bottom: 1.5rem;
+    }
+
+    /* 命令块 —— 每条命令清晰展示 */
+    .cmd-item {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+        padding: 1.2rem 1.3rem;
+        border-radius: 18px;
+        background: #f9fcff;
+        border: 1px solid #d6e5f2;
+        margin-bottom: 1rem;
+    }
+    .cmd-item .cmd-code {
+        background: #0b1f2e;
+        color: #a6e3a1;
+        font-family: 'Fira Code', 'JetBrains Mono', monospace;
+        font-size: 0.95rem;
+        padding: 0.7rem 1rem;
+        border-radius: 12px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+        border: 1px solid #1c3c55;
+    }
+    .cmd-item .cmd-code .cmt { color: #7e9eb5; }
+
+    .cmd-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.3rem;
+    }
+    .meta-row {
+        display: flex;
+        gap: 0.6rem;
+        align-items: flex-start;
+        font-size: 0.95rem;
+    }
+    .meta-label {
+        flex-shrink: 0;
+        font-weight: 700;
+        width: 92px;
+        font-size: 0.88rem;
+        padding-top: 0.1rem;
+    }
+    .do .meta-label   { color: #1a8f5a; }
+    .dont .meta-label { color: #c0392b; }
+    .meta-text { color: #2e4a66; }
+
+    .badge-do {
+        display: inline-block;
+        background: #e1f7ec;
+        color: #16794c;
+        font-size: 0.78rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 20px;
+        margin-left: 0.3rem;
+        font-weight: 600;
+    }
+    .badge-dont {
+        display: inline-block;
+        background: #fdeaea;
+        color: #b03030;
+        font-size: 0.78rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 20px;
+        margin-left: 0.3rem;
+        font-weight: 600;
+    }
+
+    /* 简单版里步骤更紧凑 */
+    .simple-step {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 0.4rem;
+    }
+    .simple-num {
+        background: #e3eef8;
+        color: #1e5a8a;
+        font-weight: 700;
+        min-width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    /* 视频链接区（只保留 B 站纯 Git 指令视频） */
+    .bili-box {
+        background: #f0f7ff;
+        border: 1px solid #b8d4ed;
+        border-radius: 20px;
+        padding: 1.2rem 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    .bili-left {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        color: #1e3c5a;
+        font-weight: 500;
+    }
+    .bili-left i {
+        font-size: 1.8rem;
+        color: #de4c5d;
+    }
+    .btn-bili {
+        background: #de4c5d;
+        color: white;
+        text-decoration: none;
+        padding: 0.65rem 1.5rem;
+        border-radius: 40px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 8px 15px -5px #de4c5d90;
+        transition: all 0.2s ease;
+        border: 1px solid #ffffff50;
+        white-space: nowrap;
+    }
+    .btn-bili:hover {
+        background: #c33d4d;
+        transform: scale(1.02);
+    }
+
+    /* 说明小标题 */
+    .sec-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #0b2d4b;
+        margin: 1.8rem 0 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .sec-title:first-of-type { margin-top: 0; }
+    .sec-title i {
+        color: #2a6d9c;
+        background: #e3eef8;
+        padding: 0.4rem;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+
+    .tip-box {
+        background: #fef9e7;
+        border-left: 5px solid #f5b041;
+        padding: 0.9rem 1.2rem;
+        border-radius: 14px;
+        font-size: 0.95rem;
+        color: #7d5d1e;
+        margin: 1rem 0;
+    }
+
+    .faq-item {
+        background: #f9fcff;
+        padding: 1rem 1.2rem;
+        border-radius: 16px;
+        margin-bottom: 0.8rem;
+        border: 1px solid #d6e5f2;
+    }
+    .faq-item strong { color: #1e5a8a; display: block; margin-bottom: 0.3rem; }
+    .faq-item p { color: #2e4a66; font-size: 0.95rem; }
+
+    .footer {
+        text-align: center;
+        margin-top: 2.5rem;
+        color: #6e8ba6;
+        font-size: 0.88rem;
+        border-top: 1px solid #c8dae9;
+        padding-top: 1.2rem;
+    }
+
+    code.inline {
+        background: #eef4f9;
+        padding: 0.15rem 0.45rem;
+        border-radius: 6px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        color: #1d5b8c;
+        border: 1px solid #d1e0ed;
+    }
+
+    @media (max-width: 640px) {
+        .header h1 { font-size: 1.6rem; }
+        .card { padding: 1.3rem; }
+        .tab-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+        .meta-label { width: 76px; font-size: 0.82rem; }
+        .bili-box { flex-direction: column; align-items: flex-start; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- 页头 -->
+    <div class="header">
+        <h1><i class="fab fa-git-alt"></i> Gitee 上传教程</h1>
+        <div class="subhead">纯 Git 指令 · 每条命令讲清「做什么 / 不做什么」</div>
+    </div>
+
+    <!-- 切换标签：简单版 / 详细版 -->
+    <div class="tabs">
+        <button class="tab-btn active" data-panel="simple">
+            <i class="fas fa-bolt"></i> 简单版
+        </button>
+        <button class="tab-btn" data-panel="detail">
+            <i class="fas fa-book-open"></i> 详细版
+        </button>
+    </div>
+
+    <!-- ================= 简单版 ================= -->
+    <div id="panel-simple" class="panel active">
+        <div class="card">
+            <div class="sec-title"><i class="fas fa-list-ol"></i> 五步上传，够用就行</div>
+
+            <!-- 步骤 1 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">1</span>
+                    <div class="cmd-code">git init</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">在当前文件夹创建一个空的 Git 仓库（生成隐藏的 <code class="inline">.git</code> 目录），让 Git 开始管理这个文件夹。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不上传任何文件，不连接 Gitee，只是本地初始化。文件夹里原有的文件不会被改动。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 2 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">2</span>
+                    <div class="cmd-code">git add .</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把当前文件夹里<strong>所有</strong>新增和修改过的文件加入「暂存区」，告诉 Git：这些改动我准备提交了。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">没有真正保存版本，也没有上传到 Gitee。只写 <code class="inline">git add 文件名</code> 就只暂存那一个文件。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 3 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">3</span>
+                    <div class="cmd-code">git commit -m "首次提交"</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把暂存区里的内容打包成一个「版本」，存入本地 Git 仓库，并附上说明文字。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">仍然只存在于你的电脑上，没有上传到 Gitee。引号里的文字只是备注，不影响代码。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 4 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">4</span>
+                    <div class="cmd-code">git remote add origin 你的仓库HTTPS地址</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">给本地的 Git 仓库绑定一个「远程仓库」地址，并起名叫 <code class="inline">origin</code>，之后 push 就知道往哪送。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不上传代码，不下载代码，只是登记一个地址。若之前绑定过，需改用 <code class="inline">git remote set-url origin 地址</code>。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 步骤 5 -->
+            <div class="cmd-item">
+                <div class="simple-step">
+                    <span class="simple-num">5</span>
+                    <div class="cmd-code">git push -u origin master</div>
+                </div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把本地仓库里已提交的版本<strong>上传</strong>到 Gitee 的 <code class="inline">master</code> 分支，<code class="inline">-u</code> 记住这次关联，以后直接 <code class="inline">git push</code> 即可。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不会自动帮你 commit，没提交的改动不会被传上去；也不会拉取远程已有内容。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <i class="fas fa-lightbulb"></i> 顺序不能乱：<strong>init → add → commit → remote → push</strong>。跳步会导致推送失败。
+            </div>
+
+            <!-- B 站视频链接（纯 Git 指令，无 VSCode） -->
+            <div class="bili-box">
+                <div class="bili-left">
+                    <i class="fab fa-bilibili"></i>
+                    <span>B 站 · 纯命令行 Git + Gitee 上传实战</span>
+                </div>
+                <a href="https://www.bilibili.com/video/BV1G8CFYvEjt/" target="_blank" class="btn-bili">
+                    <i class="fas fa-play"></i> 去看视频
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 详细版 ================= -->
+    <div id="panel-detail" class="panel">
+        <div class="card">
+            <div class="sec-title"><i class="fas fa-info-circle"></i> 0. 先搞清楚 Git 和 Gitee 的关系</div>
+            <p style="color:#2e4a66;">
+                <strong>Git</strong> 是本地版本控制工具，负责记录代码的每次修改；<strong>Gitee</strong> 是基于 Git 的代码托管平台。<br>
+                简单说：<strong>Git 管本地，Gitee 管远程</strong>。下面所有命令都在本地终端（Git Bash）执行。
+            </p>
+
+            <div class="sec-title"><i class="fas fa-download"></i> 1. 安装与配置（只需一次）</div>
+
+            <div class="cmd-item">
+                <div class="cmd-code">git --version</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">查看 Git 是否安装成功，显示版本号即表示已安装。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不修改任何配置，不联网，只是查看。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cmd-item">
+                <div class="cmd-code">git config --global user.name "你的名字"
+git config --global user.email "你的邮箱@example.com"</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">设置全局用户名和邮箱，Git 在提交时会记录「是谁提交的」，建议与 Gitee 账号一致。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不创建仓库，不上传代码，只是写进 Git 配置文件。<code class="inline">--global</code> 表示对这台电脑所有仓库生效。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sec-title"><i class="fas fa-cloud-upload-alt"></i> 2. 完整上传流程（逐条讲清）</div>
+
+            <!-- init -->
+            <div class="cmd-item">
+                <div class="cmd-code"><span class="cmt"># 进入你的代码文件夹后执行</span>
+git init</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">在当前目录初始化一个本地 Git 仓库，生成隐藏文件夹 <code class="inline">.git</code>，从此 Git 可以追踪此目录下的文件变化。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不上传、不提交、不关联远程仓库；已有文件不会被删除或移动。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- add -->
+            <div class="cmd-item">
+                <div class="cmd-code">git add .
+<span class="cmt"># 或指定文件： git add index.html</span></div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把工作区中所有新增、修改的文件放入「暂存区」，表示这些改动即将被提交。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不生成版本记录，不上传远程。它只是「选中」改动，真正的存档在下一步 commit。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- commit -->
+            <div class="cmd-item">
+                <div class="cmd-code">git commit -m "首次提交：完成基础页面"</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">将暂存区内容打包为一个版本，永久记录在本地 Git 历史中，<code class="inline">-m</code> 后是本次提交的说明。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">仍然只在本地，不会出现在 Gitee 上；也不包含没有 <code class="inline">git add</code> 过的改动。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- remote add -->
+            <div class="cmd-item">
+                <div class="cmd-code">git remote add origin https://gitee.com/你的用户名/仓库名.git</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把本地仓库与 Gitee 上的远程仓库关联，给这个远程地址起别名 <code class="inline">origin</code>，方便后续 push/pull。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不传输任何代码，只是登记地址。如果提示 <code class="inline">remote origin already exists</code>，改用 <code class="inline">git remote set-url origin 新地址</code>。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- push -->
+            <div class="cmd-item">
+                <div class="cmd-code">git push -u origin master</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">把本地 master 分支的所有已提交版本上传到 Gitee 的 origin 仓库；<code class="inline">-u</code> 建立跟踪关系，以后直接 <code class="inline">git push</code> 即可。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不会自动 commit，未提交的改动不会被上传；不会自动合并远程已有内容（若远程有 README 等需先 pull）。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <i class="fas fa-exclamation-triangle"></i> 如果推送被拒绝（rejected），说明远程有本地没有的提交。先执行 <code class="inline">git pull origin master</code> 合并，再重新 push。
+            </div>
+
+            <div class="sec-title"><i class="fas fa-sync-alt"></i> 3. 日常更新：改完代码后只需三条</div>
+
+            <div class="cmd-item">
+                <div class="cmd-code">git add .
+git commit -m "修改说明"
+git push</div>
+                <div class="cmd-meta">
+                    <div class="meta-row do">
+                        <span class="meta-label">做什么</span>
+                        <span class="meta-text">暂存改动 → 提交到本地 → 推送到 Gitee。因为第一次 push 用了 <code class="inline">-u</code>，之后可以直接 <code class="inline">git push</code>，无需再写 origin master。</span>
+                    </div>
+                    <div class="meta-row dont">
+                        <span class="meta-label">不做什么</span>
+                        <span class="meta-text">不需要重复 <code class="inline">git init</code> 和 <code class="inline">git remote add</code>，一个仓库只需初始化一次。</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sec-title"><i class="fas fa-life-ring"></i> 4. 常见问题</div>
+
+            <div class="faq-item">
+                <strong>❓ push 被拒绝 (rejected)</strong>
+                <p>远程仓库有你本地没有的内容（如创建时勾选了 README）。先 <code class="inline">git pull origin master</code> 合并，再 <code class="inline">git push</code>。</p>
+            </div>
+            <div class="faq-item">
+                <strong>❓ 每次都要输密码</strong>
+                <p>在 Gitee 设置里配置 SSH 公钥，把远程地址换成 SSH 格式（<code class="inline">git@gitee.com:...</code>），即可免密。</p>
+            </div>
+            <div class="faq-item">
+                <strong>❓ 提交后发现漏了文件</strong>
+                <p>再执行 <code class="inline">git add 漏掉的文件</code> → <code class="inline">git commit -m "补充"</code> → <code class="inline">git push</code> 即可，不需要重新 init。</p>
+            </div>
+
+            <!-- B 站视频链接（纯 Git 指令） -->
+            <div class="bili-box">
+                <div class="bili-left">
+                    <i class="fab fa-bilibili"></i>
+                    <span>B 站 · Git 命令行 + Gitee 完整流程（无编辑器）</span>
+                </div>
+                <a href="https://www.bilibili.com/video/BV1G8CFYvEjt/" target="_blank" class="btn-bili">
+                    <i class="fas fa-play"></i> 去看视频
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-code-branch"></i> 纯 Git 指令教程 · 简单版 / 详细版 点击上方标签切换
+    </div>
+</div>
+
+<script>
+    // 标签切换：两个版本互斥显示
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = {
+        simple: document.getElementById('panel-simple'),
+        detail: document.getElementById('panel-detail')
+    };
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.panel;
+
+            // 切换按钮激活态
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 切换面板：同一时间只显示一个
+            Object.keys(panels).forEach(key => {
+                panels[key].classList.toggle('active', key === target);
+            });
+
+            // 可选：切回顶部，体验更顺
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+</script>
+</body>
+</html>
