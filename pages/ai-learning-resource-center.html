@@ -1,0 +1,1360 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: ai_learning_hub_20250922
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: ai_learning_hub_20250922
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 学习资源中心 · 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4ed;
+  --surface: #faf9f5;
+  --surface-2: #ffffff;
+  --ink: #141413;
+  --ink-2: #4d4c48;
+  --ink-3: #5e5d59;
+  --ink-4: #87867f;
+  --border: #e8e6dc;
+  --border-2: #f0eee6;
+  --accent: #c96442;
+  --accent-2: #d97757;
+  --ring: #d1cfc5;
+  --ring-deep: #c2c0b6;
+  --warm-sand: #e8e6dc;
+  --focus: #3898ec;
+  --success: #5a8a5c;
+  --tag-bg: #e8e6dc;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navigation ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,244,237,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  gap: 32px;
+}
+.nav-logo {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--ink-3);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--ink);
+  background: var(--warm-sand);
+}
+.nav-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-4);
+  min-width: 80px;
+}
+.progress-bar-mini {
+  width: 48px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-mini-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ── Hero ── */
+.hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 24px 48px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(201,100,66,0.08);
+  border: 1px solid rgba(201,100,66,0.15);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.hero p {
+  font-size: 18px;
+  color: var(--ink-3);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* ── Role Selector ── */
+.role-selector {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.role-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.role-btn:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.role-btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+.role-btn .role-icon { font-size: 16px; }
+
+/* ── Search ── */
+.search-wrap {
+  max-width: 480px;
+  margin: 0 auto 16px;
+  position: relative;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  font-size: 14px;
+  color: var(--ink);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.search-wrap input:focus { border-color: var(--focus); }
+.search-wrap input::placeholder { color: var(--ink-4); }
+.search-wrap .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-4);
+  pointer-events: none;
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  padding: 0 24px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 13px;
+  color: var(--ink-4);
+}
+.stat-item { display: flex; align-items: center; gap: 6px; }
+.stat-num { font-weight: 600; color: var(--ink-2); font-size: 14px; }
+
+/* ── Section ── */
+.section {
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+}
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+.section-title {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.section-subtitle {
+  font-size: 13px;
+  color: var(--ink-4);
+}
+
+/* ── Filter Tags ── */
+.filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.filter-tag {
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: transparent;
+  font-size: 13px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.filter-tag:hover { border-color: var(--accent); color: var(--ink); }
+.filter-tag.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Cards Grid ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+.card:hover {
+  border-color: var(--ring);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  transform: translateY(-1px);
+}
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(201,100,66,0.07);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 12px;
+}
+.card-title {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--ink-4);
+}
+.card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 6px;
+}
+.card-action-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  color: var(--ink-4);
+}
+.card-action-btn:hover { border-color: var(--accent); color: var(--accent); }
+.card-action-btn.starred { background: var(--accent); border-color: var(--accent); color: #fff; }
+.card-action-btn.done { background: var(--success); border-color: var(--success); color: #fff; }
+.card-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-2);
+}
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 10px;
+  border: 1px solid rgba(201,100,66,0.2);
+  border-radius: var(--radius-full);
+  transition: all 0.15s ease;
+}
+.card-link:hover { background: rgba(201,100,66,0.07); }
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--ink-4);
+}
+.empty-state .empty-icon { font-size: 40px; margin-bottom: 16px; }
+.empty-state p { font-size: 14px; }
+
+/* ── Path Section ── */
+.path-section {
+  max-width: 800px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+}
+.path-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--warm-sand);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: 24px;
+}
+.path-tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  text-align: center;
+}
+.path-tab:hover { color: var(--ink); }
+.path-tab.active {
+  background: var(--surface-2);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.path-content { display: none; }
+.path-content.active { display: block; }
+.path-step {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-2);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  border-radius: var(--radius-sm);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.path-step:hover { background: rgba(0,0,0,0.015); }
+.path-step:last-child { border-bottom: none; }
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--warm-sand);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.path-step.completed .step-num {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+.step-body { flex: 1; }
+.step-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--ink-4);
+  line-height: 1.5;
+}
+.step-check {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  margin-top: 4px;
+  font-size: 11px;
+  color: transparent;
+}
+.path-step.completed .step-check {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+/* ── Milestone Cards ── */
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.milestone-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.milestone-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  opacity: 0.3;
+}
+.milestone-card.reached::before { opacity: 1; }
+.milestone-num {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.04em;
+}
+.milestone-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.milestone-desc {
+  font-size: 13px;
+  color: var(--ink-4);
+  line-height: 1.5;
+}
+.milestone-check {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-4);
+  cursor: pointer;
+}
+.milestone-check input { accent-color: var(--accent); }
+
+/* ── Tool Grid ── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.tool-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: all 0.15s ease;
+}
+.tool-card:hover { border-color: var(--ring); }
+.tool-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.tool-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.tool-desc {
+  font-size: 12px;
+  color: var(--ink-4);
+  line-height: 1.4;
+}
+.tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+.tool-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--warm-sand);
+  border-radius: var(--radius-full);
+  color: var(--ink-3);
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,19,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+}
+.modal-header {
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.modal-close {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--ink-4);
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.modal-close:hover { color: var(--ink); border-color: var(--ink-3); }
+.modal-body { padding: 16px 24px 24px; }
+.modal-badge {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.modal-title {
+  font-family: 'Noto Serif SC', Georgia, serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.modal-desc {
+  font-size: 14px;
+  color: var(--ink-3);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.modal-section { margin-bottom: 16px; }
+.modal-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 8px;
+}
+.modal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--surface);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+.modal-link:hover { opacity: 0.85; }
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.modal-tag {
+  font-size: 12px;
+  padding: 3px 10px;
+  background: var(--warm-sand);
+  border-radius: var(--radius-full);
+  color: var(--ink-3);
+}
+
+/* ── Footer ── */
+.footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--ink-4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero { padding: 48px 20px 32px; }
+  .cards { grid-template-columns: 1fr; }
+  .milestone-grid { grid-template-columns: 1fr; }
+  .tool-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.3s ease forwards; }
+.card { animation: fadeIn 0.3s ease forwards; }
+.card:nth-child(2) { animation-delay: 0.04s; }
+.card:nth-child(3) { animation-delay: 0.08s; }
+.card:nth-child(4) { animation-delay: 0.12s; }
+.card:nth-child(5) { animation-delay: 0.16s; }
+.card:nth-child(6) { animation-delay: 0.2s; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ring); }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">AI 学习中心</a>
+    <div class="nav-links">
+      <a href="#resources" class="active" data-section="resources">资源库</a>
+      <a href="#path" data-section="path">学习路径</a>
+      <a href="#tools" data-section="tools">工具链</a>
+      <a href="#milestones" data-section="milestones">里程碑</a>
+    </div>
+    <div class="nav-progress">
+      <span id="progress-text">已学 0%</span>
+      <div class="progress-bar-mini">
+        <div class="progress-bar-mini-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">2025 年度整理 · 持续更新</div>
+  <h1>AI 学习资料导航</h1>
+  <p>从提示词入门到 Agent 开发，系统化的学习路线与精选资源，帮你少走弯路。</p>
+  <div class="role-selector" id="roleSelector">
+    <button class="role-btn active" data-role="all">
+      <span class="role-icon">📚</span>全部资源
+    </button>
+    <button class="role-btn" data-role="user">
+      <span class="role-icon">💬</span>AI 使用者
+    </button>
+    <button class="role-btn" data-role="engineer">
+      <span class="role-icon">⚙️</span>应用工程师
+    </button>
+    <button class="role-btn" data-role="researcher">
+      <span class="role-icon">🔬</span>算法研究
+    </button>
+  </div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索资源、课程、工具…">
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num" id="statTotal">0</span> 个资源</div>
+  <div class="stat-item"><span class="stat-num" id="statStarted">0</span> 已开始</div>
+  <div class="stat-item"><span class="stat-num" id="statDone">0</span> 已完成</div>
+  <div class="stat-item"><span class="stat-num">🆕</span> 本周更新</div>
+</div>
+
+<!-- Resources Section -->
+<section class="section" id="resources">
+  <div class="section-header">
+    <h2 class="section-title">资源库</h2>
+    <span class="section-subtitle" id="resourceCount"></span>
+  </div>
+  <div class="filter-row" id="filterRow">
+    <button class="filter-tag active" data-filter="all">全部</button>
+    <button class="filter-tag" data-filter="github">开源库</button>
+    <button class="filter-tag" data-filter="course">课程</button>
+    <button class="filter-tag" data-filter="doc">教程</button>
+    <button class="filter-tag" data-filter="platform">平台</button>
+    <button class="filter-tag" data-filter="tool">工具</button>
+  </div>
+  <div class="cards" id="cardsContainer"></div>
+</section>
+
+<!-- Learning Path Section -->
+<section class="path-section" id="path">
+  <div class="section-header">
+    <h2 class="section-title">学习路径</h2>
+  </div>
+  <div class="path-tabs">
+    <button class="path-tab active" data-path="user">💬 AI 使用者</button>
+    <button class="path-tab" data-path="engineer">⚙️ 应用工程师</button>
+    <button class="path-tab" data-path="researcher">🔬 算法研究</button>
+  </div>
+
+  <div class="path-content active" id="path-user">
+    <div class="path-step" data-step="u1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">掌握基础提示词</div>
+        <div class="step-desc">学会"角色 + 背景 + 任务 + 约束"四要素，覆盖 80% 日常场景</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="u2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">多工具搭配使用</div>
+        <div class="step-desc">ChatGPT 写作、Perplexity 搜索、Claude 分析、Kimi 长文本处理</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="u3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">进阶技巧：CoT / Few-shot</div>
+        <div class="step-desc">思维链、少样本提示、角色堆叠、分段输入</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="u4">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">初探自动化工作流</div>
+        <div class="step-desc">用 Coze/Zapier/n8n 把 AI 接入日常工作流</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="u5">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">了解 RAG 概念</div>
+        <div class="step-desc">理解检索增强生成原理，会用 NotebookLM 等工具处理私有数据</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+  </div>
+
+  <div class="path-content" id="path-engineer">
+    <div class="path-step" data-step="e1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Python 基础</div>
+        <div class="step-desc">函数、类型注解、虚拟环境、异步基础——LLM 应用是 I/O 密集型</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="e2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">LLM API 基础（2-3周）</div>
+        <div class="step-desc">调用 OpenAI/Claude API，流式输出、结构化 JSON 输出、工具调用</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="e3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">RAG 系统构建（3-4周）</div>
+        <div class="step-desc">嵌入模型、文本分块、向量数据库（Chroma/pgvector）、混合检索、重排序</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="e4">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">生产工程化（2-3周）</div>
+        <div class="step-desc">流式 API、异步队列、成本监控、降级方案、可观测性（日志/追踪）</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="e5">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Agent 开发（3-4周）</div>
+        <div class="step-desc">从零实现 Agent 循环（~100行），LangGraph 状态管理，人在回路</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+  </div>
+
+  <div class="path-content" id="path-researcher">
+    <div class="path-step" data-step="r1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">数学基础</div>
+        <div class="step-desc">线性代数（特征值/SVD）、概率论（贝叶斯/MLE）、微积分（梯度下降）、优化理论</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="r2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">经典机器学习</div>
+        <div class="step-desc">线性/逻辑回归、SVM、决策树、集成方法（RF/XGBoost）、聚类、降维（PCA）</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="r3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">深度学习</div>
+        <div class="step-desc">神经网络、反向传播、CNN、RNN/LSTM、Transformer、PyTorch 实战</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="r4">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">方向专项（CV/NLP/RL）</div>
+        <div class="step-desc">CS231n（CV）、CS224n（NLP）、Spinning Up（RL），选一个深入</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+    <div class="path-step" data-step="r5">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">论文阅读与复现</div>
+        <div class="step-desc">Papers With Code、Transformer from Scratch、Hugging Face 论文精读</div>
+      </div>
+      <div class="step-check">✓</div>
+    </div>
+  </div>
+</section>
+
+<!-- Tools Section -->
+<section class="section" id="tools">
+  <div class="section-header">
+    <h2 class="section-title">工具链</h2>
+    <span class="section-subtitle">按功能分类</span>
+  </div>
+  <div class="tool-grid" id="toolGrid"></div>
+</section>
+
+<!-- Milestones Section -->
+<section class="section" id="milestones">
+  <div class="section-header">
+    <h2 class="section-title">里程碑</h2>
+    <span class="section-subtitle">自评进度，标记达成的目标</span>
+  </div>
+  <div class="milestone-grid" id="milestoneGrid"></div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <span>AI 学习资源中心 · 2025 · 持续更新中</span>
+  <span>数据来源：GitHub · Coursera · fast.ai · 各高校公开课</span>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-badge" id="modalBadge"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// ── Data ──
+const resources = [
+  // GitHub 开源库
+  { id:1, name:"developer-roadmap", cat:"github", role:["user","engineer","researcher"], stars:"29.7k", badge:"GitHub · 顶级", icon:"🗺️",
+    desc:"GitHub 上最火的开发者路线图库，含 AI/ML/NLP/CV/MLOps 等 50+ 条路线图，每条路由含资源链接。",
+    links:[{label:"GitHub",url:"https://github.com/kamranahmedse/developer-roadmap"},{label:"官网",url:"https://roadmap.sh"}],
+    tags:["路线图","免费","全栈"] },
+  { id:2, name:"learning-Journey-AI", cat:"github", role:["researcher"], stars:"432", badge:"GitHub", icon:"🚀",
+    desc:"2025 最新 AI 学习路线，数学基础→ML→DL→CV/NLP/生成式AI→Agent→部署，全流程自学指南。",
+    links:[{label:"GitHub",url:"https://github.com/0voice/learning-Journey-AI"}],
+    tags:["Python","全流程","实战"] },
+  { id:3, name:"AI-Tutorial (dwSun)", cat:"github", role:["researcher"], stars:"⭐", badge:"GitHub", icon:"📘",
+    desc:"从深度学习到 AI 实战，79 章 4.7万行，378 张 Mermaid 图，覆盖数学→ML→DL→LLM→Agent→部署全链路。",
+    links:[{label:"GitHub",url:"https://github.com/dwSun/AI-Tutorial"}],
+    tags:["中文","图解","系统"] },
+  { id:4, name:"Artificial_Intelligence_Tutorial_zh", cat:"github", role:["researcher"], stars:"⭐", badge:"GitHub", icon:"🧠",
+    desc:"900+ 知识点交互式知识图谱，零基础到前沿研究，支持反向查找前置知识，适合查漏补缺。",
+    links:[{label:"GitHub",url:"https://github.com/qq940500529/Artificial_Intelligence_Tutorial_zh"},{label:"知识图谱",url:"https://qq940500529.github.io/Artificial_Intelligence_Tutorial_zh/"}],
+    tags:["知识点","图谱","中文"] },
+  { id:5, name:"Gen-AI-Roadmap-2025", cat:"github", role:["engineer"], stars:"7", badge:"GitHub", icon:"✨",
+    desc:"生成式 AI 8 阶段路线图：Python→ML→MLOps→DL→Prompt/RAG/Agent→微调→多模态→专项项目。",
+    links:[{label:"GitHub",url:"https://github.com/ApexIQ/Gen-AI-Roadmap-2025"}],
+    tags:["生成式AI","Agent","部署"] },
+  { id:6, name:"Generative-AI-Learning-Roadmap", cat:"github", role:["engineer"], stars:"78", badge:"GitHub", icon:"🌟",
+    desc:"200+ 精选资源，4 阶段 16 轨道，覆盖数学→LLM→LLMOps→多模态/Agent，含 AWS/GCP/Azure 专项。",
+    links:[{label:"GitHub",url:"https://github.com/iscloudready/Generative-AI-Learning-Roadmap"}],
+    tags:["RAG","LLMOps","云部署"] },
+
+  // 中文教程
+  { id:7, name:"零基础学AI（GitBook）", cat:"doc", role:["user","engineer"], stars:"—", badge:"在线教程", icon:"📖",
+    desc:"A/B 双轨学习契约：A轨非技术用户学提示词，B轨工程师学 API+RAG+Agent，三阶段成长路线。",
+    links:[{label:"GitBook",url:"https://yeasy.gitbook.io/ai_beginner_guide/"}],
+    tags:["中文","双轨制","非技术友好"] },
+  { id:8, name:"learn-ai（deconbear）", cat:"doc", role:["engineer","researcher"], stars:"—", badge:"在线教程", icon:"📝",
+    desc:"55 篇文章覆盖 ML 基石→DL→CV→NLP→RL→前沿，每个知识点含 demo 代码+练习题，适合中文读者。",
+    links:[{label:"网站",url:"https://deconbear.github.io/learn-ai/"}],
+    tags:["中文","代码实践","渐进式"] },
+  { id:9, name:"AI Skill Navigation", cat:"doc", role:["engineer"], stars:"—", badge:"在线教程", icon:"🧭",
+    desc:"2026课程表视角，构建优先+评估前置三原则，5个阶段各带可验证检查点，含学习方法论。",
+    links:[{label:"网站",url:"https://aiskillnav.com/"}],
+    tags:["工程化","检查点","作品导向"] },
+  { id:10, name:"小企鹅 Penchan AI 指南", cat:"doc", role:["user","engineer"], stars:"—", badge:"在线教程", icon:"🐧",
+    desc:"三阶段路线：入门（1-2周）→中阶（1-3月）→进阶（3月+），附证书选择建议和工具推荐。",
+    links:[{label:"网站",url:"https://penchan.co/zh-cn/ai/course/"}],
+    tags:["证书","中文","路线图"] },
+
+  // 免费课程
+  { id:11, name:"CS50's AI with Python", cat:"course", role:["engineer"], stars:"—", badge:"Harvard · edX", icon:"🎓",
+    desc:"7 周免费课程，涵盖搜索/强化学习/神经网络/自然语言处理，含 Python 项目实战。",
+    links:[{label:"edX",url:"https://www.edx.org/course/introduction-to-artificial-intelligence-with-python"}],
+    tags:["大学","Python","项目驱动"] },
+  { id:12, name:"Google ML Crash Course", cat:"course", role:["engineer"], stars:"—", badge:"Google", icon:"📊",
+    desc:"15 小时速成课，短小精悍，含 Colab 交互式练习，覆盖线性回归/逻辑回归/过拟合/正则化。",
+    links:[{label:"Google AI",url:"https://developers.google.com/machine-learning/crash-course"}],
+    tags:["速成","TensorFlow","动手"] },
+  { id:13, name:"Practical Deep Learning for Coders", cat:"course", role:["researcher"], stars:"—", badge:"fast.ai", icon:"🔥",
+    desc:"Jeremy Howard 主讲，项目优先教学法，7 周用 PyTorch 实战，适合有编程基础的人快速上手。",
+    links:[{label:"fast.ai",url:"https://course.fast.ai/"}],
+    tags:["PyTorch","项目优先","免费"] },
+  { id:14, name:"Neural Networks: Zero to Hero", cat:"course", role:["researcher"], stars:"—", badge:"YouTube", icon:"🧬",
+    desc:"Karpathy（OpenAI 联合创始人）从零手写 GPT，从感知机到 Transformer 完整推导，视频免费。",
+    links:[{label:"YouTube",url:"https://www.youtube.com/watch?v=VMj-3S1tku0"}],
+    tags:["深度理论","Karpathy","手写代码"] },
+  { id:15, name:"Deep Learning Specialization", cat:"course", role:["researcher"], stars:"—", badge:"Coursera · Andrew Ng", icon:"🅿️",
+    desc:"5 门课系统覆盖 NN/CNN/RNN/序列模型/Transformer，吴恩达经典课程， Coursera 可旁听免费。",
+    links:[{label:"Coursera",url:"https://www.coursera.org/specializations/deep-learning"}],
+    tags:["经典","大学","证书"] },
+  { id:16, name:"ChatGPT Prompt Engineering for Devs", cat:"course", role:["engineer","user"], stars:"—", badge:"DeepLearning.AI", icon:"💡",
+    desc:"OpenAI 官方提示词课程，涵盖 instruction/t coT/few-shot/输出格式等核心技巧。",
+    links:[{label:"DeepLearning.AI",url:"https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/"}],
+    tags:["提示词","OpenAI","免费"] },
+  { id:17, name:"Elements of AI", cat:"course", role:["user"], stars:"—", badge:"Helsinki Univ.", icon:"🌍",
+    desc:"芬兰国民 AI 课程，完全免费，30 小时，无编程要求，理解 AI 基本概念与伦理。",
+    links:[{label:"官网",url:"https://www.elements-of-ai.com/"}],
+    tags:["零基础","非技术","免费"] },
+  { id:18, name:"Google AI Essentials", cat:"course", role:["user","engineer"], stars:"—", badge:"Coursera", icon:"☁️",
+    desc:"Google 官方 AI 培训项目，涵盖 ML 基础概念、提示词设计、AI 伦理，免费旁听。",
+    links:[{label:"Coursera",url:"https://www.coursera.org/professional-certificates/google-ai-essentials"}],
+    tags:["入门","Google","非技术友好"] },
+
+  // 平台
+  { id:19, name:"Kaggle", cat:"platform", role:["researcher","engineer"], stars:"—", badge:"Google", icon:"🏆",
+    desc:"机器学习竞赛平台，免费 Notebook + Micro-courses（Pandas/ML/DL/CV/NLP），边学边实战。",
+    links:[{label:"Kaggle",url:"https://www.kaggle.com/learn"}],
+    tags:["竞赛","实战","免费"] },
+  { id:20, name:"Hugging Face", cat:"platform", role:["engineer","researcher"], stars:"—", badge:"开源社区", icon:"🤗",
+    desc:"开源模型生态，Transformers 库、Spaces 部署、Course 免费教程，LLM 应用首选平台。",
+    links:[{label:"官网",url:"https://huggingface.co/"}],
+    tags:["开源","LLM","模型"] },
+  { id:21, name:"NVIDIA DLI", cat:"platform", role:["engineer","researcher"], stars:"—", badge:"NVIDIA", icon:"🟢",
+    desc:"NVIDIA 深度学习培训中心，提供 RAG/多模态 Agent/LLM 应用等课程，注册后部分免费。",
+    links:[{label:"DLI",url:"https://www.nvidia.cn/training/learning-path/generative-ai-llm/"}],
+    tags:["GPU","证书","实操"] },
+  { id:22, name:"Papers With Code", cat:"platform", role:["researcher"], stars:"—", badge:"学术", icon:"📄",
+    desc:"论文+代码+排行榜一站式，搜 SOTA 模型和复现代码的最佳入口。",
+    links:[{label:"网站",url:"https://paperswithcode.com/"}],
+    tags:["论文","代码","SOTA"] },
+];
+
+const tools = [
+  { icon:"🐍", name:"Python", desc:"AI 领域首选语言", tags:["必备","基础"] },
+  { icon:"🔥", name:"PyTorch", desc:"深度学习主流框架", tags:["框架","必学"] },
+  { icon:"🧠", name:"Transformers", desc:"Hugging Face 模型库", tags:["LLM","开源"] },
+  { icon:"📊", name:"scikit-learn", desc:"经典 ML 算法库", tags:["ML","入门"] },
+  { icon:"🔍", name:"LangChain", desc:"LLM 应用开发框架", tags:["Agent","RAG"] },
+  { icon:"📚", name:"LlamaIndex", desc:"RAG 数据连接框架", tags:["RAG","检索"] },
+  { icon:"💾", name:"ChromaDB", desc:"轻量级向量数据库", tags:["向量库","RAG"] },
+  { icon:"📈", name:"Weights & Biases", desc:"实验追踪与可视化", tags:["实验","调试"] },
+  { icon:"🐳", name:"Docker", desc:"模型部署容器化", tags:["部署","生产"] },
+  { icon:"⚡", name:"vLLM", desc:"高性能 LLM 推理服务", tags:["推理","生产"] },
+  { icon:"🎨", name:"Gradio/Streamlit", desc:"快速 Demo 展示", tags:["演示","快速原型"] },
+  { icon:"🔧", name:"FastAPI", desc:"高并发 API 框架", tags:["后端","部署"] },
+];
+
+const milestones = [
+  { id:"m1", title:"提示词能手", desc:"能写出结构化、高质量的提示词，完成 3 个真实工作任务" },
+  { id:"m2", title:"RAG 系统搭建", desc:"独立完成一个基于私有文档的问答系统，含评估报告" },
+  { id:"m3", title:"Agent 原型", desc:"构建一个能调用工具、管理状态的 AI Agent" },
+  { id:"m4", title:"模型微调", desc:"在开源模型（如 LLaMA/Qwen）上完成指令微调" },
+  { id:"m5", title:"生产部署", desc:"将 AI 应用部署到线上，具备可观测性和成本监控" },
+  { id:"m6", title:"论文复现", desc:"精读并复现一篇 AI 顶会论文的核心实验" },
+];
+
+// ── State ──
+let state = {
+  role: 'all',
+  filter: 'all',
+  search: '',
+  starred: JSON.parse(localStorage.getItem('ai_hub_starred') || '[]'),
+  done: JSON.parse(localStorage.getItem('ai_hub_done') || '[]'),
+  pathSteps: JSON.parse(localStorage.getItem('ai_hub_path') || '{}'),
+};
+
+function saveState() {
+  localStorage.setItem('ai_hub_starred', JSON.stringify(state.starred));
+  localStorage.setItem('ai_hub_done', JSON.stringify(state.done));
+  localStorage.setItem('ai_hub_path', JSON.stringify(state.pathSteps));
+}
+
+// ── Render ──
+function getFilteredResources() {
+  return resources.filter(r => {
+    const roleMatch = state.role === 'all' || r.role.includes(state.role);
+    const filterMatch = state.filter === 'all' || r.cat === state.filter;
+    const searchMatch = !state.search || 
+      r.name.toLowerCase().includes(state.search.toLowerCase()) ||
+      r.desc.toLowerCase().includes(state.search.toLowerCase()) ||
+      r.tags.some(t => t.toLowerCase().includes(state.search.toLowerCase()));
+    return roleMatch && filterMatch && searchMatch;
+  });
+}
+
+function renderCards() {
+  const container = document.getElementById('cardsContainer');
+  const filtered = getFilteredResources();
+  document.getElementById('resourceCount').textContent = `${filtered.length} 个资源`;
+  document.getElementById('statTotal').textContent = resources.length;
+  document.getElementById('statStarted').textContent = state.done.length;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><p>没有找到匹配的资源，试试其他筛选条件</p></div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(r => `
+    <div class="card" onclick="openModal(${r.id})">
+      <div class="card-actions">
+        <button class="card-action-btn ${state.starred.includes(r.id)?'starred':''}" 
+          onclick="event.stopPropagation();toggleStar(${r.id})" title="收藏">☆</button>
+        <button class="card-action-btn ${state.done.includes(r.id)?'done':''}" 
+          onclick="event.stopPropagation();toggleDone(${r.id})" title="标记完成">✓</button>
+      </div>
+      <div class="card-badge">${r.badge}</div>
+      <div class="card-title">${r.icon} ${r.name}</div>
+      <div class="card-desc">${r.desc}</div>
+      <div class="card-meta">
+        ${r.stars !== '—' ? `<div class="card-meta-item">⭐ ${r.stars}</div>` : ''}
+        ${r.tags.map(t => `<div class="card-meta-item">#${t}</div>`).join('')}
+      </div>
+      <div class="card-links">
+        ${r.links.map(l => `<a href="${l.url}" target="_blank" class="card-link" onclick="event.stopPropagation()">${l.label} ↗</a>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTools() {
+  const grid = document.getElementById('toolGrid');
+  grid.innerHTML = tools.map(t => `
+    <div class="tool-card">
+      <div class="tool-icon">${t.icon}</div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-desc">${t.desc}</div>
+      <div class="tool-tags">${t.tags.map(tag => `<span class="tool-tag">${tag}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function renderMilestones() {
+  const grid = document.getElementById('milestoneGrid');
+  grid.innerHTML = milestones.map(m => `
+    <div class="milestone-card ${state.done.includes('m'+m.id.slice(1))?'reached':''}">
+      <div class="milestone-num">里程碑 ${m.id.replace('m','')}</div>
+      <div class="milestone-title">${m.title}</div>
+      <div class="milestone-desc">${m.desc}</div>
+      <label class="milestone-check">
+        <input type="checkbox" ${state.done.includes('m'+m.id.slice(1))?'checked':''} 
+          onchange="toggleMilestone('${m.id}')">
+        我已达成
+      </label>
+    </div>
+  `).join('');
+}
+
+function renderPathSteps() {
+  document.querySelectorAll('.path-step').forEach(step => {
+    const key = step.dataset.step;
+    const num = step.querySelector('.step-num');
+    const check = step.querySelector('.step-check');
+    if (state.pathSteps[key]) {
+      step.classList.add('completed');
+      num.textContent = '✓';
+      check.textContent = '✓';
+    } else {
+      step.classList.remove('completed');
+      num.textContent = key.replace(/[a-z]/,'').padStart(1,'') || step.dataset.step;
+      check.textContent = '';
+    }
+  });
+}
+
+function updateProgress() {
+  const total = resources.length + milestones.length;
+  const completed = state.done.length;
+  const pct = Math.round(completed / total * 100);
+  document.getElementById('progress-text').textContent = `已学 ${pct}%`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('statDone').textContent = completed;
+}
+
+// ── Actions ──
+function toggleStar(id) {
+  const idx = state.starred.indexOf(id);
+  if (idx >= 0) state.starred.splice(idx, 1); else state.starred.push(id);
+  saveState();
+  renderCards();
+}
+
+function toggleDone(id) {
+  const idx = state.done.indexOf(id);
+  if (idx >= 0) state.done.splice(idx, 1); else state.done.push(id);
+  saveState();
+  renderCards();
+  updateProgress();
+}
+
+function toggleMilestone(id) {
+  const key = 'm' + id.replace('m','');
+  const idx = state.done.indexOf(key);
+  if (idx >= 0) state.done.splice(idx, 1); else state.done.push(key);
+  saveState();
+  renderMilestones();
+  updateProgress();
+}
+
+function openModal(id) {
+  const r = resources.find(r => r.id === id);
+  if (!r) return;
+  document.getElementById('modalBadge').textContent = r.badge;
+  document.getElementById('modalTitle').textContent = r.name;
+  document.getElementById('modalBody').innerHTML = `
+    <p class="modal-desc">${r.desc}</p>
+    <div class="modal-section">
+      <div class="modal-section-title">相关链接</div>
+      ${r.links.map(l => `<a href="${l.url}" target="_blank" class="modal-link">${l.label} ↗</a>`).join(' ')}
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">标签</div>
+      <div class="modal-tags">${r.tags.map(t => `<span class="modal-tag">${t}</span>`).join('')}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">适合人群</div>
+      <div class="modal-tags">${r.role.map(rm => `<span class="modal-tag">${rm==='user'?'💬 使用者':rm==='engineer'?'⚙️ 工程师':'🔬 研究者'}</span>`).join('')}</div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ── Events ──
+document.querySelectorAll('.role-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.role = btn.dataset.role;
+    renderCards();
+  });
+});
+
+document.querySelectorAll('.filter-tag').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tag').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.filter = btn.dataset.filter;
+    renderCards();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  state.search = e.target.value;
+  renderCards();
+});
+
+document.querySelectorAll('.path-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.path-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.path-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('path-' + tab.dataset.path).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.path-step').forEach(step => {
+  step.addEventListener('click', () => {
+    const key = step.dataset.step;
+    if (state.pathSteps[key]) delete state.pathSteps[key];
+    else state.pathSteps[key] = true;
+    saveState();
+    renderPathSteps();
+    updateProgress();
+  });
+});
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// Nav scroll spy
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', e => {
+    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+// Init
+renderCards();
+renderTools();
+renderMilestones();
+renderPathSteps();
+updateProgress();
+</script>
+</body>
+</html>
