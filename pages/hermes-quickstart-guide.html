@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes AI Agent · 小白上手指南</title>
+    <style>
+        /* ========== 主题变量 ========== */
+        :root {
+            --bg: #f6f8f9;
+            --surface: #ffffff;
+            --surface-alt: #f1f5f7;
+            --text-primary: #10222e;
+            --text-secondary: #55656f;
+            --text-muted: #7b8a94;
+            --border: #e2e8ec;
+            --border-strong: #cfd8de;
+            --accent: #0d7a6f;
+            --accent-hover: #0a6259;
+            --accent-soft: #e4f2f0;
+            --accent-text: #0a5c54;
+            --code-bg: #f2f6f7;
+            --code-text: #16323d;
+            --warn-bg: #fdf6e7;
+            --warn-border: #f0d9a8;
+            --warn-text: #7a5a1a;
+            --danger-bg: #fdeeee;
+            --danger-border: #f2c9c9;
+            --danger-text: #8a3a3a;
+            --ok-bg: #e8f4ed;
+            --ok-text: #1c6b45;
+            --shadow-sm: 0 1px 2px rgba(16,34,46,0.05);
+            --shadow-md: 0 2px 8px rgba(16,34,46,0.07);
+            --radius: 14px;
+            --radius-sm: 9px;
+            --toggle-bg: #dde4e8;
+            --toggle-knob: #ffffff;
+            --tab-bg: #eef2f4;
+            --tab-active: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0c1519;
+            --surface: #16232a;
+            --surface-alt: #1b2b33;
+            --text-primary: #e6eef2;
+            --text-secondary: #a3b4bd;
+            --text-muted: #7b8d97;
+            --border: #26383f;
+            --border-strong: #354c55;
+            --accent: #4ecdc4;
+            --accent-hover: #6fd9d1;
+            --accent-soft: #14332f;
+            --accent-text: #7fe0d8;
+            --code-bg: #102028;
+            --code-text: #d7e6ea;
+            --warn-bg: #332b16;
+            --warn-border: #5c4a1e;
+            --warn-text: #e8cd92;
+            --danger-bg: #332021;
+            --danger-border: #5c3234;
+            --danger-text: #eaa0a0;
+            --ok-bg: #143228;
+            --ok-text: #7fd0a3;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 2px 10px rgba(0,0,0,0.35);
+            --toggle-bg: #2c4149;
+            --toggle-knob: #4ecdc4;
+            --tab-bg: #122026;
+            --tab-active: #16232a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.25s ease, color 0.25s ease;
+            padding: 22px 16px 72px;
+            min-height: 100vh;
+            font-size: 15px;
+        }
+
+        .container { max-width: 1040px; margin: 0 auto; }
+
+        /* ========== 图标 ========== */
+        .icon {
+            width: 20px; height: 20px;
+            stroke: currentColor; stroke-width: 2;
+            fill: none; stroke-linecap: round; stroke-linejoin: round;
+            flex-shrink: 0; display: inline-block; vertical-align: middle;
+        }
+        .icon-sm { width: 16px; height: 16px; }
+        .icon-lg { width: 26px; height: 26px; }
+
+        /* ========== 头部 ========== */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 14px;
+        }
+        .header-left { display: flex; align-items: center; gap: 13px; }
+        .logo-mark {
+            width: 44px; height: 44px;
+            background: var(--accent); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; flex-shrink: 0;
+        }
+        .header h1 { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+        .header .sub { font-size: 0.83rem; color: var(--text-secondary); }
+
+        /* 主题切换 */
+        .theme-switch {
+            display: flex; align-items: center; gap: 9px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 40px; padding: 6px 6px 6px 16px;
+            box-shadow: var(--shadow-sm); transition: background 0.25s, border-color 0.25s;
+        }
+        .theme-switch span { font-size: 0.78rem; font-weight: 500; color: var(--text-secondary); }
+        .toggle-btn {
+            position: relative; width: 50px; height: 28px;
+            background: var(--toggle-bg); border: none; border-radius: 30px;
+            cursor: pointer; transition: background 0.25s ease; flex-shrink: 0; padding: 0;
+        }
+        .toggle-btn::after {
+            content: ""; position: absolute; top: 3px; left: 3px;
+            width: 22px; height: 22px; background: var(--toggle-knob);
+            border-radius: 50%; transition: transform 0.25s ease, background 0.25s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+        }
+        [data-theme="dark"] .toggle-btn::after { transform: translateX(22px); }
+
+        /* ========== Tab 导航 ========== */
+        .tabs {
+            display: flex; gap: 5px; background: var(--tab-bg);
+            padding: 5px; border-radius: 13px; margin-bottom: 20px;
+            border: 1px solid var(--border); overflow-x: auto;
+            transition: background 0.25s, border-color 0.25s;
+            scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+            padding: 11px 14px; border: none; border-radius: 9px;
+            background: transparent; color: var(--text-secondary);
+            font-size: 0.88rem; font-weight: 600; font-family: inherit;
+            cursor: pointer; transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            white-space: nowrap; min-width: 0;
+        }
+        .tab-btn:hover { background: var(--surface-alt); color: var(--text-primary); }
+        .tab-btn.active {
+            background: var(--tab-active); color: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ========== 面板 ========== */
+        .panel {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); box-shadow: var(--shadow-sm);
+            padding: 26px 24px;
+            transition: background 0.25s, border-color 0.25s;
+            animation: fadeIn 0.22s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .panel-header {
+            display: flex; align-items: center; gap: 11px;
+            margin-bottom: 22px; padding-bottom: 15px; border-bottom: 1px solid var(--border);
+        }
+        .panel-header .ph-icon {
+            width: 34px; height: 34px; border-radius: 9px;
+            background: var(--accent-soft); color: var(--accent);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .panel-header h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; flex: 1; }
+        .panel-header .badge {
+            font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em;
+            background: var(--accent-soft); color: var(--accent-text);
+            padding: 4px 11px; border-radius: 20px;
+        }
+
+        /* ========== 通用文字组件 ========== */
+        .lead { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 18px; }
+        .section-label {
+            font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.07em;
+            margin: 26px 0 13px; display: flex; align-items: center; gap: 9px;
+        }
+        .section-label:first-child { margin-top: 0; }
+        .section-label::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+        /* ========== 提示框 ========== */
+        .callout {
+            display: flex; gap: 11px; padding: 13px 15px;
+            border-radius: var(--radius-sm); font-size: 0.86rem;
+            margin: 14px 0; border: 1px solid; line-height: 1.6;
+        }
+        .callout .icon { margin-top: 2px; }
+        .callout-tip { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); }
+        .callout-warn { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
+        .callout-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger-text); }
+        .callout strong { font-weight: 700; }
+
+        /* ========== 代码块 + 复制 ========== */
+        .code-wrap { position: relative; margin: 9px 0; }
+        .code-body {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 11px 46px 11px 14px; border-radius: var(--radius-sm);
+            font-family: "SF Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
+            font-size: 0.8rem; line-height: 1.7; overflow-x: auto;
+            border: 1px solid var(--border);
+            transition: background 0.25s, border-color 0.25s;
+            white-space: pre-wrap; word-break: break-word;
+        }
+        .copy-btn {
+            position: absolute; top: 7px; right: 7px;
+            display: flex; align-items: center; gap: 4px;
+            background: var(--surface); border: 1px solid var(--border-strong);
+            color: var(--text-secondary); border-radius: 7px;
+            padding: 4px 9px; font-size: 0.68rem; font-weight: 600;
+            font-family: inherit; cursor: pointer;
+            transition: all 0.18s; opacity: 0.85;
+        }
+        .copy-btn:hover { opacity: 1; color: var(--accent); border-color: var(--accent); }
+        .copy-btn.copied { color: var(--ok-text); border-color: var(--ok-text); background: var(--ok-bg); }
+        .inline-code {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 1.5px 7px; border-radius: 5px;
+            font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+            font-size: 0.82em; border: 1px solid var(--border);
+        }
+
+        /* ========== 步骤流程（新手入门） ========== */
+        .steps { display: flex; flex-direction: column; gap: 12px; }
+        .step-card {
+            display: flex; gap: 14px; padding: 16px;
+            background: var(--surface-alt); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); transition: border-color 0.2s, background 0.25s;
+        }
+        .step-card:hover { border-color: var(--accent); }
+        .step-num {
+            width: 30px; height: 30px; border-radius: 8px;
+            background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+        }
+        .step-body { flex: 1; min-width: 0; }
+        .step-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 5px; }
+        .step-desc { font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 4px; }
+
+        /* ========== 概念词典 ========== */
+        .glossary {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+            gap: 10px;
+        }
+        .term {
+            background: var(--surface-alt); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 12px 14px;
+            transition: border-color 0.2s, background 0.25s;
+        }
+        .term:hover { border-color: var(--accent); }
+        .term-name { font-weight: 700; font-size: 0.86rem; color: var(--accent-text); margin-bottom: 4px; }
+        .term-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; }
+
+        /* ========== 命令卡片（基础操作） ========== */
+        .cmd-card {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            margin-bottom: 12px; overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--surface);
+        }
+        .cmd-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+        .cmd-head {
+            display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+            padding: 12px 14px; background: var(--surface-alt);
+            border-bottom: 1px solid var(--border); transition: background 0.25s;
+        }
+        .cmd-name {
+            font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+            font-weight: 700; font-size: 0.92rem; color: var(--accent-text);
+        }
+        .cmd-tag {
+            font-size: 0.7rem; font-weight: 600; padding: 2px 9px;
+            border-radius: 20px; background: var(--accent-soft); color: var(--accent-text);
+        }
+        .cmd-body { padding: 13px 14px; }
+        .meta-row {
+            display: flex; gap: 9px; font-size: 0.85rem;
+            margin-bottom: 6px; line-height: 1.55;
+        }
+        .meta-label {
+            font-weight: 700; color: var(--text-muted);
+            flex-shrink: 0; min-width: 46px; font-size: 0.78rem; padding-top: 2px;
+        }
+        .meta-val { color: var(--text-secondary); }
+        .meta-val strong { color: var(--text-primary); font-weight: 600; }
+        .cmd-note {
+            display: flex; gap: 7px; font-size: 0.8rem; color: var(--warn-text);
+            background: var(--warn-bg); border: 1px solid var(--warn-border);
+            padding: 8px 11px; border-radius: 7px; margin-top: 8px; line-height: 1.55;
+        }
+
+        /* ========== 场景卡片 ========== */
+        .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+        @media (max-width: 720px) { .scenario-grid { grid-template-columns: 1fr; } }
+        .scenario-card {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 16px; background: var(--surface-alt);
+            transition: border-color 0.2s, transform 0.18s, box-shadow 0.2s;
+        }
+        .scenario-card:hover {
+            border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-md);
+        }
+        .sc-head { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+        .sc-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--accent-soft); color: var(--accent);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .sc-title { font-weight: 700; font-size: 0.92rem; }
+        .sc-desc { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
+        .sc-action {
+            font-size: 0.83rem; color: var(--text-primary);
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 9px 11px; border-radius: 7px; margin-top: 4px;
+        }
+        .sc-action b { color: var(--accent-text); }
+
+        /* ========== 界面示意图（CSS 手绘 mockup） ========== */
+        .mockup {
+            background: var(--surface); border: 1px solid var(--border-strong);
+            border-radius: 10px; padding: 11px; margin-top: 10px;
+            font-size: 0.72rem; overflow: hidden;
+        }
+        .mock-bar {
+            height: 9px; background: var(--border); border-radius: 4px; margin-bottom: 7px;
+        }
+        .mock-side {
+            display: flex; gap: 10px;
+        }
+        .mock-list { width: 96px; flex-shrink: 0; }
+        .mock-item {
+            height: 15px; background: var(--surface-alt); border: 1px solid var(--border);
+            border-radius: 4px; margin-bottom: 5px;
+        }
+        .mock-item.active { background: var(--accent-soft); border-color: var(--accent); }
+        .mock-main { flex: 1; min-width: 0; }
+        .mock-line {
+            height: 8px; background: var(--border); border-radius: 3px; margin-bottom: 6px;
+        }
+        .mock-line.short { width: 62%; }
+        .mock-line.accent { background: var(--accent-soft); }
+        .mock-chat {
+            background: var(--surface-alt); border: 1px solid var(--border);
+            border-radius: 6px; padding: 7px 9px; margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+        .mock-caption {
+            font-size: 0.72rem; color: var(--text-muted); text-align: center;
+            margin-top: 7px; font-style: italic;
+        }
+
+        /* ========== 快捷键表 ========== */
+        .kbd-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .kbd-table th, .kbd-table td {
+            text-align: left; padding: 9px 11px; border-bottom: 1px solid var(--border);
+        }
+        .kbd-table th { font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; }
+        .kbd-table tr:last-child td { border-bottom: none; }
+        .kbd-table td:first-child { white-space: nowrap; }
+        .kbd {
+            display: inline-block; background: var(--surface-alt);
+            border: 1px solid var(--border-strong); border-bottom-width: 2px;
+            border-radius: 5px; padding: 2px 7px;
+            font-family: "SF Mono", Consolas, monospace; font-size: 0.75rem;
+            color: var(--text-primary); font-weight: 600;
+        }
+
+        /* ========== 搜索 + 速查 ========== */
+        .search-box { position: relative; margin-bottom: 15px; }
+        .search-box .icon {
+            position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); pointer-events: none;
+        }
+        .search-input {
+            width: 100%; padding: 11px 14px 11px 40px;
+            border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+            background: var(--surface-alt); color: var(--text-primary);
+            font-size: 0.88rem; font-family: inherit; outline: none;
+            transition: border-color 0.2s, background 0.25s;
+        }
+        .search-input:focus { border-color: var(--accent); }
+        .search-input::placeholder { color: var(--text-muted); }
+        .quick-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: 9px;
+        }
+        .quick-card {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 11px 13px; background: var(--surface-alt);
+            transition: border-color 0.18s, transform 0.15s, background 0.25s;
+            cursor: pointer;
+        }
+        .quick-card:hover { border-color: var(--accent); transform: scale(1.015); background: var(--accent-soft); }
+        .quick-cmd {
+            font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+            font-weight: 700; font-size: 0.85rem; color: var(--accent-text); margin-bottom: 3px;
+        }
+        .quick-desc { font-size: 0.76rem; color: var(--text-secondary); }
+        .no-result {
+            text-align: center; padding: 26px; color: var(--text-muted); font-size: 0.87rem;
+        }
+
+        /* ========== FAQ 折叠 ========== */
+        .faq-item {
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            margin-bottom: 9px; overflow: hidden; background: var(--surface);
+        }
+        .faq-q {
+            display: flex; align-items: center; gap: 10px;
+            padding: 13px 15px; cursor: pointer; font-weight: 600; font-size: 0.89rem;
+            transition: background 0.18s; user-select: none;
+        }
+        .faq-q:hover { background: var(--surface-alt); }
+        .faq-q .chev { margin-left: auto; transition: transform 0.22s; color: var(--text-muted); }
+        .faq-item.open .faq-q .chev { transform: rotate(180deg); }
+        .faq-q .qi { color: var(--accent); flex-shrink: 0; }
+        .faq-a {
+            display: none; padding: 0 15px 14px 15px;
+            font-size: 0.86rem; color: var(--text-secondary); line-height: 1.65;
+            border-top: 1px solid var(--border); padding-top: 12px;
+        }
+        .faq-item.open .faq-a { display: block; }
+
+        /* 底部 */
+        .footer {
+            margin-top: 34px; text-align: center;
+            font-size: 0.76rem; color: var(--text-muted);
+        }
+        .hidden { display: none; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* 移动端 */
+        @media (max-width: 640px) {
+            body { padding: 15px 11px 56px; font-size: 14.5px; }
+            .header h1 { font-size: 1.2rem; }
+            .tab-btn { font-size: 0.78rem; padding: 9px 9px; gap: 5px; }
+            .tab-btn .icon { width: 16px; height: 16px; }
+            .panel { padding: 18px 14px; }
+            .step-card { padding: 13px; gap: 11px; }
+            .scenario-grid { grid-template-columns: 1fr; }
+            .kbd-table { font-size: 0.8rem; }
+            .kbd-table th, .kbd-table td { padding: 7px 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SVG 图标库（零依赖，内联） -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+        <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+        <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+        <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 21h6"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.4.3.6.7.6 1.1v1h5.8v-1c0-.4.2-.8.6-1.1A6 6 0 0 0 12 3z"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+        <symbol id="i-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+        <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+        <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6.01" y2="10"/><line x1="10" y1="10" x2="10.01" y2="10"/><line x1="14" y1="10" x2="14.01" y2="10"/><line x1="18" y1="10" x2="18.01" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    </defs>
+</svg>
+
+<div class="container">
+    <!-- 头部 -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo-mark"><svg class="icon icon-lg"><use href="#i-zap"/></svg></div>
+            <div>
+                <h1>Hermes AI Agent</h1>
+                <div class="sub">零基础上手 · 命令速查 · 场景实战 · 避坑指南</div>
+            </div>
+        </div>
+        <div class="theme-switch">
+            <span>主题</span>
+            <button class="toggle-btn" id="themeToggle" aria-label="切换主题"></button>
+        </div>
+    </header>
+
+    <!-- Tab 导航 -->
+    <div class="tabs" role="tablist">
+        <button class="tab-btn active" id="tab-start" role="tab" data-tab="start">
+            <svg class="icon"><use href="#i-compass"/></svg><span>新手入门</span>
+        </button>
+        <button class="tab-btn" id="tab-basic" role="tab" data-tab="basic">
+            <svg class="icon"><use href="#i-terminal"/></svg><span>基础操作</span>
+        </button>
+        <button class="tab-btn" id="tab-core" role="tab" data-tab="core">
+            <svg class="icon"><use href="#i-settings"/></svg><span>核心配置</span>
+        </button>
+        <button class="tab-btn" id="tab-scene" role="tab" data-tab="scene">
+            <svg class="icon"><use href="#i-target"/></svg><span>场景实战</span>
+        </button>
+        <button class="tab-btn" id="tab-ref" role="tab" data-tab="ref">
+            <svg class="icon"><use href="#i-book"/></svg><span>速查·避坑</span>
+        </button>
+    </div>
+
+    <!-- ============ 1. 新手入门 ============ -->
+    <div class="panel" id="panel-start" role="tabpanel">
+        <div class="panel-header">
+            <div class="ph-icon"><svg class="icon"><use href="#i-compass"/></svg></div>
+            <h2>新手入门</h2>
+            <span class="badge">从这里开始</span>
+        </div>
+
+        <p class="lead">
+            <strong>Hermes 是什么？</strong>简单说，它是一个住在你电脑里的 AI 助手——你用大白话告诉它想做什么，
+            它就能帮你读代码、改文件、跑命令、查资料。你不需要记住命令，直接说人话就行。
+        </p>
+
+        <div class="section-label">三步开机</div>
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-body">
+                    <div class="step-title">装好并登录（只需做一次）</div>
+                    <div class="step-desc">
+                        在终端运行下面两条命令之一。<code class="inline-code">hermes model</code> 会打开一个向导，
+                        让你选模型服务商并填入密钥（API Key）。如果用本地模型，可以跳过密钥。
+                    </div>
+                    <div class="code-wrap">
+                        <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                        <pre class="code-body"># 打开配置向导：选服务商 + 填密钥
+hermes model
+
+# 或者用 Nous Portal（300+ 模型统一订阅，一次登录全搞定）
+hermes setup --portal</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-body">
+                    <div class="step-title">开始第一次对话</div>
+                    <div class="step-desc">
+                        进入你的项目文件夹，启动聊天，然后用<strong>大白话</strong>说出需求。不用背命令，就像跟同事说话。
+                    </div>
+                    <div class="code-wrap">
+                        <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                        <pre class="code-body">cd 我的项目文件夹
+hermes chat
+
+# 然后直接说人话，例如：
+"帮我看看这个项目是做什么的"
+"把登录按钮的颜色改成蓝色"</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-body">
+                    <div class="step-title">学会 3 个最常用的命令</div>
+                    <div class="step-desc">
+                        日常 90% 的场景只需要这三个：<code class="inline-code">/new</code> 开新活、
+                        <code class="inline-code">/title</code> 给当前对话起名字、<code class="inline-code">/resume</code> 回到之前的活。
+                    </div>
+                    <div class="code-wrap">
+                        <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                        <pre class="code-body">/new              # 开一个新对话
+/title 修复登录bug  # 给这个对话起个名字
+/resume           # 看看以前存过哪些对话</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout callout-tip">
+            <svg class="icon icon-sm"><use href="#i-bulb"/></svg>
+            <div><strong>最重要的一句话：</strong>你随时可以直接打字纠正它，比如中途说"等等，改成 JSON 格式"，
+            不用重头再来。这是 Hermes 最舒服的用法。</div>
+        </div>
+
+        <div class="section-label">开始之前，你需要准备什么</div>
+        <div class="glossary">
+            <div class="term">
+                <div class="term-name">方式 A：用云端模型</div>
+                <div class="term-desc">需要一个模型服务商的 API Key（如 Anthropic / OpenAI / Google）。花钱买算力，效果最好，联网可用。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">方式 B：用本地模型</div>
+                <div class="term-desc">需要一张显卡（显存越大越好）。完全离线、不要钱、数据不出本机，但速度取决于你的硬件。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">方式 C：统一订阅</div>
+                <div class="term-desc">用 <code class="inline-code">hermes setup --portal</code> 一次登录，300+ 模型随便切换，不用逐个配密钥。</div>
+            </div>
+        </div>
+
+        <div class="section-label">先搞懂这几个词，后面就不懵了</div>
+        <div class="glossary">
+            <div class="term">
+                <div class="term-name">会话（Session）</div>
+                <div class="term-desc">就是你和 AI 的一次完整聊天。不同任务建议开不同会话，互不干扰。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">斜杠命令</div>
+                <div class="term-desc">以 <code class="inline-code">/</code> 开头的指令，比如 <code class="inline-code">/new</code>。在输入框打 <code class="inline-code">/</code> 就会弹出全部命令。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">上下文（Context）</div>
+                <div class="term-desc">AI 一次能"记住"的对话内容量。聊太长会记不住开头，这时用 <code class="inline-code">/compress</code> 压缩一下。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">Token</div>
+                <div class="term-desc">计费单位，粗略理解成"字数"。输入的文字和 AI 的回答都算 token，这就是为什么要压缩上下文省钱。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">模型（Model）</div>
+                <div class="term-desc">AI 的"大脑"。不同模型能力、价格、速度不同，可随时切换。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">审批模式</div>
+                <div class="term-desc">AI 执行危险操作（如删文件）前要不要先问你。新手建议开"智能审批"，安全第一。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 2. 基础操作 ============ -->
+    <div class="panel hidden" id="panel-basic" role="tabpanel">
+        <div class="panel-header">
+            <div class="ph-icon"><svg class="icon"><use href="#i-terminal"/></svg></div>
+            <h2>基础操作 · 常用命令</h2>
+            <span class="badge">日常交互</span>
+        </div>
+        <p class="lead">
+            下面每条命令都按「是什么 → 什么时候用 → 怎么用 → 注意什么」讲清楚。命令可以直接点右上角复制。
+        </p>
+
+        <div class="section-label">管理对话</div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/new</span><span class="cmd-tag">开新对话</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">开启一个全新的对话，和之前的聊天彻底分开。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">要开始一个<strong>不相关的新任务</strong>时，避免旧对话干扰它。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/new              # 直接开新对话
+/new 周报生成器     # 开新对话并直接命名</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/title</span><span class="cmd-tag">给对话起名</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">给当前对话起个好记的名字，替代随机编号。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">打算<strong>以后还要回来</strong>继续这个任务时，先起名再干活。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/title 修复登录bug</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/resume</span><span class="cmd-tag">回到旧对话</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">列出所有已命名的对话，或直接跳回某一个。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">关掉程序后想<strong>接着上次干</strong>，或在多个任务间来回切。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/resume               # 看看存了哪些对话
+/resume 修复登录bug    # 直接回到那个对话</pre>
+                </div>
+                <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div>只有用 <code class="inline-code">/title</code> 起过名的对话才能被 <code class="inline-code">/resume</code> 找回。没起名的话关掉就找不回来了。</div></div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/sethome</span><span class="cmd-tag">设为主通道</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">把当前聊天设成"主通道"，用于接收网关（如手机推送）消息。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">只在<strong>第一次配置消息网关</strong>时需要，日常用不到。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/sethome</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">控制上下文（省钱 + 防失忆）</div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/compress</span><span class="cmd-tag">压缩记忆</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">把冗长的聊天记录压缩成简短摘要，腾出空间。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">聊了很久、感觉 AI <strong>开始忘记前面说过的话</strong>，或提示上下文快满时。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/compress</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/context</span><span class="cmd-tag">查看占用</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">显示当前上下文用了多少、还剩多少。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">想知道<strong>要不要压缩</strong>时，先看一眼这个。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/context</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/stop</span><span class="cmd-tag">紧急停止</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">立刻停掉 AI 正在做的事或后台进程。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">发现它<strong>跑偏了、卡住了、或在乱改文件</strong>时，先喊停。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/stop</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">模型与安全</div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/model</span><span class="cmd-tag">切换模型</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">在<strong>已配置好</strong>的模型之间热切换，当前对话立刻生效。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">这个任务太难想换个更强的模型，或太简单想换个便宜的。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/model                        # 看看有哪些模型可切
+/model anthropic/claude-sonnet-4.6
+/model openai/gpt-5.4</pre>
+                </div>
+                <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div>只能切<strong>已经配置过</strong>的模型。要加新服务商，得退出对话运行 <code class="inline-code">hermes model</code>。</div></div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/approve</span><span class="cmd-tag">批准危险操作</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">批准 AI 执行被判定为高风险的命今。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">它弹出"这条命令需要批准"时，你确认没问题再批。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/approve session   # 本次对话内都放行
+/approve always    # 以后都放行（谨慎使用）</pre>
+                </div>
+                <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div>新手别用 <code class="inline-code">always</code>。建议用"智能审批"模式，让便宜小模型帮你判断低风险命令。</div></div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/diff</span><span class="cmd-tag">查看改动</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">显示这个对话里 AI 到底<strong>改了哪些代码</strong>。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">在提交代码前，检查它有没有乱改东西。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/diff</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">干活与效率</div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/init</span><span class="cmd-tag">认识项目</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">扫描整个项目，自动生成一份 <code class="inline-code">AGENTS.md</code> 说明文件。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val"><strong>刚接手一个新项目</strong>时先跑它，AI 后面就更懂这个项目。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/init</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">/skills</span><span class="cmd-tag">查看技能</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">列出 AI 当前会用的"技能"（扩展能力）。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">想知道它能干哪些 specialised 的活，或搜某个技能。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/skills              # 列出全部
+/skills search docker # 搜跟 docker 有关的</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd-card">
+            <div class="cmd-head">
+                <span class="cmd-name">!命令</span><span class="cmd-tag">直接跑 shell</span>
+            </div>
+            <div class="cmd-body">
+                <div class="meta-row"><span class="meta-label">作用</span><span class="meta-val">前面加 <code class="inline-code">!</code> 直接执行系统命今，<strong>不消耗 AI 轮次</strong>。</span></div>
+                <div class="meta-row"><span class="meta-label">何时用</span><span class="meta-val">只是想<strong>自己跑个命令</strong>（如 <code class="inline-code">ls</code>、<code class="inline-code">git status</code>），不想浪费 AI。</span></div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">!ls
+!git status</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">快捷键</div>
+        <table class="kbd-table">
+            <thead><tr><th>快捷键</th><th>作用</th></tr></thead>
+            <tbody>
+                <tr><td><span class="kbd">Ctrl</span> + <span class="kbd">K</span> <span style="color:var(--text-muted)">/ ⌘K</span></td><td>打开命令总控台，可搜索所有设置和命令</td></tr>
+                <tr><td><span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">S</span></td><td>显示/隐藏底部状态栏（看模型、审批模式）</td></tr>
+                <tr><td><span class="kbd">Esc</span> <span class="kbd">Esc</span>（双击）</td><td>丢弃正在输入的草稿</td></tr>
+                <tr><td><span class="kbd">Ctrl</span> + <span class="kbd">S</span></td><td>暂存写了一半的 prompt</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-tip">
+            <svg class="icon icon-sm"><use href="#i-bulb"/></svg>
+            <div><strong>执行中想改主意？</strong>直接打字说"等等，把日志改成 JSON 格式"就行，
+            Hermes 会保留已完成的部分并按新要求调整，不用 <code class="inline-code">/stop</code> 重来。</div>
+        </div>
+    </div>
+
+    <!-- ============ 3. 核心配置 ============ -->
+    <div class="panel hidden" id="panel-core" role="tabpanel">
+        <div class="panel-header">
+            <div class="ph-icon"><svg class="icon"><use href="#i-settings"/></svg></div>
+            <h2>核心配置 · 模型与省钱</h2>
+            <span class="badge">进阶一点</span>
+        </div>
+        <p class="lead">
+            这一页讲怎么换"大脑"（模型）、怎么少花钱、怎么完全离线跑。新手先用默认配置就行，等熟悉了再来看。
+        </p>
+
+        <div class="section-label">三种模型切换方式（别搞混）</div>
+        <div class="callout callout-warn">
+            <svg class="icon icon-sm"><use href="#i-alert"/></svg>
+            <div><strong>最容易踩的坑：</strong>仪表板里换模型<strong>只对新建的对话生效</strong>，已经打开的聊天不变。
+            想让当前对话立刻换模型，必须用 <code class="inline-code">/model</code> 命令。</div>
+        </div>
+        <div class="code-wrap">
+            <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+            <pre class="code-body"># ① 加新服务商 / 填密钥（要退出对话）
+hermes model
+
+# ② 当前对话里热切换（只切已配置的）
+/model anthropic/claude-sonnet-4.6
+/model openai/gpt-5.4
+/model google/gemini-2.5-pro
+
+# ③ 统一订阅，一次登录 300+ 模型
+hermes setup --portal</pre>
+        </div>
+
+        <div class="section-label">辅助模型：省钱的关键</div>
+        <p class="lead" style="margin-bottom:10px">
+            Hermes 会把一些<strong>不重要的杂活</strong>（起标题、看图、压缩记录）交给便宜的小模型，
+            让贵的主模型专心干核心推理。这一项配置好，成本能降很多。
+        </p>
+        <div class="glossary">
+            <div class="term">
+                <div class="term-name">Title Gen（起标题）</div>
+                <div class="term-desc">用便宜模型给对话起名字，效果和贵模型差不多，成本约 <strong>$0.10/M</strong>。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">Vision（看图）</div>
+                <div class="term-desc">主模型不支持看图时（如 DeepSeek），指向 <code class="inline-code">gpt-4o-mini</code> 之类便宜的视觉模型。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">Compression（压缩）</div>
+                <div class="term-desc">用快模型做摘要，成本能降到主模型的 <strong>1/50</strong>。</div>
+            </div>
+            <div class="term">
+                <div class="term-name">Approval（审批）</div>
+                <div class="term-desc">智能审批模式下，让小模型判断低风险命令，不用每次都麻烦主模型。</div>
+            </div>
+        </div>
+        <div class="code-wrap">
+            <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+            <pre class="code-body"># 命令行设置某个槽位
+hermes config set auxiliary.title_gen.model google/gemini-3-flash-preview
+
+# 或在仪表板里：Models → 展开 Show auxiliary</pre>
+        </div>
+
+        <div class="section-label">本地模型：完全离线、不花钱</div>
+        <p class="lead" style="margin-bottom:10px">
+            想不联网、不花钱、数据完全不出本机？用本地模型。Hermes 支持 Unsloth、Ollama、LM Studio 等。
+        </p>
+        <div class="code-wrap">
+            <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+            <pre class="code-body"># 方式一：内置本地运行时（最省事）
+# 设置 → Providers → Local Models
+# Install runtime → 选模型 → Download → Use
+
+# 方式二：用 Unsloth 起服务
+unsloth start hermes --model unsloth/Qwen3.6-27B-GGUF --temp 1.0 --top-p 0.95
+
+# 方式三：Ollama 一键启动
+ollama launch hermes-desktop
+
+# 方式四：连接已有的本地服务（VLLM / SGLang / llama-server）
+# hermes model 里选 "Custom endpoint"，填 http://127.0.0.1:8080</pre>
+        </div>
+        <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div><strong>硬要求：</strong>本地模型上下文至少要 <strong>64K tokens</strong>，否则 Hermes 会拒绝启动。
+        llama.cpp 加 <code class="inline-code">--ctx-size 65536</code>，Ollama 加 <code class="inline-code">-c 65536</code>。</div></div>
+
+        <div class="section-label">自定义端点 / 命名服务商</div>
+        <div class="code-wrap">
+            <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+            <pre class="code-body"># 配好自定义端点后，对话里这样切
+/model custom:qwen-2.5
+/model custom         # 端点只加载了一个模型时，自动选它
+/model local:qwen-2.5 # 三段式：给服务商起个名字</pre>
+        </div>
+
+        <div class="callout callout-tip">
+            <svg class="icon icon-sm"><use href="#i-info"/></svg>
+            <div>想确认现在用的是哪个模型？看欢迎横幅，或直接输入 <code class="inline-code">/model</code>（不带参数）。</div>
+        </div>
+    </div>
+
+    <!-- ============ 4. 场景实战 ============ -->
+    <div class="panel hidden" id="panel-scene" role="tabpanel">
+        <div class="panel-header">
+            <div class="ph-icon"><svg class="icon"><use href="#i-target"/></svg></div>
+            <h2>场景实战 · 我想…</h2>
+            <span class="badge">照着做就行</span>
+        </div>
+        <p class="lead">按你的目的找对应做法，每一步都能直接照抄。</p>
+
+        <div class="scenario-grid">
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-wallet"/></svg></div>
+                    <div class="sc-title">我想少花点钱</div>
+                </div>
+                <div class="sc-desc">把杂活交给便宜模型，主模型只干核心活。</div>
+                <div class="sc-action">
+                    <b>做法：</b>仪表板 → Models → Show auxiliary，把四个槽位都填上便宜模型（flash / mini / haiku 级别）。
+                </div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">hermes config set auxiliary.title_gen.model google/gemini-3-flash-preview
+/compress   # 聊太久时记得压缩，直接省 token</pre>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-monitor"/></svg></div>
+                    <div class="sc-title">我想完全离线用</div>
+                </div>
+                <div class="sc-desc">不联网、不花钱、数据不出本机。</div>
+                <div class="sc-action">
+                    <b>做法：</b>设置 → Providers → Local Models → Install runtime → 选模型 → Download → Use。
+                    或用 Ollama：<code class="inline-code">ollama launch hermes-desktop</code>。
+                </div>
+                <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div>记得把上下文设到 <strong>65536</strong> 以上，否则启动会被拒绝。空闲 15 分钟后模型会自动卸载释放显存。</div></div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-layers"/></svg></div>
+                    <div class="sc-title">我想同时干好几件事</div>
+                </div>
+                <div class="sc-desc">用多个命名会话并行处理不同任务，互不干扰。</div>
+                <div class="sc-action">
+                    <b>做法：</b>每个任务开一个会话并<strong>立刻起名</strong>，之后用 <code class="inline-code">/resume</code> 来回跳。
+                </div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/new 重构用户模块
+/title 重构用户模块
+# ……切到别的活……
+/resume 重构用户模块   # 回来接着干</pre>
+                </div>
+                <div class="mockup">
+                    <div class="mock-bar"></div>
+                    <div class="mock-side">
+                        <div class="mock-list">
+                            <div class="mock-item active"></div>
+                            <div class="mock-item"></div>
+                            <div class="mock-item"></div>
+                            <div class="mock-item"></div>
+                        </div>
+                        <div class="mock-main">
+                            <div class="mock-chat">重构用户模块</div>
+                            <div class="mock-line"></div>
+                            <div class="mock-line short"></div>
+                            <div class="mock-line accent"></div>
+                        </div>
+                    </div>
+                    <div class="mock-caption">左侧会话列表 + 右侧对话区（示意图）</div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-code"/></svg></div>
+                    <div class="sc-title">我想让它帮我写代码</div>
+                </div>
+                <div class="sc-desc">先让它认识项目，再提需求，最后检查改动。</div>
+                <div class="sc-action">
+                    <b>流程：</b><code class="inline-code">/init</code> 生成项目说明 → 用大白话提需求 → <code class="inline-code">/diff</code> 检查它改了什么。
+                </div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/init
+# "给登录接口加上参数校验"
+/diff</pre>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
+                    <div class="sc-title">我怕它乱删我文件</div>
+                </div>
+                <div class="sc-desc">用审批模式管住危险操作。</div>
+                <div class="sc-action">
+                    <b>做法：</b>设置 → 安全 → 审批模式，选<strong>智能审批</strong>。危险命令会先问你，
+                    确认后用 <code class="inline-code">/approve session</code> 放行；跑偏了就 <code class="inline-code">/stop</code>。
+                </div>
+                <div class="cmd-note"><svg class="icon icon-sm"><use href="#i-alert"/></svg><div>新手<strong>不要</strong>用 <code class="inline-code">/approve always</code>，那等于永久放行所有危险命令。</div></div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="sc-head">
+                    <div class="sc-icon"><svg class="icon"><use href="#i-zap"/></svg></div>
+                    <div class="sc-title">它开始忘事了 / 变慢了</div>
+                </div>
+                <div class="sc-desc">上下文塞太满，先看看占用再压缩。</div>
+                <div class="sc-action">
+                    <b>做法：</b>先 <code class="inline-code">/context</code> 看占用，接近上限就 <code class="inline-code">/compress</code> 压缩。
+                    如果还不理想，<code class="inline-code">/new</code> 开个干净的新对话。
+                </div>
+                <div class="code-wrap">
+                    <button class="copy-btn" data-copy><svg class="icon icon-sm"><use href="#i-copy"/></svg>复制</button>
+                    <pre class="code-body">/context
+/compress</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 5. 速查·避坑 ============ -->
+    <div class="panel hidden" id="panel-ref" role="tabpanel">
+        <div class="panel-header">
+            <div class="ph-icon"><svg class="icon"><use href="#i-book"/></svg></div>
+            <h2>速查 · 避坑</h2>
+            <span class="badge">记不住就来这</span>
+        </div>
+
+        <div class="section-label">命令速查（可搜索）</div>
+        <div class="search-box">
+            <svg class="icon"><use href="#i-search"/></svg>
+            <input class="search-input" id="cmdSearch" type="text" placeholder="搜索命令或用途，例如：新建、压缩、模型…">
+        </div>
+        <div class="quick-grid" id="quickGrid">
+            <div class="quick-card" data-keywords="new 新建 会话 对话 开新">
+                <div class="quick-cmd">/new</div><div class="quick-desc">开一个新对话</div>
+            </div>
+            <div class="quick-card" data-keywords="title 命名 重命名 起名">
+                <div class="quick-cmd">/title</div><div class="quick-desc">给当前对话起名字</div>
+            </div>
+            <div class="quick-card" data-keywords="resume 恢复 回到 旧对话 列表">
+                <div class="quick-cmd">/resume</div><div class="quick-desc">回到之前的对话</div>
+            </div>
+            <div class="quick-card" data-keywords="model 模型 切换 换模型">
+                <div class="quick-cmd">/model</div><div class="quick-desc">切换模型</div>
+            </div>
+            <div class="quick-card" data-keywords="compress 压缩 上下文 记忆 省钱">
+                <div class="quick-cmd">/compress</div><div class="quick-desc">压缩上下文</div>
+            </div>
+            <div class="quick-card" data-keywords="context 上下文 占用 查看">
+                <div class="quick-cmd">/context</div><div class="quick-desc">查看上下文占用</div>
+            </div>
+            <div class="quick-card" data-keywords="stop 停止 中断 紧急">
+                <div class="quick-cmd">/stop</div><div class="quick-desc">停止当前操作</div>
+            </div>
+            <div class="quick-card" data-keywords="approve 批准 审批 危险 放行">
+                <div class="quick-cmd">/approve</div><div class="quick-desc">批准危险命令</div>
+            </div>
+            <div class="quick-card" data-keywords="diff 改动 变更 代码 检查">
+                <div class="quick-cmd">/diff</div><div class="quick-desc">查看代码改动</div>
+            </div>
+            <div class="quick-card" data-keywords="init 项目 扫描 agents.md 认识">
+                <div class="quick-cmd">/init</div><div class="quick-desc">扫描项目生成说明</div>
+            </div>
+            <div class="quick-card" data-keywords="skills 技能 能力 搜索">
+                <div class="quick-cmd">/skills</div><div class="quick-desc">查看可用技能</div>
+            </div>
+            <div class="quick-card" data-keywords="! shell 命令 执行 跑命令">
+                <div class="quick-cmd">!命令</div><div class="quick-desc">直接执行 shell 命令</div>
+            </div>
+            <div class="quick-card" data-keywords="sethome 主通道 网关 配置">
+                <div class="quick-cmd">/sethome</div><div class="quick-desc">设为主通道</div>
+            </div>
+            <div class="quick-card" data-keywords="hermes model 配置 服务商 密钥 key">
+                <div class="quick-cmd">hermes model</div><div class="quick-desc">配置模型服务商</div>
+            </div>
+            <div class="quick-card" data-keywords="portal 订阅 登录 300 统一">
+                <div class="quick-cmd">hermes setup --portal</div><div class="quick-desc">统一订阅登录</div>
+            </div>
+        </div>
+        <div class="no-result hidden" id="noResult">没找到匹配的命令，换个词试试（如：压缩、模型、新建）。</div>
+
+        <div class="section-label">新手最常踩的 6 个坑</div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg>在仪表板换了模型，当前对话怎么没变？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a">仪表板（或 <code class="inline-code">hermes model</code>）切换<strong>只对新建的对话生效</strong>，已打开的聊天标签页不受影响。想让当前对话立刻生效，用 <code class="inline-code">/model 模型名</code> 命令。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg>关掉程序后，之前的对话找不回来了？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a">只有用 <code class="inline-code">/title</code> <strong>起过名</strong>的对话才会被保存，之后用 <code class="inline-code">/resume</code> 能找回。没起名的对话关掉就没了，所以重要任务请先 <code class="inline-code">/title</code>。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg>本地模型启动失败 / 被拒绝？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a">Hermes 要求<strong>最小 64K tokens 上下文</strong>。llama.cpp 加 <code class="inline-code">--ctx-size 65536</code>，Ollama 加 <code class="inline-code">-c 65536</code>，否则启动时会直接拒绝。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg>聊着聊着 AI 开始忘记前面的内容？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a">上下文快满了。先 <code class="inline-code">/context</code> 看占用，再 <code class="inline-code">/compress</code> 压缩成摘要。压缩既能"续命"又能省钱。实在不行就 <code class="inline-code">/new</code> 开新的。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg>它要执行一条我看不懂的危险命令，怎么办？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a">先 <code class="inline-code">/stop</code> 喊停，看清命令内容再决定。别用 <code class="inline-code">/approve always</code>，那是永久放行。建议设置 → 安全 → 审批模式选<strong>智能审批</strong>，让小模型先帮你筛一遍低风险命令。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q"><svg class="icon icon-sm qi"><use href="#i-alert"/></svg><code class="inline-code">/model</code> 切不到我想用的新模型？<svg class="icon icon-sm chev"><use href="#i-chev"/></svg></div>
+            <div class="faq-a"><code class="inline-code">/model</code> <strong>只能切已经配置过</strong>的模型。要添加新的服务商（填 API Key、OAuth 登录），得退出对话后在终端运行 <code class="inline-code">hermes model</code> 走配置向导。</div>
+        </div>
+
+        <div class="callout callout-tip" style="margin-top:20px">
+            <svg class="icon icon-sm"><use href="#i-bulb"/></svg>
+            <div><strong>记不住命令？</strong>在输入框直接打 <code class="inline-code">/</code> 就会弹出全部命令列表；
+            或者按 <code class="inline-code">Ctrl+K</code>（Mac ⌘K）打开命令总控台搜索。真不用背。</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Hermes Agent v0.20+ · 基于 Nous Research 开源项目 · 本页为上手速查，细节以官方文档为准
+    </div>
+</div>
+
+<script>
+(function () {
+    /* ---------- 主题切换 ---------- */
+    var toggle = document.getElementById('themeToggle');
+    var html = document.documentElement;
+
+    var savedTheme = localStorage.getItem('hermes-theme');
+    if (savedTheme) {
+        html.setAttribute('data-theme', savedTheme);
+    } else {
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    }
+
+    toggle.addEventListener('click', function () {
+        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('hermes-theme', next);
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('hermes-theme')) {
+            html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+    });
+
+    /* ---------- Tab 切换 ---------- */
+    var tabs = [
+        { btn: document.getElementById('tab-start'), panel: document.getElementById('panel-start') },
+        { btn: document.getElementById('tab-basic'), panel: document.getElementById('panel-basic') },
+        { btn: document.getElementById('tab-core'), panel: document.getElementById('panel-core') },
+        { btn: document.getElementById('tab-scene'), panel: document.getElementById('panel-scene') },
+        { btn: document.getElementById('tab-ref'), panel: document.getElementById('panel-ref') }
+    ];
+
+    function switchTab(targetIndex) {
+        tabs.forEach(function (item, index) {
+            if (index === targetIndex) {
+                item.btn.classList.add('active');
+                item.btn.setAttribute('aria-selected', 'true');
+                item.panel.classList.remove('hidden');
+                item.panel.style.animation = 'none';
+                void item.panel.offsetHeight;
+                item.panel.style.animation = 'fadeIn 0.22s ease';
+            } else {
+                item.btn.classList.remove('active');
+                item.btn.setAttribute('aria-selected', 'false');
+                item.panel.classList.add('hidden');
+            }
+        });
+    }
+
+    tabs.forEach(function (item, index) {
+        item.btn.addEventListener('click', function () { switchTab(index); });
+    });
+
+    document.querySelector('.tabs').addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var currentIndex = tabs.findIndex(function (item) { return item.btn.classList.contains('active'); });
+        var nextIndex = e.key === 'ArrowRight'
+            ? (currentIndex + 1) % tabs.length
+            : (currentIndex - 1 + tabs.length) % tabs.length;
+        tabs[nextIndex].btn.focus();
+        switchTab(nextIndex);
+    });
+
+    /* ---------- 一键复制 ---------- */
+    document.querySelectorAll('.copy-btn[data-copy]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var wrap = btn.closest('.code-wrap');
+            if (!wrap) return;
+            var body = wrap.querySelector('.code-body');
+            var text = body.innerText;
+            var done = function () {
+                var original = btn.innerHTML;
+                btn.classList.add('copied');
+                btn.innerHTML = '<svg class="icon icon-sm"><use href="#i-check"/></svg>已复制';
+                setTimeout(function () {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = original;
+                }, 1500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, fallback);
+            } else { fallback(); }
+            function fallback() {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); done(); } catch (err) {}
+                document.body.removeChild(ta);
+            }
+        });
+    });
+
+    /* ---------- 命令搜索过滤 ---------- */
+    var searchInput = document.getElementById('cmdSearch');
+    var quickGrid = document.getElementById('quickGrid');
+    var noResult = document.getElementById('noResult');
+    var cards = Array.prototype.slice.call(quickGrid.querySelectorAll('.quick-card'));
+
+    searchInput.addEventListener('input', function () {
+        var q = searchInput.value.trim().toLowerCase();
+        var visible = 0;
+        cards.forEach(function (card) {
+            var hay = (card.getAttribute('data-keywords') + ' ' + card.innerText).toLowerCase();
+            var match = !q || hay.indexOf(q) !== -1;
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        noResult.classList.toggle('hidden', visible !== 0);
+    });
+
+    /* ---------- FAQ 折叠 ---------- */
+    document.querySelectorAll('.faq-q').forEach(function (q) {
+        q.addEventListener('click', function () {
+            q.parentElement.classList.toggle('open');
+        });
+    });
+})();
+</script>
+</body>
+</html>
